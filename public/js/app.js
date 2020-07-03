@@ -37227,6 +37227,31 @@ module.exports = function(module) {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+__webpack_require__(/*! ./avatar */ "./resources/js/avatar.js");
+
+/***/ }),
+
+/***/ "./resources/js/avatar.js":
+/*!********************************!*\
+  !*** ./resources/js/avatar.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+$('#avatarUpload').on('change', function (e) {
+  var reader = new FileReader();
+
+  reader.onload = function (e) {
+    $("#avatar_preview").attr('src', e.target.result);
+  };
+
+  reader.readAsDataURL(e.target.files[0]);
+});
+$('#avatarUploadButton').click(function () {
+  $('#avatarUpload').click();
+  return false;
+});
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
