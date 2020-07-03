@@ -26,8 +26,8 @@ return [
     'between' => [
         'numeric' => ':attributeは:min〜:maxの範囲で入力してください。',
         'file' => ':attributeは:min〜:max KBのファイルを選択してください。',
-        'string' => ':attributeは:min〜:max文字の範囲で入力してください。',
-	'array' => ':attributeは:min〜:max個の範囲内にしてください。',
+        'string' => ':attributeは:min字以上〜:max字以下で入力してください。',
+	    'array' => ':attributeは:min〜:max個の範囲内にしてください。',
     ],
     'boolean' => ':attributeはtrueかfalseにしてください。',
     'confirmed' => ':attributeが確認用と一致しません。',
@@ -79,7 +79,7 @@ return [
     'max' => [
         'numeric' => ':attributeは:max以下で入力してください。',
         'file' => ':attributeは:max KB以下のファイルを選択してください。',
-        'string' => ':attributeは:max文字以下入力してください。',
+        'string' => ':attributeは:max字以下で入力してください。',
         'array' => ':attributeは:max個以下にしてください。',
     ],
     'mimes' => ':attributeは:values形式で選択してください。',
@@ -87,7 +87,7 @@ return [
     'min' => [
         'numeric' => ':attributeは:min以上で入力してください。',
         'file' => ':attributeは:min KB以上のファイルを選択してください。',
-        'string' => ':attributeは:min文字以上入力してください。',
+        'string' => ':attributeは:min字以上入力してください。',
         'array' => ':attributeは:min個以上にしてください。',
     ],
     'not_in' => ':attributeは不正です。',
@@ -146,6 +146,7 @@ return [
     */
 
     'attributes' => [
+        'name' => 'ユーザー名',
         'email' => 'メールアドレス',
         'password' => 'パスワード',
     ],
