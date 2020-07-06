@@ -15,3 +15,4 @@ Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
+Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);

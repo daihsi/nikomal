@@ -17058,8 +17058,24 @@ readers do not read off random characters that represent icons */
 }
 
 #avatar_preview {
-  max-width: 200px;
-  max-height: 200px;
-  border-radius: 20px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .user_avatar_icon {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .user_avatar_icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+  }
 }
 
