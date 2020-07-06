@@ -39,7 +39,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="top-text">
+                <h2 class="font-weight-bold mt-4 mb-4">
                     <p>さぁ、動物たちの笑っている表情を</p>
                     <p>投稿共有して一緒に癒されましょう</p>
                 </h2>
