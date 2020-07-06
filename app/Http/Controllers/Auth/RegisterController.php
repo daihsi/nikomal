@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Providers\RouteServiceProvider;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -53,7 +52,7 @@ class RegisterController extends Controller
         return $this->registered($request, $user)
                         ?: redirect($this->redirectPath());
     }
-
+    
     /**
      * Create a new user instance after a valid registration.
      *
@@ -64,23 +63,23 @@ class RegisterController extends Controller
     
     protected function create(array $data)
     {
+        
         if (isset($data['avatar'])) {
             
             $file = $data['avatar'];
-            
-            //ファイル名のタイムスタンプ
-            $now = date_format(Carbon::now(), 'YmdHis');
+
             //アップロードされたファイル名取得
             $name = $file->getClientOriginalName();
-            //s3保存先のパス生成
-            $storePath="/nikomal".$now."_".$name;
+
             //画像を横幅300px,縦幅アスペクト比維持の自動サイズへリサイズ
             $image = Image::make($file)
                 ->resize(300, null, function ($constraint) {
                     $constraint->aspectRatio();
-                });
+                });;
             //s3へのアップロードと保存
-            $data['avatar'] = Storage::disk('s3')->put($storePath, (string) $image->encode(), 'public');
+            $path = Storage::disk('s3')->put('/users_avatar/'.$name, (string) $image->encode(), 'public');
+            
+            $data['avatar'] = Storage::disk('s3')->url('users_avatar/'.$name);
         };
 
        return User::create([
@@ -88,6 +87,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'avatar' => $data['avatar'] ?? null,
+            
         ]);
     }
 }
