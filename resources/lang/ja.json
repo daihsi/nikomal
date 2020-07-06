@@ -1,7 +1,8 @@
 {
     "Login": "ログイン",
     "Register": "ユーザー登録",
-    "Forgot Your Password?": "パスワードを忘れた場合",
+    "Logout": "ログアウト",
+    "Forgot Your Password?": "パスワードをお忘れの方はこちらへ",
     "Reset Password": "パスワード再設定",
     "Send Password Reset Link": "パスワード再設定URLを送信",
     "Name": "ユーザー名",
