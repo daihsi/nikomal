@@ -17041,11 +17041,6 @@ readers do not read off random characters that represent icons */
   border-radius: 15px;
 }
 
-.top-text {
-  font-weight: bold;
-  margin: 30px 0;
-}
-
 .register-btn {
   background-color: #7ed957;
   color: #fff;
