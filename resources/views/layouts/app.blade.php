@@ -11,6 +11,8 @@
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
+    <script type="text/javascript" src="{{ mix('js/preview_upload.js') }}" defer></script>
+    <script src="{{ mix('js/infinite_scroll.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

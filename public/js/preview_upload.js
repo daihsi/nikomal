@@ -86,10 +86,10 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./resources/js/avatar.js":
-/*!********************************!*\
-  !*** ./resources/js/avatar.js ***!
-  \********************************/
+/***/ "./resources/js/preview_upload.js":
+/*!****************************************!*\
+  !*** ./resources/js/preview_upload.js ***!
+  \****************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -110,13 +110,13 @@ $('#avatarUploadButton').click(function () {
 /***/ }),
 
 /***/ 1:
-/*!**************************************!*\
-  !*** multi ./resources/js/avatar.js ***!
-  \**************************************/
+/*!**********************************************!*\
+  !*** multi ./resources/js/preview_upload.js ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/ubuntu/environment/nikomal/resources/js/avatar.js */"./resources/js/avatar.js");
+module.exports = __webpack_require__(/*! /home/ubuntu/environment/nikomal/resources/js/preview_upload.js */"./resources/js/preview_upload.js");
 
 
 /***/ })
