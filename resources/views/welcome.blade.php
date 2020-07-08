@@ -43,8 +43,8 @@
                     <p>さぁ、動物たちの笑っている表情を</p>
                     <p>投稿共有して一緒に癒されましょう</p>
                 </h2>
-                <a class="register-btn btn btn btn-lg" href="#">投稿する</a>
-                <a class="introduction-btn btn btn btn-lg" href="#">はじめに</a>
+                <a class="register_btn btn btn btn-lg" href="#">投稿する</a>
+                <a class="introduction_btn btn btn btn-lg" href="#">はじめに</a>
             </div>
         </div>
     </div>
