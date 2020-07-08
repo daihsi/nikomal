@@ -30,13 +30,13 @@
             @endforeach
         </div>
     </div>
-    @if ($users->nextPageUrl())
-      <p class="pagination">
-        <a href="{{ $users->nextPageUrl() }}" class="pagination_next"></a>
-      </p>
-    @endif
 </div>
-<p class="text-center mt-1">
-  <button class="view_more_button btn btn btn-lg active" aria-pressed="true">もっと見る</button>
-</p>
+@if ($users->hasMorePages())
+    <p class="pagination">
+        <a href="{{ $users->nextPageUrl() }}" class="pagination_next"></a>
+    </p>
+    <p class="text-center mt-1">
+      <button class="view_more_button btn btn btn-lg active" aria-pressed="true">もっと見る</button>
+    </p>
+@endif
 @endif
