@@ -12818,9 +12818,9 @@ var jQueryBridget = __webpack_require__(/*! jquery-bridget */ "./node_modules/jq
 var InfiniteScroll = __webpack_require__(/*! infinite-scroll */ "./node_modules/infinite-scroll/js/index.js");
 
 jQueryBridget('infiniteScroll', InfiniteScroll, $);
-$('#user_list').infiniteScroll({
+$('.card-group').infiniteScroll({
   path: '.pagination_next',
-  append: '.card-group',
+  append: '#user_list',
   history: false,
   button: '.view_more_button',
   scrollThreshold: false,

@@ -4,9 +4,9 @@ var InfiniteScroll = require('infinite-scroll');
 
 jQueryBridget('infiniteScroll', InfiniteScroll, $);
 
-$('#user_list').infiniteScroll({
+$('.card-group').infiniteScroll({
     path: '.pagination_next',
-    append: '.card-group',
+    append: '#user_list',
     history: false,
     button: '.view_more_button',
     scrollThreshold: false,
