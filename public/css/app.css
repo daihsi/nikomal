@@ -17037,7 +17037,7 @@ readers do not read off random characters that represent icons */
 .animalsCarousel {
   display: block;
   width: 100%;
-  height: 30vw;
+  height: 35vw;
   border-radius: 15px;
 }
 
@@ -17047,7 +17047,7 @@ readers do not read off random characters that represent icons */
   margin-right: 50px;
 }
 
-.introduction-btn {
+.introduction_btn {
   background-color: #C0C0C0;
   color: #fff;
 }
