@@ -23,13 +23,11 @@
 
 </head>
 <body>
-    <div id="app">
-        {{-- ナビゲーションバー --}}
-        @include('commons.navbar')
+    {{-- ナビゲーションバー --}}
+    @include('commons.navbar')
         
-        <main>
-            @yield('content')
-        </main>
-    </div>
+    <main>
+        @yield('content')
+    </main>
 </body>
 </html>

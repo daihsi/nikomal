@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
     @guest
         <div class="row justify-content-center">
-            <div class="col-7">
+            <div class="col-6">
                  <div id="carouselExampleFade" class="carousel slide carousel-fade" data-intrebal=4000 data-touch=true data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -36,7 +36,7 @@
         </div>
     </div>
   
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12 text-center">
                 <h2 class="font-weight-bold mt-4 mb-4">
@@ -48,33 +48,44 @@
             </div>
         </div>
     </div>
-
-    <div class="border mb-5 mt-5"></div>
+    
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-11">
+                <div class="border mb-5 mt-5"></div>
+            </div>
+        </div>
+    </div>
 
     <h3 class="text-center font-weight-bold mt-5 mb-4">みんなの投稿</h3>
     @endguest
 
-    <div class="container">
-        <form>
-            <div class="form-row justify-content-center justify-content-md-end">
-                <div class="form-group col-lg-5 col-md-6 col-9">
-                  <input class="form-control" type="search" placeholder="キーワード">
-                </div>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-11">
+                <form>
+                    <div class="form-row justify-content-center justify-content-md-end">
+                        <div class="form-group col-xl-3 col-lg-4 col-md-5 col-sm-7 col-8">
+                          <input class="form-control" type="search" placeholder="キーワード">
+                        </div>
+                    </div>
+                    <div class="form-row justify-content-center justify-content-md-end">
+                        <div class="form-group col-lg-2 col-md-3 col-sm-4 col-5 pr-3">
+                            <select id="animals-select" class="form-control">
+                                <option value="">動物カテゴリー</option>
+                                <option value="イヌ">イヌ</option>
+                                <option value="ネコ">ネコ</option>
+                                <option value="ゾウ">ゾウ</option>
+                                <option value="サル">サル</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success"><i class="fas fa-search fa-lg"></i>検索する</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-row justify-content-center justify-content-md-end">
-                <div class="form-group col-lg-3 col-md-4 col-sm-4 col-5 pr-3">
-                    <select id="animals-select" class="form-control">
-                        <option value="">動物カテゴリー</option>
-                        <option value="イヌ">イヌ</option>
-                        <option value="ネコ">ネコ</option>
-                        <option value="ゾウ">ゾウ</option>
-                        <option value="サル">サル</option>
-                    </select>
-                </div>
-                <div>
-                    <button type="submit" class="btn btn-outline-success"><i class="fas fa-search fa-lg"></i>検索する</button>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
+
 @endsection
