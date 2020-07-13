@@ -16,3 +16,7 @@ Route::get('/', 'HomeController@index');
 Auth::routes();
 
 Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::resource('users', 'UsersController', ['only' => ['edit', 'update']]);
+});
