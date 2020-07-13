@@ -14,6 +14,48 @@
 @import '~@fortawesome/fontawesome-free/scss/brands';
 
 
+@media (max-width: 576px) {
+  .user_show_avatar {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  //
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+	.user_avatar_icon {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+	}
+  .user_show_avatar {
+    width: 170px;
+    height: 170px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+	.user_avatar_icon {
+		width: 160px;
+		height: 160px;
+		border-radius: 50%;
+	}	
+	.user_show_avatar {
+	  width: 200px;
+	  height: 200px;
+	}
+}
+
+@media (max-width: 991.98px) {
+  #avatar_preview {
+    width: 200px;
+    height: 200px;
+  }
+}
+
 .logo {
     width: 150px;
     height: 37.5px;
@@ -26,41 +68,35 @@
   border-radius: 15px;
 }
 
+.font-weight-bold {
+  font-size: 1.3em
+}
 
-.register_btn {
+.btn-outline-success {
+  color: #7ed957;
+  border-color: #7ed957;
+}
+
+.btn-outline-success:hover {
+  color: #fff;
   background-color: #7ed957;
+  border-color: #7ed957;
+}
+
+.btn-success {
   color: #fff;
-  margin-right: 50px;
-}
-
-.introduction_btn {
-  background-color: #C0C0C0;
-  color: #fff;
-}
-
-#avatar_preview {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-}
-
-@media (min-width: 768px) and (max-width: 991.98px) {
-	.user_avatar_icon {
-		width: 160px;
-		height: 160px;
-		border-radius: 50%;
-	}	
-}
-
-@media (min-width: 576px) and (max-width: 767.98px) {
-	.user_avatar_icon {
-		width: 120px;
-		height: 120px;
-		border-radius: 50%;
-	}	
-}
-
-.view_more_button {
   background-color: #7ed957;
+  border-color: #7ed957;
+}
+
+.btn-success:hover {
   color: #fff;
+  background-color: #2fa360;
+  border-color: #2d995b;
+}
+
+.btn-outline-info:hover {
+  color: #fff;
+  background-color: #6cb2eb;
+  border-color: #6cb2eb;
 }
