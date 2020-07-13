@@ -105,7 +105,7 @@ return [
     'same' => ':attributeと:otherが一致するよう入力してください。',
     'size' => [
         'numeric' => ':attributeは:sizeで入力してください。',
-	'file' => ':attributeは:size KBのファイルを選択してください。',
+	    'file' => ':attributeは:size KBのファイルを選択してください。',
         'string' => ':attributeは:size文字で入力してください。',
         'array' => ':attributeは:size個にしてください。',
     ],
@@ -149,6 +149,8 @@ return [
         'name' => 'ユーザー名',
         'email' => 'メールアドレス',
         'password' => 'パスワード',
+        'avatar' => 'アバター画像',
+        'self_introduction' => '自己紹介',
     ],
 
 ];
