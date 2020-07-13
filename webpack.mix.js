@@ -12,7 +12,5 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .js('resources/js/infinite_scroll.js', 'public/js')
-    .js('resources/js/preview_upload.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .version();
