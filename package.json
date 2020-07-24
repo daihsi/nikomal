@@ -28,6 +28,7 @@
     "dependencies": {
         "dropzone": "^5.7.1",
         "infinite-scroll": "^3.0.6",
+        "masonry-layout": "^4.2.2",
         "select2": "^4.0.13"
     }
 }
