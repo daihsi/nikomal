@@ -4,6 +4,7 @@ var InfiniteScroll = require('infinite-scroll');
 
 jQueryBridget('infiniteScroll', InfiniteScroll, $);
 
+//ユーザー一覧ページ
 $('.card-group').infiniteScroll({
     path: '.pagination_next',
     append: '#user_list',

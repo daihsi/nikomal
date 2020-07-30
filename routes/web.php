@@ -11,12 +11,13 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
-
+Route::get('/', 'PostsController@index');
 Auth::routes();
-
 Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('users', 'UsersController', ['only' => ['edit', 'update']]);
+    Route::resource('posts', 'PostsController', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
 });
+
+Route::resource('posts', 'PostsController', ['only' => 'show']);

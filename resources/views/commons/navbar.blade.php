@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-12">
             <header class="mb-3">
@@ -11,8 +11,7 @@
                     </button>
             
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            
-                        <!-- Right Side Of Navbar -->
+                        <!-- 右側 -->
                         <ul class="navbar-nav mr-auto"></ul>
                         <ul class="navbar-nav navbar-right">
                             {{-- アプリ紹介ページへのリンク --}}
@@ -39,7 +38,7 @@
                             
                             {{-- 新規投稿ページへのリンク --}}
                             <li class="nav-item pt-2 mr-2">
-                                <a class="nav-link" href="#"><i class="fas fa-pen-square fa-lg new_post"></i>新規投稿</a>
+                                <a class="nav-link" href="{{ route('posts.create') }}"><i class="fas fa-pen-square fa-lg new_post"></i>新規投稿</a>
                             </li>
             
                             <li class="nav-item dropdown">
