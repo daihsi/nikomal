@@ -51,26 +51,29 @@
        </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container">
     <div class="row justify-content-center">
-    <div class="col-10">
-    <ul class="nav nav-tabs justify-content-center mt-3" id="myTab">
+    <div class="col-12">
+    <ul class="nav nav-tabs justify-content-center mt-3 mb-3" id="myTab">
       <li class="nav-item" role="presentation">
-        <a class="nav-link text-muted active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">ホーム</a>
+        <a class="nav-link text-muted active" id="mypost-tab" data-toggle="tab" href="#mypost" role="tab" aria-controls="mypost" aria-selected="true">投稿</a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link text-muted" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">プロフィール</a>
+        <a class="nav-link text-muted" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">フォロー</a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link text-muted" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">メッセージ</a>
+        <a class="nav-link text-muted" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">フォロワー</a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link text-muted" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">セッティング</a>
+        <a class="nav-link text-muted" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">いいね</a>
       </li>
     </ul>
     
     <div class="tab-content">
-      <div class="tab-pane active" id="home" aria-labelledby="home-tab">ホーム</div>
+        <div class="tab-pane active" id="mypost" aria-labelledby="mypost-tab">
+            {{-- 自分の投稿一覧 --}}
+            @include('posts.posts')
+        </div>
       <div class="tab-pane" id="profile" aria-labelledby="profile-tab">プロフィール</div>
       <div class="tab-pane" id="messages" aria-labelledby="messages-tab">メッセージ</div>
       <div class="tab-pane" id="settings" aria-labelledby="settings-tab">セッティング</div>

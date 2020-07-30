@@ -21,9 +21,12 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        
+        $user->loadRelationshipCounts();
+        $posts = $user->posts()->orderBy('created_at', 'desc')->simplePaginate(6);
+
         return view('users.show', [
             'user' => $user,
+            'posts' => $posts,
         ]);
     }
     
@@ -41,21 +44,18 @@ class UsersController extends Controller
     
     public function update(UserUpdateRequest $request, $id)
     {
-        
+
         $user = User::findOrFail($id);
-        $avatar = $request->file('avatar');
-        
-        if ($avatar) {
-             
+
+        if (!empty($request->file('avatar'))) {
             //既存ファイルを消去
-            if ($user->avatar) {
+            if(!empty($user->avatar)) {
                 Storage::disk('s3')->delete('users_avatar/'.basename($user->avatar));
             }
-             
-            $file = $avatar;
+            $file = $request->file('avatar');
             //アップロードされたファイル名取得
             $name = $file->getClientOriginalName();
-
+    
             //画像を横幅300px,縦幅アスペクト比維持の自動サイズへリサイズ
             $image = Image::make($file)
                 ->resize(300, null, function ($constraint) {
@@ -65,13 +65,11 @@ class UsersController extends Controller
             $path = Storage::disk('s3')->put('/users_avatar/'.$name, (string) $image->encode(), 'public');
             //データペースへ保存;
             $url = Storage::disk('s3')->url('users_avatar/'.$name);
-
+        }
+        elseif (empty($request->file('image')) && !empty($user->avatar)) {
+            $url = $user->avatar;
         }
         
-        if (empty($avatar) && $user->avatar) {
-            $url = Storage::disk('s3')->url('users_avatar/'.basename($user->avatar));
-        }
-
         $user->fill([
             'name' => $request->name,
             'avatar' => $url ?? null,
