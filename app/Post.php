@@ -32,7 +32,7 @@ class Post extends Model
     }
     
     //animal_idで指定されたカテゴリーに属する
-    public function belngsToCategory($animal_id)
+    public function belongsToCategory($animal_id)
     {
         $exist = $this->isBelongsToCategory($animal_id);
         
