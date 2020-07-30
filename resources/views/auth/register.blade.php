@@ -11,9 +11,9 @@
                 @csrf
                 <div class="text-center">
                 @if (!empty($file))
-                    <img id="avatar_preview" src="data:image/{{ $mimeType }};base64,{{ $file }}" class="rounded-circle" width="230" height="230">
+                    <img id="avatar_preview" src="data:image/{{ $mimeType }};base64,{{ $file }}" class="rounded-circle @error('avatar') is-invalid @enderror text-center" width="230" height="230">
                 @else
-                    <img id="avatar_preview" src="{{ asset('storage/images/default_icon.png') }}" class="rounded-circle" width="230" height="230">
+                    <img id="avatar_preview" src="{{ asset('storage/images/default_icon.png') }}" class="rounded-circle @error('avatar') is-invalid @enderror text-center" width="230" height="230">
                 @endif
                     <input type="file" name="avatar" id="avatarUpload" accept='image/jpeg,image/png,image/jpg' style="display:none;">
                     <button class="btn btn-outline-success d-none d-md-inline ml-3" id="avatarUploadButton">写真を選択</button>  
