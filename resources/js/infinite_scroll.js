@@ -1,15 +1,12 @@
-var $ = require('jquery');
-var jQueryBridget = require('jquery-bridget');
 var InfiniteScroll = require('infinite-scroll');
 
-jQueryBridget('infiniteScroll', InfiniteScroll, $);
-
-//ユーザー一覧ページ
-$('.card-group').infiniteScroll({
+var user_list = document.getElementById('user_list');
+var infScroll = new InfiniteScroll( user_list, {
     path: '.pagination_next',
-    append: '#user_list',
+    append: '.user_card',
     history: false,
     button: '.view_more_button',
     scrollThreshold: false,
     hideNav: '.pagination',
+
 });
