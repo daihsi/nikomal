@@ -151,6 +151,9 @@ return [
         'password' => 'パスワード',
         'avatar' => 'アバター画像',
         'self_introduction' => '自己紹介',
+        'image' => '投稿画像',
+        'content' => 'キャプショ',
+        'animals_name' => '動物',
     ],
 
 ];
