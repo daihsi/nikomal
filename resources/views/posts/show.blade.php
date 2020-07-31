@@ -20,7 +20,7 @@
                             <form method="POST" action="{{ route('posts.destroy', $post->id) }}">
                                 @method('DELETE')
                                 @csrf
-                                <button type-"submit" class="btn btn-danger rounded-pill fas fa-trash-alt mt-1 ml-1">削除</button>
+                                <button type="submit" class="btn btn-danger rounded-pill fas fa-trash-alt mt-1 ml-1">削除</button>
                             </form>
                         @endif
                     </div>
