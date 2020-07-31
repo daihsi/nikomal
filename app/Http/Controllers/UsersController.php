@@ -23,10 +23,13 @@ class UsersController extends Controller
         $user = User::findOrFail($id);
         $user->loadRelationshipCounts();
         $posts = $user->posts()->orderBy('created_at', 'desc')->simplePaginate(6);
-
+        $followings = $user->followings()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
+        $followers = $user->followers()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
         return view('users.show', [
             'user' => $user,
             'posts' => $posts,
+            'followings' => $followings,
+            'followers' => $followers,
         ]);
     }
     
@@ -77,6 +80,5 @@ class UsersController extends Controller
         ])->save();
 
         return redirect()->route('users.show', ['user' => $user]);
-
     }
 }

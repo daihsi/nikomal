@@ -16,6 +16,10 @@ Auth::routes();
 Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
 
 Route::group(['middleware' => ['auth']], function() {
+    Route::group(['prefix' => 'users/{id}'], function() {
+        Route::post('follow', 'UserFollowController@store')->name('user.follow');
+        Route::delete('unfollow', 'UserFollowController@destroy')->name('user.unfollow');
+    });
     Route::resource('users', 'UsersController', ['only' => ['edit', 'update']]);
     Route::resource('posts', 'PostsController', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
 });

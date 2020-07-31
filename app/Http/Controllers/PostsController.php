@@ -66,7 +66,7 @@ class PostsController extends Controller
                 $animal_id[] = $animal->id;
             }
         }
-        $post->belngsToCategory($animal_id);
+        $post->belongsToCategory($animal_id);
 
         //画像データの保存
         foreach ($post->postImages() as $post_image) {
