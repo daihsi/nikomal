@@ -34,4 +34,8 @@
         <button class="view_more_button btn btn-success btn-lg" aria-pressed="true">もっと見る</button>
     </p>
 @endif
+@else
+<div class="d-flex justify-content-center align-items-center" style="height:200px; color:rgba(0,0,0,0.4);">
+    まだ投稿がありません
+</div>
 @endif
