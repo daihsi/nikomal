@@ -17030,6 +17030,17 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
+@media (max-width: 311px) {
+  .follow_button,
+  .action_follow {
+    font-size: 10px;
+  }
+
+  .unfollow_button {
+    font-size: 9px;
+  }
+}
+
 @media (max-width: 345px) {
   #post_image_preview,
   #edit_post_image_preview {
@@ -17058,6 +17069,12 @@ readers do not read off random characters that represent icons */
     border-radius: 50%;
   }
 
+  .followings_icon {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+  }
+
   .user_show_avatar {
     width: 170px;
     height: 170px;
@@ -17074,7 +17091,8 @@ readers do not read off random characters that represent icons */
 }
 
 @media (min-width: 768px) and (max-width: 991.98px) {
-  .user_avatar_icon {
+  .user_avatar_icon,
+  .followings_icon {
     width: 160px;
     height: 160px;
     border-radius: 50%;
@@ -17175,5 +17193,31 @@ readers do not read off random characters that represent icons */
 
 .card {
   border: 1px solid white;
+}
+
+.follow_button:hover {
+  background-color: #d0211c;
+  border-color: #c51f1a;
+}
+
+button .unfollow_button {
+  display: none;
+}
+
+button:hover .follow_now_button {
+  display: none;
+}
+
+button:hover .unfollow_button {
+  display: inline;
+}
+
+.header_navbar {
+  width: 100vw;
+  max-width: 1700px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
 }
 
