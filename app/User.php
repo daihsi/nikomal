@@ -43,10 +43,9 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    //投稿数、フォロー数、フォロワー数のカウント
-    public function loadRelationshipCounts()
-    {
-        $this->loadCount(['posts', 'followings', 'followers']);
+    //投稿数、フォロー数、フォロワー数、いいね数のカウント
+    public function loadRelationshipCounts() {
+        $this->loadCount(['posts', 'followings', 'followers', 'likes']);
     }
 
     //Userモデルとのリレーション
@@ -90,5 +89,30 @@ class User extends Authenticatable
     //フォロー中であるか調べる処理
     public function isFollowing($user_id) {
         return $this->followings()->where('follow_id', $user_id)->exists();
+    }
+
+    //Postモデルとのリレーション
+    public function likes() {
+        return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id')->withTimestamps();
+    }
+
+    //投稿にいいねする処理、投稿のいいねを外す処理
+    public function like($post_id) {
+        $exist = $this->isLike($post_id);
+
+        if($exist) {
+            $this->likes()->detach($post_id);
+            return false;
+        }
+        else {
+            $this->likes()->attach($post_id);
+            return true;
+        }
+    }
+
+    //いいねしているか調べる処理
+    public function isLike($post_id) {
+        //いいねリクエストされた投稿のidが、すでにuser_idと結び中間テーブルに存在するか
+        return $this->likes()->where('post_id', $post_id)->exists();
     }
 }

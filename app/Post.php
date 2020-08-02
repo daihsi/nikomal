@@ -10,30 +10,28 @@ class Post extends Model
         'content', 
     ];
 
-    public function user()
-    {
+    //Userモデルとのリレーション
+    public function user() {
         return $this->belongsTo(User::class);
     }
-    
-    public function postImages()
-    {
+
+    //PostImageモデルとのリレーション
+    public function postImages() {
         return $this->hasMany(PostImage::class);
     }
-    
-    public function loadRelationshipCounts()
-    {
-        $this->loadCount('postImages');
+
+    //投稿画像、ある一つの投稿にいいねしているユーザーのカウント
+    public function loadRelationshipCounts() {
+        $this->loadCount(['postImages', 'likeUsers']);
     }
-    
-    
-    public function postCategorys()
-    {
+
+    //Animalモデルとのリレーション
+    public function postCategorys() {
         return $this->belongsToMany(Animal::class, 'post_category', 'post_id', 'animal_id')->withTimestamps();
     }
-    
+
     //animal_idで指定されたカテゴリーに属する
-    public function belongsToCategory($animal_id)
-    {
+    public function belongsToCategory($animal_id) {
         $exist = $this->isBelongsToCategory($animal_id);
         
         if ($exist) {
@@ -44,10 +42,9 @@ class Post extends Model
             return true;
         }
     }
-    
+
     //animal_idで指定されたカテゴリーから外れる
-    public function removeBelngsToCategory($animal_id)
-    {
+    public function removeBelngsToCategory($animal_id) {
         $exist = $this->isBelongsToCategory($animal_id);
         
         if($exist) {
@@ -58,10 +55,14 @@ class Post extends Model
             return false;
         }
     }
-    
+
     //animal_idで指定されたカテゴリーにこの投稿が属しているか調べる
-    public function isBelongsToCategory($animal_id)
-    {
-        return $this->postCategorys()->where('post_id',$animal_id)->exists();
+    public function isBelongsToCategory($animal_id) {
+        return $this->postCategorys()->where('animal_id',$animal_id)->exists();
+    }
+
+    //Userモデルとのリレーション
+    public function likeUsers() {
+        return $this->belongsToMany(User::class, 'likes', 'post_id', 'user_id')->withTimestamps();
     }
 }

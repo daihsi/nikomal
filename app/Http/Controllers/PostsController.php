@@ -98,11 +98,14 @@ class PostsController extends Controller
         $post = Post::findOrFail($id);
         $post_images = $post->postImages;
         $post_categorys = $post->postCategorys;
+        $post->loadRelationshipCounts();
+        $like_users = $post->likeUsers()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
 
         return view('posts.show',[
             'post' => $post,
             'post_images' => $post_images,
             'post_categorys' => $post_categorys,
+            'users' => $like_users,
         ]);
     }
 
