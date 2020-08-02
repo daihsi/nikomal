@@ -23,13 +23,10 @@ class UsersController extends Controller
         $user = User::findOrFail($id);
         $user->loadRelationshipCounts();
         $posts = $user->posts()->orderBy('created_at', 'desc')->simplePaginate(6);
-        $followings = $user->followings()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
-        $followers = $user->followers()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
+
         return view('users.show', [
             'user' => $user,
             'posts' => $posts,
-            'followings' => $followings,
-            'followers' => $followers,
         ]);
     }
     
@@ -80,5 +77,41 @@ class UsersController extends Controller
         ])->save();
 
         return redirect()->route('users.show', ['user' => $user]);
+    }
+
+    public function followings($id)
+    {
+        $user = User::findOrFail($id);
+        $user->loadRelationshipCounts();
+        $followings = $user->followings()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
+
+        return view('users.followings', [
+            'user' => $user,
+            'users' => $followings
+        ]);
+    }
+
+    public function followers($id)
+    {
+        $user = User::findOrFail($id);
+        $user->loadRelationshipCounts();
+        $followers = $user->followers()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
+
+        return view('users.followers', [
+            'user' => $user,
+            'users' => $followers,
+        ]);
+    }
+
+    public function likes($id)
+    {
+        $user = User::findOrFail($id);
+        $user->loadRelationshipCounts();
+        $likes = $user->likes()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(6);
+
+        return view('users.likes', [
+            'user' => $user,
+            'posts' => $likes,
+        ]);
     }
 }

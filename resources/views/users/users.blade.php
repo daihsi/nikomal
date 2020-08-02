@@ -15,7 +15,7 @@
                         <div class="d-flex flex-column ml-2 align-self-center">
                             <a href="{{ route('users.show', $user->id) }}" class="btn btn-link text-dark font-weight-bold ">{{ $user->name }}</a>
                             {{-- フォロー/アンフォローボタン--}}
-                            @include('user_follow.follow_button_users')
+                            @include('user_follow.follow_button')
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         <div class="d-sm-flex flex-column ml-2 align-self-center">
                             <a href="{{ route('users.show', $user->id) }}" class="btn btn-link text-dark font-weight-bold mr-auto">{{ $user->name }}</a>
                             {{-- フォロー/アンフォローボタン--}}
-                            @include('user_follow.follow_button_users')
+                            @include('user_follow.follow_button')
                         </div>
                     </div>
                 </div>
