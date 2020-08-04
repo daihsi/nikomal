@@ -2,7 +2,7 @@ var Masonry = require('masonry-layout');
 var InfiniteScroll = require('infinite-scroll');
 var imagesLoaded = require('imagesloaded');
 
-//トップページ
+//トップページ、個別ユーザー投稿一覧、個別ユーザーいいね投稿一覧
 var post_card_container = document.getElementById('post_card_container');
 
 InfiniteScroll.imagesLoaded = imagesLoaded;

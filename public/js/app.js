@@ -47422,24 +47422,6 @@ var infScroll = new InfiniteScroll(user_list, {
   scrollThreshold: false,
   hideNav: '.pagination'
 });
-var following_list = document.getElementById('following_list');
-var infScroll = new InfiniteScroll(following_list, {
-  path: '.followings_pagination_next',
-  append: '.following_card',
-  history: false,
-  button: '.following_more_button',
-  scrollThreshold: false,
-  hideNav: '.pagination'
-});
-var follower_list = document.getElementById('follower_list');
-var infScroll = new InfiniteScroll(follower_list, {
-  path: '.follower_pagination_next',
-  append: '.following_card',
-  history: false,
-  button: '.follower_more_button',
-  scrollThreshold: false,
-  hideNav: '.pagination'
-});
 
 /***/ }),
 
@@ -47454,7 +47436,7 @@ var Masonry = __webpack_require__(/*! masonry-layout */ "./node_modules/masonry-
 
 var InfiniteScroll = __webpack_require__(/*! infinite-scroll */ "./node_modules/infinite-scroll/js/index.js");
 
-var imagesLoaded = __webpack_require__(/*! imagesloaded */ "./node_modules/imagesloaded/imagesloaded.js"); //トップページ
+var imagesLoaded = __webpack_require__(/*! imagesloaded */ "./node_modules/imagesloaded/imagesloaded.js"); //トップページ、個別ユーザー投稿一覧、個別ユーザーいいね投稿一覧
 
 
 var post_card_container = document.getElementById('post_card_container');

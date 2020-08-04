@@ -6,19 +6,19 @@ $('#avatarUpload').on('change', function (e) {
     };  
     reader.readAsDataURL(e.target.files[0]);  
 }); 
-$('#avatarUploadButton').click(function(){
+$('#avatarUploadButton').click(function() {
     $('#avatarUpload').click();
     return false;
 });
 
 $('#avatarUpload').on('change', function (e) {  
-    let reader = new FileReader();  
-    reader.onload = function (e) {  
+    let reader = new FileReader();
+    reader.onload = function (e) {
         $("#avatar_preview").attr('src', e.target.result)  
     };
     reader.readAsDataURL(e.target.files[0]);  
 }); 
-$('#avatarUploadButtonBottom').click(function(){
+$('#avatarUploadButtonBottom').click(function() {
     $('#avatarUpload').click();
     return false;
 });
@@ -31,7 +31,7 @@ $('#post_upload').on('change', function (e) {
     };  
     reader.readAsDataURL(e.target.files[0]);
 });
-$('#edit_post_image_preview').click(function(){
+$('#edit_post_image_preview').click(function() {
     $('#post_upload').click();
     return false;
 });
@@ -52,7 +52,7 @@ $('#post_upload').on('change', function (e) {
         post_image_preview_style.cursor = 'pointer';
         post_image_preview_style.borderRadius = '5px';
 });
-$('#post_image_preview').click(function(){
+$('#post_image_preview').click(function() {
     $('#post_upload').click();
     return false;
 });
