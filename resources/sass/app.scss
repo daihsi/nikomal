@@ -16,102 +16,165 @@
 //select2
 @import '~select2/dist/css/select2.min.css';
 
-@media (max-width: 311px) {
+@media (max-width: 315px) {
+
   .follow_button,
   .action_follow {
     font-size: 10px;
   }
+
   .unfollow_button {
     font-size: 9px;
+  }
+
+  //投稿カードのユーザーネーム欄
+  .card-title {
+    font-size: 3.4vw;
+  }
+
+}
+
+@media (min-width: 315px) and (max-width: 375px) {
+
+  //投稿カードのユーザーネーム欄
+  .card-title {
+    font-size: 3.7vw;
   }
 }
 
 @media (max-width: 345px) {
+
     #post_image_preview, 
     #edit_post_image_preview {
     max-height: 240px;
   }
+
+  //ユーザー一覧、フォロー一覧、フォロワー一覧、いいねユーザー一覧のユーザーネーム
+  .user_name,
+  .like_user_name {
+    font-size: 4vw;
+  }
+
 }
 
 @media (min-width: 345px) and (max-width: 576px) {
+
   #post_image_preview,
   #edit_post_image_preview {
     max-height: 340px;
   }
+
 }
 
 
 //xsサイズ
 @media (max-width: 576px) {
+
   .user_show_avatar {
     width: 150px;
     height: 150px;
   }
+
 }
 
 //~sm:maxサイズ
 @media (max-width: 767.98px) {
-  //
-}
 
-//smサイズ
-@media (min-width: 576px) and (max-width: 767.98px) {
+  //ユーザー一覧、フォロー一覧、フォロワー一覧のユーザーアイコン
 	.user_avatar_icon {
 		width: 120px;
 		height: 120px;
 		border-radius: 50%;
 	}
-	.followings_icon {
-	  width: 110px;
-	  height: 110px;
-	  border-radius: 50%;
-	}
+
+}
+
+//smサイズ
+@media (min-width: 576px) and (max-width: 767.98px) {
+
   .user_show_avatar {
     width: 170px;
     height: 170px;
   }
+
   #post_image_preview,
   #edit_post_image_preview {
     max-height: 340px;
   }
+
   .post_image_supplement {
     font-size: 15px;
   }
+
+  //ユーザー一覧、フォロー一覧、フォロワー一覧、いいねユーザー一覧のユーザーネーム
+  .user_name,
+  .like_user_name {
+    font-size: 77%;
+  }
+
 }
 
 //mdサイズ
 @media (min-width: 768px) and (max-width: 991.98px) {
-	.user_avatar_icon,
-	.followings_icon {
+
+  //ユーザー一覧、フォロー一覧、フォロワー一覧、いいねユーザー一覧のユーザーアイコン
+	.user_avatar_icon {
 		width: 160px;
 		height: 160px;
 		border-radius: 50%;
 	}
+
 	.user_show_avatar {
 	  width: 200px;
 	  height: 200px;
 	}
+
 	#post_image_preview,
 	#edit_post_image_preview {
 	  max-height: 400px;
 	}
+
+  //ヘッダーナビのユーザーネーム
+  .nav_user_name {
+    font-size : 53%;
+  }
+
 }
 
 //~md:maxサイズ
 @media (max-width: 991.98px) {
+
   #avatar_preview {
     width: 200px;
     height: 200px;
   }
+
 }
 
 //~lg:minサイズ
 @media (min-width: 992px) {
+
   #post_image_preview,
   #edit_post_image_preview {
     max-width:530px;
     max-height:430px;
   }
+
+}
+
+//lgサイズ
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  //
+}
+
+//lg~サイズ
+@media (min-width: 1200px) {
+
+  //投稿詳細いいねユーザー一覧のユーザーネーム
+  .like_user_name {
+    //font-size: 77%;
+  }
+
 }
 
 //ナビゲーション上のアプリロゴ
@@ -127,10 +190,6 @@
   height: 50vw;
   max-height: 460px;
   border-radius: 7px;
-}
-
-.font-weight-bold {
-  font-size: 1.3em
 }
 
 .btn-outline-success {
@@ -192,6 +251,12 @@
   border: 1px solid rgba(255, 255, 255,);
 }
 
+//投稿カードの画像
+.post_image_card {
+  width: 100%;
+  max-height: 640px;
+}
+
 //ホバー時フォロー中ボタンの色変更
 .follow_button:hover {
   background-color: #d0211c;
@@ -211,6 +276,46 @@ button:hover .follow_now_button {
 //ホバー時のアンフォローボタン文字の表示
 button:hover .unfollow_button {
   display: inline;
+}
+
+//平常時のいいね中ボタンのスタイル
+.like_now_button, .like_button {
+  color: #FF0461;
+  background-color:#fffff;
+  padding: 0;
+  margin: 0;
+  width: 2.1rem;
+  height: 2.1rem;
+  line-height: 2.1rem;
+  text-align: center;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+//平常時のいいねボタンのスタイル
+.like_button {
+  color: #BBBBBB;
+  background-color:#fffff;
+  padding: 0;
+  margin: 0;
+  width: 2.1rem;
+  height: 2.1rem;
+  line-height: 2.1rem;
+  text-align: center;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+//カーソルが乗った時のいいね、いいね中ボタンのスタイル
+.like_now_button:hover, .like_button:hover {
+  background-color: #FFD5EC;
+  color: #FF0461;
+}
+
+//フォーカス時のアウトライン消去
+.btn:focus {
+  outline: none;
+  box-shadow:none;
 }
 
 //ヘッダーナビゲーション
