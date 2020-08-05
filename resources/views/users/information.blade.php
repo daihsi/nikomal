@@ -36,8 +36,8 @@
               </div>
         @endif
     </div>
-    <div class="row justify-content-center d-lg-none d-flex">
-        <div class="col-12 flex-column ml-5" style="max-width: 485px;">
+    <div class="row justify-content-center d-lg-none d-flex mt-3">
+        <div class="col-12 flex-column" style="max-width: 485px;">
             <div class="font-weight-bold">{{ $user->name }}</div>
             <div class="pt-3 overflow-auto" style="max-height: 150px;">
                 <p>{!! nl2br(e($user->self_introduction)) !!}</p>
