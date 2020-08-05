@@ -10,15 +10,15 @@
         <div class="col-12">
             {{-- タブ一覧 --}}
             @include('commons.navtabs_user_show')
-            {{-- フォロワー一覧 --}}
-            @include('users.users')
-            @if(count($users) == 0)
-                <div class="d-flex justify-content-center align-items-center" style="height:200px; color:rgba(0,0,0,0.4);">
-                    まだフォロワーがいません
-                </div>
-            @endif
         </div>
     </div>
 </div>
+{{-- フォロワー一覧 --}}
+@include('users.users')
+@if(count($users) == 0)
+    <div class="d-flex justify-content-center align-items-center" style="height:200px; color:rgba(0,0,0,0.4);">
+        まだフォロワーがいません
+    </div>
+@endif
 
 @endsection
