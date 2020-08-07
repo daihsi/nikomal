@@ -5,6 +5,8 @@
 use App\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +20,19 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(User::class, function (Faker $faker) {
+
+        Storage::fake('users_avatar');
+        $upload_file = UploadedFile::fake()->image('avatar_test.jpg');
+        $upload_file->move('storage/framework/testing/disks/users_avatar');
+        $file_name = $upload_file->getFilename();
+
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         'remember_token' => Str::random(10),
+        'avatar' => 'storage/framework/testing/disks/users_avatar/'.$file_name,
+        'self_introduction' => $faker->text(150),
     ];
 });
