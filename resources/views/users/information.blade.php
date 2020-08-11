@@ -15,7 +15,11 @@
                 <img src="{{ $user->avatar }}" class="rounded-circle mr-3 user_show_avatar" width="230" height="230">
             @endempty
             @if(Auth::id() === $user->id)
-              <div class="d-lg-none d-block align-self-end">{!! link_to_route('users.edit', '編集', ['user' => $user->id], ['class' => 'btn btn-outline-success rounded-pill fas fa-user-edit']) !!}</div>
+                <div class="d-lg-none d-block align-self-end">{!! link_to_route('users.edit', '編集', ['user' => $user->id], ['class' => 'btn btn-outline-success rounded-pill fas fa-user-edit']) !!}</div>
+            @else
+                <div class="d-lg-none d-block align-self-end">
+                    @include('user_follow.follow_button')
+                </div>
             @endif
         </div>
 
@@ -29,6 +33,9 @@
             </div>
         @else
             <div class="flex-lg-column col-lg-6 pr-5 d-none d-lg-flex" style="max-width: 485px;">
+                <div class="align-self-end">
+                    @include('user_follow.follow_button')
+                </div>
                 <div class="user_other font-weight-bold mt-3">{{ $user->name }}</div>
                 <div class="overflow-auto mt-1" style="max-height: 150px;">
                     <p>{!! nl2br(e($user->self_introduction)) !!}</p>
