@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Storage;
 $factory->define(User::class, function (Faker $faker) {
 
         Storage::fake('users_avatar');
-        $upload_file = UploadedFile::fake()->image('avatar_test.jpg');
+        $upload_file = UploadedFile::fake()->image('avatar_test.jpg')->size(2048);
         $upload_file->move('storage/framework/testing/disks/users_avatar');
         $file_name = $upload_file->getFilename();
 

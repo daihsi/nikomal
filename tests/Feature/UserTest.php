@@ -77,9 +77,6 @@ class UserTest extends TestCase
         ];
         //どこがエラーになったか検証
         $this->assertEquals($expectedFailed, $validator->failed());
-        dump($expectedFailed);
-        dump($validator->failed());
-
     }
 
     //メール、画像フォーマットのバリデーションテスト
