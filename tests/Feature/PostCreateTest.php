@@ -121,7 +121,6 @@ class PostCreateTest extends TestCase
         ];
         //どこがエラーになったか検証
         $this->assertEquals($expectedFailed, $validator->failed());
-        //リクエストに失敗したため、詳細ページにリダイレクトしているか確認
     }
 
     //contentの桁あふれの際のバリデーションテスト
@@ -189,7 +188,7 @@ class PostCreateTest extends TestCase
         //バリデーションルールとデータを整合性検証
         $validator = Validator::make($data, $rules);
         $result = $validator->passes();
-        //データが偽であるか確認
+        //データが真であるか確認
         $this->assertTrue($result);
     }
 
@@ -223,6 +222,7 @@ class PostCreateTest extends TestCase
             ->assertSeeTextInOrder($animals_name);
     }
 
+    //ユーザー詳細ページに投稿が表示されているかテスト
     public function testPostViewUserShowpage()
     {
         $factory_user = factory(User::class)->create();
