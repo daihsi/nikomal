@@ -231,7 +231,7 @@ class UserEditTest extends TestCase
                     'file' => $avatar,
                     'self_introduction' => str_repeat('あ', 150),
                 ]);
-        $test = $this->assertDatabaseHas('users', $data);
+        $this->assertDatabaseHas('users', $data);
 
         //リクエストに成功したため、詳細ページにリダイレクトしているか確認
         $response->assertStatus(302)->assertRedirect($url);
