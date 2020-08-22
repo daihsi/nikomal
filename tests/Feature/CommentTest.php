@@ -268,4 +268,10 @@ class CommentTest extends TestCase
             $response->assertSee($comment->comment);
         }
     }
+
+    //ゲストユーザーにはコメント入力エリアが表示されていないかテスト
+    public function testCommentTextArea() {
+        $this->get(route('posts.show', $this->post->id))
+            ->assertDontSee('<textarea></textarea>');
+    }
 }
