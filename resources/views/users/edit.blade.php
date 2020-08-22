@@ -39,7 +39,7 @@
 
                     <div class="form-group mt-3">
                         <label for="self_introduction" class="col col-form-label">{{ __('Self_Introduction') }}</label>
-                        <textarea id="self_introduction" class="form-control @error('self_introduction') is-invalid @enderror" name="self_introduction" placeholder="150字以下で入力してください" rows="5" cols="40" wrap="hard" maxlength="150">{{ $user->self_introduction }}</textarea>
+                        <textarea id="self_introduction" class="form-control @error('self_introduction') is-invalid @enderror" name="self_introduction" placeholder="150字以下で入力してください" rows="5" maxlength="150">{{ $user->self_introduction }}</textarea>
 
                         @error('self_introduction')
                             <span class="invalid-feedback" role="alert">
