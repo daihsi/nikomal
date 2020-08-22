@@ -17039,15 +17039,11 @@ readers do not read off random characters that represent icons */
   .unfollow_button {
     font-size: 9px;
   }
-
-  .card-title {
-    font-size: 3.4vw;
-  }
 }
 
-@media (min-width: 315px) and (max-width: 375px) {
-  .card-title {
-    font-size: 3.7vw;
+@media (max-width: 351px) {
+  .card-header {
+    font-size: 4vw;
   }
 }
 
@@ -17074,6 +17070,11 @@ readers do not read off random characters that represent icons */
   .user_show_avatar {
     width: 150px;
     height: 150px;
+  }
+
+  .authenticated_user_comment p,
+  .user_comment p {
+    max-width: 480px;
   }
 }
 
@@ -17104,6 +17105,11 @@ readers do not read off random characters that represent icons */
   .like_user_name {
     font-size: 77%;
   }
+
+  .authenticated_user_comment p,
+  .user_comment p {
+    max-width: 450px;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 991.98px) {
@@ -17126,6 +17132,11 @@ readers do not read off random characters that represent icons */
   .nav_user_name {
     font-size: 53%;
   }
+
+  .authenticated_user_comment p,
+  .user_comment p {
+    max-width: 462px;
+  }
 }
 
 @media (max-width: 991.98px) {
@@ -17140,6 +17151,20 @@ readers do not read off random characters that represent icons */
   #edit_post_image_preview {
     max-width: 530px;
     max-height: 430px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .authenticated_user_comment p,
+  .user_comment p {
+    max-width: 402px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .authenticated_user_comment p,
+  .user_comment p {
+    max-width: 420px;
   }
 }
 
@@ -17210,6 +17235,28 @@ readers do not read off random characters that represent icons */
   border: 1px solid white;
 }
 
+.card-header {
+  padding: 0.5rem;
+  background-color: #FFFFFF;
+  border-bottom: none;
+}
+
+.card-body {
+  padding: 0.5rem;
+}
+
+.card-footer {
+  padding: 0.5rem;
+  background-color: #FFFFFF;
+  border-top: none;
+}
+
+.post_content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .post_image_card {
   width: 100%;
   max-height: 640px;
@@ -17277,5 +17324,108 @@ button:hover .unfollow_button {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
+}
+
+.new_comment_box {
+  position: relative;
+  margin: 2em 0;
+  padding: 0.5em 1em;
+  border: solid 3px #e8e8e8;
+  border-radius: 8px;
+}
+
+.new_comment_title {
+  position: absolute;
+  display: inline-block;
+  top: -13px;
+  left: 10px;
+  padding: 0 9px;
+  line-height: 1;
+  font-size: 18px;
+  background: #FFF;
+  color: #6c757d;
+  font-weight: bold;
+}
+
+.comment_heading {
+  border-bottom: 4px double #e8e8e8;
+  text-align: center;
+  margin: 10px 0 0 0;
+  padding: 0 0 5px 0;
+  font-weight: bold;
+  color: #6c757d;
+  font-size: 17px;
+}
+
+textarea {
+  resize: none;
+}
+
+.comment_area {
+  padding: 20px 10px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: right;
+  font-size: 14px;
+  background-color: #FFFFFF;
+}
+
+.user_comment {
+  margin: 7px 0;
+}
+
+.user_comment p:after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: -12px;
+  left: -3px;
+  border: 8px solid transparent;
+  border-right: 18px solid #edf1ee;
+  transform: rotate(55deg);
+}
+
+.user_comment p {
+  display: inline-block;
+  position: relative;
+  margin: 0 0 0 20px;
+  padding: 8px;
+  border-radius: 12px;
+  background: #edf1ee;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.authenticated_user_comment {
+  margin: 0 0;
+}
+
+.authenticated_user_comment p:after {
+  content: "";
+  position: absolute;
+  top: -12px;
+  right: -3px;
+  border: 8px solid transparent;
+  border-left: 18px solid #7ed957;
+  transform: rotate(-55deg);
+}
+
+.authenticated_user_comment p {
+  display: inline-block;
+  position: relative;
+  margin: 0 20px 0 0;
+  padding: 8px;
+  border-radius: 12px;
+  background: #7ed957;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.p_category {
+  font-size: 13px;
+}
+
+.p_hash {
+  font-size: 10px;
 }
 

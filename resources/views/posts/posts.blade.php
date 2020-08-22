@@ -5,25 +5,42 @@
         @foreach ($posts as $post)
             <div class="post_item col-xl-4 col-lg-6 col-md-8 col-sm-10 col-12 offset-xl-0 offset-lg-0 offset-md-2 offset-sm-1">
             <div class="card shadow p-2 bg-white rounded mb-4">
-                @foreach ($post->postImages as $post_image)
-                    <a href="{{ route('posts.show', $post->id) }}"><img src="{{ $post_image->image }}" class="card-img-top post_image_card"
-                        @foreach ($post->postCategorys as $post_category) @php $animals_name = 'animals_name'. $post->id; $$animals_name[] = $post_category->name; @endphp @endforeach alt="{{ implode('・', $$animals_name). 'の笑顔写真。投稿の詳細ページへ' }}">
-                    </a>
-                @endforeach
-                <div class="card-body">
-                    <div class="card-title font-weight-bold">
+                <div class="card-header">
                     @empty($post->user->avatar)
-                        <a href="{{ route('users.show', $post->user->id) }}" class="text-dark"><img src="{{ asset('storage/images/default_icon.png') }}" class="rounded-circle" width="40" height="40">{{ $post->user->name }}</a>
+                        <a href="{{ route('users.show', $post->user->id) }}" class="text-dark font-weight-bold"><img src="{{ asset('storage/images/default_icon.png') }}" class="rounded-circle mr-2" width="40" height="40">{{ $post->user->name }}</a>
                     @else
-                        <a href="{{ route('users.show', $post->user->id) }}" class="text-dark"><img src="{{ $post->user->avatar }}" class="rounded-circle mr-2" width="40" height="40">{{ $post->user->name }}</a>
+                        <a href="{{ route('users.show', $post->user->id) }}" class="text-dark font-weight-bold"><img src="{{ $post->user->avatar }}" class="rounded-circle mr-2" width="40" height="40">{{ $post->user->name }}</a>
                     @endempty
-                    </div>
-                    <p class="card-text">{!! nl2br(e($post->content)) !!}</p>
+                </div>
+                <div class="card-body">
+                    @foreach ($post->postImages as $post_image)
+                        <a href="{{ route('posts.show', $post->id) }}"><img src="{{ $post_image->image }}" class="rounded post_image_card"
+                            @foreach ($post->postCategorys as $post_category) @php $animals_name = 'animals_name'. $post->id; $$animals_name[] = $post_category->name; @endphp @endforeach alt="{{ implode('・', $$animals_name). 'の笑顔写真。投稿の詳細ページへ' }}">
+                        </a>
+                    @endforeach
+                </div>
+                <div class="card-footer">
+                    <p class="card-text post_content">{{ $post->content }}</p>
                         @foreach($post->postCategorys as $post_category)
-                            <div class="badge badge-success mr-1 align-self-center"><i class="fas fa-hashtag">{{ $post_category->name }}</i></div>
+                            <a href="#"><span class="p_category"><i class="fas fa-hashtag p_hash"></i>{{ $post_category->name }}</span></a>
                         @endforeach
-                    <div class="d-flex justify-content-end">
+                    <div class="d-flex justify-content-center mt-2">
+                        {{-- いいねボタン --}}
                         @include('likes.like_button')
+                        <div class="ml-5 d-flex align-items-center">
+                            <i class="far fa-comments fa-lg pr-2" style="color: #BBBBBB;"></i>
+                            <span class="align-self-end comment_count"
+                                @if (Auth::check())
+                                    style="margin:0 0 1.6px 0;"
+                                @else
+                                    style="margin: 2px 0 0 0;"
+                                @endif
+                            >{{ $post->postComments->count() }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-2">
+                        <small>{{ $post->created_at->format('Y/m/d H:i') }}</small>
                     </div>
                 </div>
             </div>

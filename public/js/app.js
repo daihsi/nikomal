@@ -47422,6 +47422,15 @@ var infScroll = new InfiniteScroll(user_list, {
   scrollThreshold: false,
   hideNav: '.pagination'
 });
+var comment_area = document.getElementById('comment_area');
+var infScroll = new InfiniteScroll(comment_area, {
+  path: '.comment_next',
+  append: '.balloon',
+  history: false,
+  button: '.comment_more_button',
+  scrollThreshold: false,
+  hideNav: '.pagination'
+});
 
 /***/ }),
 
