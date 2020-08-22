@@ -6,6 +6,7 @@ use App\User;
 use App\Post;
 use App\PostImage;
 use App\Animal;
+use App\Comment;
 use App\Http\Requests\PostRequest;
 use App\Http\Requests\PostEditRequest;
 use Illuminate\Http\Request;
@@ -100,12 +101,14 @@ class PostsController extends Controller
         $post_categorys = $post->postCategorys;
         $post->loadRelationshipCounts();
         $like_users = $post->likeUsers()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
+        $comments = $post->postComments()->orderBy('created_at', 'desc')->simplePaginate(12);
 
         return view('posts.show',[
             'post' => $post,
             'post_images' => $post_images,
             'post_categorys' => $post_categorys,
             'users' => $like_users,
+            'comments' => $comments,
         ]);
     }
 
