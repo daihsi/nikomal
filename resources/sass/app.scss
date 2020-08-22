@@ -27,25 +27,21 @@
     font-size: 9px;
   }
 
-  //投稿カードのユーザーネーム欄
-  .card-title {
-    font-size: 3.4vw;
-  }
-
 }
 
-@media (min-width: 315px) and (max-width: 375px) {
-
+@media (max-width: 351px) {
+  
   //投稿カードのユーザーネーム欄
-  .card-title {
-    font-size: 3.7vw;
+  .card-header {
+    font-size: 4vw;
   }
+
 }
 
 @media (max-width: 345px) {
 
-    #post_image_preview, 
-    #edit_post_image_preview {
+  #post_image_preview, 
+  #edit_post_image_preview {
     max-height: 240px;
   }
 
@@ -73,6 +69,12 @@
   .user_show_avatar {
     width: 150px;
     height: 150px;
+  }
+
+  //コメント一覧のコメント表示
+  .authenticated_user_comment p,
+  .user_comment p {
+    max-width: 480px;
   }
 
 }
@@ -112,6 +114,12 @@
     font-size: 77%;
   }
 
+  //コメント一覧のコメント表示
+  .authenticated_user_comment p,
+  .user_comment p {
+    max-width: 450px;
+  }
+
 }
 
 //mdサイズ
@@ -139,6 +147,12 @@
     font-size : 53%;
   }
 
+  //コメント一覧のコメント表示
+  .authenticated_user_comment p,
+  .user_comment p {
+    max-width: 462px;
+  }
+
 }
 
 //~md:maxサイズ
@@ -164,7 +178,12 @@
 
 //lgサイズ
 @media (min-width: 992px) and (max-width: 1199.98px) {
-  //
+
+  //コメント一覧のコメント表示
+  .authenticated_user_comment p,
+  .user_comment p {
+    max-width: 402px;
+  }
 }
 
 //lg~サイズ
@@ -173,6 +192,12 @@
   //投稿詳細いいねユーザー一覧のユーザーネーム
   .like_user_name {
     //font-size: 77%;
+  }
+
+  //コメント一覧のコメント表示
+  .authenticated_user_comment p,
+  .user_comment p {
+    max-width: 420px;
   }
 
 }
@@ -251,6 +276,29 @@
   border: 1px solid rgba(255, 255, 255,);
 }
 
+.card-header {
+  padding: 0.50rem;
+  background-color: #FFFFFF;
+  border-bottom: none;
+}
+
+.card-body {
+  padding: 0.50rem;
+}
+
+.card-footer {
+  padding: 0.50rem;
+  background-color: #FFFFFF;
+  border-top: none;
+}
+
+//投稿一覧のコンテンツを一定の幅以上は隠す
+.post_content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 //投稿カードの画像
 .post_image_card {
   width: 100%;
@@ -326,4 +374,115 @@ button:hover .unfollow_button {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
+}
+
+//コメント入力エリアの周りの囲い
+.new_comment_box {
+    position: relative;
+    margin: 2em 0;
+    padding: 0.5em 1em;
+    border: solid 3px #e8e8e8;
+    border-radius: 8px;
+}
+
+//コメント入力エリアのタイトル
+.new_comment_title {
+    position: absolute;
+    display: inline-block;
+    top: -13px;
+    left: 10px;
+    padding: 0 9px;
+    line-height: 1;
+    font-size: 18px;
+    background: #FFF;
+    color: #6c757d;
+    font-weight: bold;
+}
+
+//コメント一覧見出し
+.comment_heading {
+  border-bottom: 4px double #e8e8e8;
+  text-align: center;
+  margin: 10px 0 0 0;
+  padding: 0 0 5px 0;
+  font-weight: bold;
+  color: #6c757d;
+  font-size: 17px;
+}
+
+textarea {
+  resize: none;
+}
+
+//コメント一覧エリア背景色など
+.comment_area {
+  padding: 20px 10px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: right;
+  font-size: 14px;
+  background-color: #FFFFFF;
+}
+
+//左側(認証ユーザー以外)のコメント
+.user_comment {
+  margin: 7px 0;
+}
+.user_comment p:after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: -12px; 
+  left: -3px;
+  border: 8px solid transparent;
+  border-right: 18px solid #edf1ee;
+  -webkit-transform: rotate(55deg);
+  transform: rotate(55deg);
+}
+.user_comment p {
+  display: inline-block;
+  position: relative; 
+  margin: 0 0 0 20px;
+  padding: 8px;
+  //max-width: 505px;
+  border-radius: 12px;
+  background: #edf1ee;
+  font-size: 1rem;
+  text-align: left;
+}
+
+//右側(認証ユーザー)の緑コメント
+.authenticated_user_comment {
+  margin: 0 0;
+}
+.authenticated_user_comment p:after {
+  content: "";
+  position: absolute;
+  top: -12px; 
+  right: -3px;
+  border: 8px solid transparent;
+  border-left: 18px solid #7ed957;
+  -webkit-transform: rotate(-55deg);
+  transform: rotate(-55deg);
+}
+.authenticated_user_comment p {
+  display: inline-block;
+  position: relative; 
+  margin: 0 20px 0 0;
+  padding: 8px;
+  //max-width: 505px;
+  border-radius: 12px;
+  background: #7ed957;
+  font-size: 1rem;
+  text-align: left;
+}
+
+//カテゴリーのフォントサイズ
+.p_category {
+  font-size: 13px;
+}
+
+//ハッシュアイコンのフォントサイズ
+.p_hash {
+  font-size: 10px;
 }
