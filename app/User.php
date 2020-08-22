@@ -115,4 +115,10 @@ class User extends Authenticatable
         //いいねリクエストされた投稿のidが、すでにuser_idと結び中間テーブルに存在するか
         return $this->likes()->where('post_id', $post_id)->exists();
     }
+
+    //Commentモデルとのリレーション
+    public function userComments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
