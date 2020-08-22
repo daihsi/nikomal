@@ -32,5 +32,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::delete('unlike', 'LikesController@destroy')->name('posts.unlike');
     });
     Route::resource('posts', 'PostsController', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+
+    Route::post('/comments', 'CommentsController@store')->name('posts.comment');
+    Route::delete('comments/{id}', 'CommentsController@destroy')->name('posts.uncomment');
 });
 Route::resource('posts', 'PostsController', ['only' => 'show']);
