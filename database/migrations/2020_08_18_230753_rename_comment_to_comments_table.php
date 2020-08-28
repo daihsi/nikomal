@@ -23,6 +23,6 @@ class RenameCommentToCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::rename('comment', 'comments');
+        Schema::rename('comments', 'comment');
     }
 }

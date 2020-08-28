@@ -26,7 +26,7 @@ class RenameImageToAvatarOnUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->renameColumn('image', 'avatar');
+            $table->renameColumn('avatar', 'image');
         });
     }
 }
