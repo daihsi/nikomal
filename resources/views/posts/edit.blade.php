@@ -27,7 +27,7 @@
             <div class="d-md-flex flex-md-column col-lg-5 col-md-8 col-sm-10 col-11 pt-3">
                 <div class="form-group">
                     <label for="content" class="col col-form-label"><span class="badge badge-danger mr-1">必須</span>キャプショ</label>
-                    <textarea id="content" name="content" class="form-control post_content @error('content') is-invalid @enderror" autocomplete="content" placeholder="150字以下で入力してください" rows=6 cols=30 wrap="hard" maxlength="150" autofocus required>{{ old('content', $post->content) }}</textarea>
+                    <textarea id="content" name="content" class="form-control @error('content') is-invalid @enderror" autocomplete="content" placeholder="150字以下で入力してください" rows=8 maxlength="150" autofocus required>{{ old('content', $post->content) }}</textarea>
                     @error('content')
                         <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
