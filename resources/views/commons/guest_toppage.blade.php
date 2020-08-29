@@ -53,4 +53,4 @@
     </div>
 </div>
 
-<h3 class="text-center font-weight-bold mt-5 mb-4">みんなの投稿</h3>
+<h3 class="text-center font-weight-bold mb-5">みんなの投稿</h3>
