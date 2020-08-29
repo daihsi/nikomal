@@ -8,7 +8,7 @@
     <li class="nav-item" role="presentation">
         <a class="nav-link text-muted" id="likes_tab" data-toggle="tab" href="#likes" role="tab" aria-controls="likes" aria-selected="true">
             いいね
-            <span class="badge badge-white badge-pill">{{ $post->likeUsers->count() }}</span>
+            <span class="badge badge-white badge-pill">{{ $post->likes->count() }}</span>
         </a>
      </li>
 </ul>
