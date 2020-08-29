@@ -53,7 +53,7 @@ class PostLikeTest extends TestCase
 
     public function tearDown(): void
     {
-        \DB::table('likes')->truncate();
+        Artisan::call('migrate:refresh');
         parent::tearDown();
     }
 
@@ -197,5 +197,78 @@ class PostLikeTest extends TestCase
             ->assertStatus(200)
             ->assertViewIs('users.likes')
             ->assertDontSee($this->post->content);
+    }
+
+    //いいねランキングページにゲストユーザーが
+    //アクセスできないようになっているかテスト
+    public function testGuestUserPostsPopularPage()
+    {
+        //いいねランキングページにアクセスしたが失敗し
+        //ログインページにリダイレクトしたか確認
+        $this->get(route('posts.popular'))
+            ->assertStatus(302)
+            ->assertRedirect(route('login'));
+    }
+
+    //ゲストユーザーがアクセス時に
+    //トップページに切り替えボタンが表示されていないかテスト
+    public function testNotSortButton()
+    {
+        $this->get('/')
+            ->assertDontSee('人気投稿')
+            ->assertDontSee('新規投稿');
+    }
+
+    //いいねが多い順で投稿が表示されているかテスト
+    public function testPostsPopularPage()
+    {
+        factory(User::class, 5)->create();
+        $users = User::all();
+        $posts = Post::all();
+        foreach ($users as $user) {
+
+            //ユーザーid(1)が、いいねをする
+            if ($user->id == 1) {
+                $this->actingAs($user);
+                foreach ($posts as $key => $post) {
+                    if ($key == 5) {
+                        break;
+                    }
+                    $this->post(route('posts.like', $post->id));
+                }
+                $this->post(route('logout'));
+            }
+
+            //ユーザーid(2)が、いいねをする
+            if ($user->id == 2) {
+                $this->actingAs($user);
+                foreach ($posts as $key => $post) {
+                    if ($key == 3) {
+                        break;
+                    }
+                    $this->post(route('posts.like', $post->id));
+                }
+                $this->post(route('logout'));
+            }
+
+            //ユーザーid(3)が、いいねをする
+            if ($user->id == 3) {
+                $this->actingAs($user);
+                foreach ($posts as $post) {
+                    $this->post(route('posts.like', $post->id));
+                    break;
+                }
+            }
+        }
+
+        //いいねが多い順の投稿を順番に取得
+        $posts = Post::withCount('likes')->orderBy('likes_count', 'desc')->get();
+        foreach ($posts as $post) {
+            $data[] = $post->content;
+        }
+
+        //投稿がいいねが多い順で表示されているか取得
+        $this->get(route('posts.popular'))
+            ->assertSeeInOrder($data);
     }
 }
