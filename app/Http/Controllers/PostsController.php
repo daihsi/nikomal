@@ -22,7 +22,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('postImages', 'postCategorys')->orderBy('created_at', 'desc')->simplePaginate(10);
+        $posts = Post::with('postImages', 'postCategorys')->orderBy('created_at', 'desc')->simplePaginate(12);
         return view('welcome', [
             'posts' => $posts,
         ]);
@@ -51,7 +51,6 @@ class PostsController extends Controller
      */
     public function store(PostRequest $request)
     {
-
         //キャプショのデータ保存
         $user = auth()->user();
         $post = $user->posts()->create([
@@ -70,20 +69,17 @@ class PostsController extends Controller
         $post->belongsToCategory($animal_id);
 
         //画像データの保存
-        foreach ($post->postImages() as $post_image) {
-            $file = $request->file('image');
-            $name = $file->getClientOriginalName();
-            $image = Image::make($file)
-                ->resize(400, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-            $path = Storage::disk('s3')->put('/post_images/'.$name, (string) $image->encode(), 'public');
-            $url = Storage::disk('s3')->url('post_images/'.$name);
-    
-            $post_image->create([
-                'image' => $url,
-            ]);
-        }
+        $file = $request->file('image');
+        $name = $file->getClientOriginalName();
+        $image = Image::make($file)
+            ->resize(400, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        $path = Storage::disk('s3')->put('/post_images/'.$name, (string) $image->encode(), 'public');
+        $url = Storage::disk('s3')->url('post_images/'.$name);
+        $post->postImages()->create([
+            'image' => $url,
+        ]);
 
         return redirect('/');
     }
@@ -100,7 +96,7 @@ class PostsController extends Controller
         $post_images = $post->postImages;
         $post_categorys = $post->postCategorys;
         $post->loadRelationshipCounts();
-        $like_users = $post->likeUsers()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
+        $like_users = $post->likes()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
         $comments = $post->postComments()->orderBy('created_at', 'desc')->simplePaginate(12);
 
         return view('posts.show',[
@@ -167,7 +163,7 @@ class PostsController extends Controller
         foreach ($post->postImages as $post_image) {
             if (!empty($request->file('image'))) {
                 if (!empty($post_image->image)) {
-                    $test = Storage::disk('s3')->delete('post_images/'.basename($post_image->image));
+                    Storage::disk('s3')->delete('post_images/'.basename($post_image->image));
                 }
                 $file = $request->image;
                 $name = $file->getClientOriginalName();
