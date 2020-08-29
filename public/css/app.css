@@ -17429,3 +17429,42 @@ textarea {
   font-size: 10px;
 }
 
+.btn-block {
+  margin-top: 0.5rem;
+}
+
+.posts_sort {
+  border: 2px dashed #e8e8e8;
+}
+
+.posts_sort:hover {
+  border: 2px dashed #6c757d;
+  background-color: #e8e8e8;
+  color: #6c757d;
+}
+
+.posts_sort.disabled,
+.posts_sort:disabled {
+  color: #e8e8e8;
+  background-color: transparent;
+}
+
+.posts_sort:not(:disabled):not(.disabled):active,
+.posts_sort:not(:disabled):not(.disabled).active,
+.show > .posts_sort.dropdown-toggle {
+  color: #6c757d;
+  background-color: #e8e8e8;
+  border: 2px dashed #6c757d;
+}
+
+.posts_sort:focus,
+.posts_sort.focus {
+  box-shadow: 0 0 0 0.2rem rgba(232, 232, 232, 0.5);
+}
+
+.posts_sort:not(:disabled):not(.disabled):active:focus,
+.posts_sort:not(:disabled):not(.disabled).active:focus,
+.show > .posts_sort.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(232, 232, 232, 0.5);
+}
+
