@@ -13,6 +13,15 @@
 //トップページ(新規投稿順)
 Route::get('/', 'PostsController@index');
 
+//投稿詳細ページ(いいねユーザー一覧)
+Route::get('posts/{id}/like', 'PostsController@likes')->name('post.likes');
+
+//投稿検索表示ページ
+Route::get('posts/search', 'PostsSearchController@index')->name('posts.search');
+
+//投稿カテゴリーリンクルーティング
+Route::get('categorys/{id}', 'PostsSearchController@categorys')->name('posts.categorys');
+
 //認証関係
 Auth::routes();
 
@@ -45,9 +54,7 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     //いいねが多い順の投稿一覧
-    Route::group(['prefix' => 'posts/'], function() {
-        Route::get('popular', 'PostsPopularController@index')->name('posts.popular');
-    });
+    Route::get('posts/popular', 'PostsPopularController@index')->name('posts.popular');
 
     //新規投稿・投稿編集
     Route::resource('posts', 'PostsController', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
@@ -57,5 +64,5 @@ Route::group(['middleware' => ['auth']], function() {
     Route::delete('comments/{id}', 'CommentsController@destroy')->name('posts.uncomment');
 });
 
-//投稿詳細ページ
+//投稿詳細ページ(コメント一覧)
 Route::resource('posts', 'PostsController', ['only' => 'show']);
