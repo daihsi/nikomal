@@ -8,6 +8,7 @@ var infScroll = new InfiniteScroll( user_list, {
     button: '.view_more_button',
     scrollThreshold: false,
     hideNav: '.pagination',
+    status: '.page_load_status',
 });
 
 var comment_area = document.getElementById('comment_area');
@@ -18,4 +19,5 @@ var infScroll = new InfiniteScroll( comment_area, {
     button: '.comment_more_button',
     scrollThreshold: false,
     hideNav: '.pagination',
+    status: '.page_load_status',
 });

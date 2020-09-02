@@ -8613,6 +8613,149 @@ return InfiniteScroll;
 
 /***/ }),
 
+/***/ "./node_modules/jquery-bridget/jquery-bridget.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/jquery-bridget/jquery-bridget.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+ * Bridget makes jQuery widgets
+ * v2.0.1
+ * MIT license
+ */
+
+/* jshint browser: true, strict: true, undef: true, unused: true */
+
+( function( window, factory ) {
+  // universal module definition
+  /*jshint strict: false */ /* globals define, module, require */
+  if ( true ) {
+    // AMD
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js") ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery ) {
+      return factory( window, jQuery );
+    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+
+}( window, function factory( window, jQuery ) {
+'use strict';
+
+// ----- utils ----- //
+
+var arraySlice = Array.prototype.slice;
+
+// helper function for logging errors
+// $.error breaks jQuery chaining
+var console = window.console;
+var logError = typeof console == 'undefined' ? function() {} :
+  function( message ) {
+    console.error( message );
+  };
+
+// ----- jQueryBridget ----- //
+
+function jQueryBridget( namespace, PluginClass, $ ) {
+  $ = $ || jQuery || window.jQuery;
+  if ( !$ ) {
+    return;
+  }
+
+  // add option method -> $().plugin('option', {...})
+  if ( !PluginClass.prototype.option ) {
+    // option setter
+    PluginClass.prototype.option = function( opts ) {
+      // bail out if not an object
+      if ( !$.isPlainObject( opts ) ){
+        return;
+      }
+      this.options = $.extend( true, this.options, opts );
+    };
+  }
+
+  // make jQuery plugin
+  $.fn[ namespace ] = function( arg0 /*, arg1 */ ) {
+    if ( typeof arg0 == 'string' ) {
+      // method call $().plugin( 'methodName', { options } )
+      // shift arguments by 1
+      var args = arraySlice.call( arguments, 1 );
+      return methodCall( this, arg0, args );
+    }
+    // just $().plugin({ options })
+    plainCall( this, arg0 );
+    return this;
+  };
+
+  // $().plugin('methodName')
+  function methodCall( $elems, methodName, args ) {
+    var returnValue;
+    var pluginMethodStr = '$().' + namespace + '("' + methodName + '")';
+
+    $elems.each( function( i, elem ) {
+      // get instance
+      var instance = $.data( elem, namespace );
+      if ( !instance ) {
+        logError( namespace + ' not initialized. Cannot call methods, i.e. ' +
+          pluginMethodStr );
+        return;
+      }
+
+      var method = instance[ methodName ];
+      if ( !method || methodName.charAt(0) == '_' ) {
+        logError( pluginMethodStr + ' is not a valid method' );
+        return;
+      }
+
+      // apply method, get return value
+      var value = method.apply( instance, args );
+      // set return value if value is returned, use only first value
+      returnValue = returnValue === undefined ? value : returnValue;
+    });
+
+    return returnValue !== undefined ? returnValue : $elems;
+  }
+
+  function plainCall( $elems, options ) {
+    $elems.each( function( i, elem ) {
+      var instance = $.data( elem, namespace );
+      if ( instance ) {
+        // set options & init
+        instance.option( options );
+        instance._init();
+      } else {
+        // initialize new instance
+        instance = new PluginClass( elem, options );
+        $.data( elem, namespace, instance );
+      }
+    });
+  }
+
+  updateJQuery( $ );
+
+}
+
+// ----- updateJQuery ----- //
+
+// set $.bridget for v1 backwards compatibility
+function updateJQuery( $ ) {
+  if ( !$ || ( $ && $.bridget ) ) {
+    return;
+  }
+  $.bridget = jQueryBridget;
+}
+
+updateJQuery( jQuery || window.jQuery );
+
+// -----  ----- //
+
+return jQueryBridget;
+
+}));
+
+
+/***/ }),
+
 /***/ "./node_modules/jquery/dist/jquery.js":
 /*!********************************************!*\
   !*** ./node_modules/jquery/dist/jquery.js ***!
@@ -47357,6 +47500,8 @@ __webpack_require__(/*! ./select2 */ "./resources/js/select2.js");
 
 __webpack_require__(/*! ./posts_masonry_layout */ "./resources/js/posts_masonry_layout.js");
 
+__webpack_require__(/*! ./reset_button */ "./resources/js/reset_button.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -47420,7 +47565,8 @@ var infScroll = new InfiniteScroll(user_list, {
   history: false,
   button: '.view_more_button',
   scrollThreshold: false,
-  hideNav: '.pagination'
+  hideNav: '.pagination',
+  status: '.page_load_status'
 });
 var comment_area = document.getElementById('comment_area');
 var infScroll = new InfiniteScroll(comment_area, {
@@ -47429,7 +47575,8 @@ var infScroll = new InfiniteScroll(comment_area, {
   history: false,
   button: '.comment_more_button',
   scrollThreshold: false,
-  hideNav: '.pagination'
+  hideNav: '.pagination',
+  status: '.page_load_status'
 });
 
 /***/ }),
@@ -47441,17 +47588,24 @@ var infScroll = new InfiniteScroll(comment_area, {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+var jQueryBridget = __webpack_require__(/*! jquery-bridget */ "./node_modules/jquery-bridget/jquery-bridget.js");
+
 var Masonry = __webpack_require__(/*! masonry-layout */ "./node_modules/masonry-layout/masonry.js");
 
 var InfiniteScroll = __webpack_require__(/*! infinite-scroll */ "./node_modules/infinite-scroll/js/index.js");
 
-var imagesLoaded = __webpack_require__(/*! imagesloaded */ "./node_modules/imagesloaded/imagesloaded.js"); //トップページ、個別ユーザー投稿一覧、個別ユーザーいいね投稿一覧
+var imagesLoaded = __webpack_require__(/*! imagesloaded */ "./node_modules/imagesloaded/imagesloaded.js");
 
+jQueryBridget('infiniteScroll', InfiniteScroll, $);
+jQueryBridget('masonry', Masonry, $);
+imagesLoaded.makeJQueryPlugin($); //トップページ、個別ユーザー投稿一覧、個別ユーザーいいね投稿一覧
+//いいねランキングページ、検索一覧ページ
 
-var post_card_container = document.getElementById('post_card_container');
-InfiniteScroll.imagesLoaded = imagesLoaded;
-var msnry = new Masonry(post_card_container, {
-  itemSelector: '.post_item',
+var $post_card_container = $('#post_card_container').masonry({
+  itemSelector: 'none',
+  // select none at first
   columnWidth: '.post_sizer',
   percentPosition: true,
   stagger: 30,
@@ -47464,14 +47618,24 @@ var msnry = new Masonry(post_card_container, {
     opacity: 0
   }
 });
-var infScroll = new InfiniteScroll(post_card_container, {
+var msnry = $post_card_container.data('masonry');
+$post_card_container.imagesLoaded(function () {
+  $post_card_container.masonry('option', {
+    itemSelector: '.post_item'
+  });
+  var $items = $post_card_container.find('.post_item');
+  $post_card_container.masonry('appended', $items);
+});
+InfiniteScroll.imagesLoaded = imagesLoaded;
+$post_card_container.infiniteScroll({
   path: '.pagination_next',
   append: '.post_item',
   outlayer: msnry,
   button: '.view_more_button',
   history: false,
   scrollThreshold: false,
-  hideNav: '.pagination'
+  hideNav: '.pagination',
+  status: '.page_load_status'
 });
 
 /***/ }),
@@ -47549,6 +47713,23 @@ $('#post_image_preview').click(function () {
 
 /***/ }),
 
+/***/ "./resources/js/reset_button.js":
+/*!**************************************!*\
+  !*** ./resources/js/reset_button.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"); //検索フォームのリセットボタン
+
+
+$('.s_reset_button').on('click', function () {
+  $('.search_animals').val(null).trigger('change');
+  $('.search_text').val('');
+});
+
+/***/ }),
+
 /***/ "./resources/js/select2.js":
 /*!*********************************!*\
   !*** ./resources/js/select2.js ***!
@@ -47560,15 +47741,28 @@ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"
 
 __webpack_require__(/*! select2 */ "./node_modules/select2/dist/js/select2.js");
 
-__webpack_require__(/*! select2/dist/js/i18n/ja.js */ "./node_modules/select2/dist/js/i18n/ja.js");
+__webpack_require__(/*! select2/dist/js/i18n/ja.js */ "./node_modules/select2/dist/js/i18n/ja.js"); //新規投稿・投稿変更フォーム
+
 
 $(document).ready(function () {
   $('#animals_select').select2({
     maximumInputLength: 15,
     maximumSelectionLength: 3,
-    placeholder: 'カタカナで動物を検索できます',
+    placeholder: '選択してください',
     language: 'ja',
-    width: '100%'
+    width: '100%',
+    closeOnSelect: false
+  });
+}); //検索フォーム
+
+$(document).ready(function () {
+  $('#animals_search').select2({
+    maximumInputLength: 15,
+    maximumSelectionLength: 10,
+    placeholder: '選択してください',
+    language: 'ja',
+    width: '100%',
+    closeOnSelect: false
   });
 });
 

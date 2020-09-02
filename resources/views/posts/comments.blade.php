@@ -45,6 +45,14 @@
             </div>
         </div>
     </div>
+    <div class="page_load_status">
+        <div class="loader-ellips infinite-scroll-request">
+            <span class="loader-ellips__dot"></span>
+            <span class="loader-ellips__dot"></span>
+            <span class="loader-ellips__dot"></span>
+            <span class="loader-ellips__dot"></span>
+        </div>
+    </div>
     @if ($comments->hasMorePages())
         <p class="pagination">
             <a href="{{ $comments->nextPageUrl() }}" class="comment_next"></a>
