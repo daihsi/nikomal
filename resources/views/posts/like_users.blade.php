@@ -1,5 +1,5 @@
 @if (count($users) > 0)
-    <div class="row mt-5 mx-auto" id="user_list">
+    <div class="row mt-4 mx-auto" id="user_list">
         @foreach ($users as $user)
             <div class="user_card col-sm-6 col-lg-12 col-xl-6">
                 <div class="card border-0 mb-5 text-center">
@@ -20,6 +20,14 @@
                 </div>
             </div>
         @endforeach
+    </div>
+    <div class="page_load_status">
+        <div class="loader-ellips infinite-scroll-request">
+            <span class="loader-ellips__dot"></span>
+            <span class="loader-ellips__dot"></span>
+            <span class="loader-ellips__dot"></span>
+            <span class="loader-ellips__dot"></span>
+        </div>
     </div>
 @if ($users->hasMorePages())
     <p class="pagination">

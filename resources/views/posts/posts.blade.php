@@ -22,7 +22,7 @@
                 <div class="card-footer">
                     <p class="card-text post_content">{{ $post->content }}</p>
                         @foreach($post->postCategorys as $post_category)
-                            <a href="#"><span class="p_category"><i class="fas fa-hashtag p_hash"></i>{{ $post_category->name }}</span></a>
+                            <a href="{{ route('posts.categorys', $post_category->id) }}"><span class="p_category"><i class="fas fa-hashtag p_hash"></i>{{ $post_category->name }}</span></a>
                         @endforeach
                     <div class="d-flex justify-content-center mt-2">
                         {{-- いいねボタン --}}
@@ -46,6 +46,14 @@
             </div>
             </div>
         @endforeach
+    </div>
+</div>
+<div class="page_load_status">
+    <div class="loader-ellips infinite-scroll-request">
+        <span class="loader-ellips__dot"></span>
+        <span class="loader-ellips__dot"></span>
+        <span class="loader-ellips__dot"></span>
+        <span class="loader-ellips__dot"></span>
     </div>
 </div>
 @if ($posts->hasMorePages())
