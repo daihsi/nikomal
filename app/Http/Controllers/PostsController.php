@@ -96,14 +96,12 @@ class PostsController extends Controller
         $post_images = $post->postImages;
         $post_categorys = $post->postCategorys;
         $post->loadRelationshipCounts();
-        $like_users = $post->likes()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
         $comments = $post->postComments()->orderBy('created_at', 'desc')->simplePaginate(12);
 
         return view('posts.show',[
             'post' => $post,
             'post_images' => $post_images,
             'post_categorys' => $post_categorys,
-            'users' => $like_users,
             'comments' => $comments,
         ]);
     }
@@ -210,5 +208,21 @@ class PostsController extends Controller
         else {
             return back();
         }
+    }
+
+    public function likes($id)
+    {
+        $post = Post::findOrFail($id);
+        $post_images = $post->postImages;
+        $post_categorys = $post->postCategorys;
+        $post->loadRelationshipCounts();
+        $likes = $post->likes()->withPivot('created_at AS joined_at')->orderBy('joined_at', 'desc')->simplePaginate(12);
+
+        return view('posts.likes', [
+            'post' => $post,
+            'post_images' => $post_images,
+            'post_categorys' => $post_categorys,
+            'users' => $likes,
+        ]);
     }
 }

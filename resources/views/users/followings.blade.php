@@ -17,7 +17,7 @@
 @include('users.users')
 @if(count($users) == 0)
     <div class="d-flex justify-content-center align-items-center" style="height:200px; color:rgba(0,0,0,0.4);">
-        まだフォローしていません
+        まだフォローがいません
     </div>
 @endif
 
