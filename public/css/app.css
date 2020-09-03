@@ -17039,6 +17039,11 @@ readers do not read off random characters that represent icons */
   .unfollow_button {
     font-size: 9px;
   }
+
+  .p_search_button,
+  .s_reset_button {
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 351px) {
@@ -17056,6 +17061,10 @@ readers do not read off random characters that represent icons */
   .user_name,
   .like_user_name {
     font-size: 4vw;
+  }
+
+  #navbar_user_name {
+    font-size: 4.5vw;
   }
 }
 
@@ -17170,7 +17179,13 @@ readers do not read off random characters that represent icons */
 
 .logo {
   width: 150px;
-  height: 37.5px;
+  height: 40px;
+}
+
+.navbar-brand {
+  padding-top: 0;
+  padding-bottom: 7px;
+  margin-right: 2px;
 }
 
 .animalsCarousel {
@@ -17262,6 +17277,99 @@ readers do not read off random characters that represent icons */
   max-height: 640px;
 }
 
+/*投稿ページローディング関係　始*/
+
+.page_load_status {
+  display: none;
+}
+
+.loader-ellips {
+  font-size: 20px;
+  position: relative;
+  width: 4em;
+  height: 1em;
+  margin: 10px auto;
+}
+
+.loader-ellips__dot {
+  display: block;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.5em;
+  background: #555;
+  position: absolute;
+  -webkit-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+  -webkit-animation-timing-function: ease;
+          animation-timing-function: ease;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+}
+
+.loader-ellips__dot:nth-child(1),
+.loader-ellips__dot:nth-child(2) {
+  left: 0;
+}
+
+.loader-ellips__dot:nth-child(3) {
+  left: 1.5em;
+}
+
+.loader-ellips__dot:nth-child(4) {
+  left: 3em;
+}
+
+@-webkit-keyframes reveal {
+  from {
+    transform: scale(0.001);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes reveal {
+  from {
+    transform: scale(0.001);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@-webkit-keyframes slide {
+  to {
+    transform: translateX(1.5em);
+  }
+}
+
+@keyframes slide {
+  to {
+    transform: translateX(1.5em);
+  }
+}
+
+.loader-ellips__dot:nth-child(1) {
+  -webkit-animation-name: reveal;
+          animation-name: reveal;
+}
+
+.loader-ellips__dot:nth-child(2),
+.loader-ellips__dot:nth-child(3) {
+  -webkit-animation-name: slide;
+          animation-name: slide;
+}
+
+.loader-ellips__dot:nth-child(4) {
+  -webkit-animation-name: reveal;
+          animation-name: reveal;
+  animation-direction: reverse;
+}
+
+/*投稿ページローディング関係　終*/
+
 .follow_button:hover {
   background-color: #d0211c;
   border-color: #c51f1a;
@@ -17328,7 +17436,7 @@ button:hover .unfollow_button {
 
 .new_comment_box {
   position: relative;
-  margin: 2em 0;
+  margin: 1em 0;
   padding: 0.5em 1em;
   border: solid 3px #e8e8e8;
   border-radius: 8px;
@@ -17427,5 +17535,77 @@ textarea {
 
 .p_hash {
   font-size: 10px;
+}
+
+.btn-block {
+  margin-top: 0.5rem;
+}
+
+.posts_sort {
+  border: 2px dashed #e8e8e8;
+}
+
+.posts_sort:hover {
+  border: 2px dashed #6c757d;
+  background-color: #e8e8e8;
+  color: #6c757d;
+}
+
+.posts_sort.disabled,
+.posts_sort:disabled {
+  color: #e8e8e8;
+  background-color: transparent;
+}
+
+.posts_sort:not(:disabled):not(.disabled):active,
+.posts_sort:not(:disabled):not(.disabled).active,
+.show > .posts_sort.dropdown-toggle {
+  color: #6c757d;
+  background-color: #e8e8e8;
+  border: 2px dashed #6c757d;
+}
+
+.posts_sort:focus,
+.posts_sort.focus {
+  box-shadow: 0 0 0 0.2rem rgba(232, 232, 232, 0.5);
+}
+
+.posts_sort:not(:disabled):not(.disabled):active:focus,
+.posts_sort:not(:disabled):not(.disabled).active:focus,
+.show > .posts_sort.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(232, 232, 232, 0.5);
+}
+
+.search_icon {
+  color: #00000080;
+}
+
+.search_link:hover,
+.search_link:active {
+  text-decoration: none;
+}
+
+.posts_search_box {
+  padding: 0.2em 0.5em;
+  margin: 5px 0 0 0;
+  color: #565656;
+  background: #e8e8e8;
+  box-shadow: 0px 0px 0px 10px #e8e8e8;
+  border: dashed 2px #ffffff;
+  border-radius: 15px;
+}
+
+.posts_search_box form {
+  padding: 5px;
+  margin: 0;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25);
+  border: 1px solid #ced4da;
+}
+
+.form-group {
+  margin-bottom: 0.5rem;
 }
 

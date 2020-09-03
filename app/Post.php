@@ -22,7 +22,7 @@ class Post extends Model
 
     //投稿画像、ある一つの投稿にいいねしているユーザーのカウント
     public function loadRelationshipCounts() {
-        $this->loadCount(['postImages', 'likeUsers']);
+        $this->loadCount(['postImages', 'likes']);
     }
 
     //Animalモデルとのリレーション
@@ -62,7 +62,7 @@ class Post extends Model
     }
 
     //Userモデルとのリレーション
-    public function likeUsers() {
+    public function likes() {
         return $this->belongsToMany(User::class, 'likes', 'post_id', 'user_id')->withTimestamps();
     }
 

@@ -27,6 +27,12 @@
     font-size: 9px;
   }
 
+  //投稿検索ボタン・リセットボタン
+  .p_search_button,
+  .s_reset_button {
+    font-size: 14px;
+  }
+
 }
 
 @media (max-width: 351px) {
@@ -51,6 +57,10 @@
     font-size: 4vw;
   }
 
+  //ナビゲーションバーの認証ユーザーネーム
+  #navbar_user_name {
+    font-size: 4.5vw;
+  }
 }
 
 @media (min-width: 345px) and (max-width: 576px) {
@@ -61,7 +71,6 @@
   }
 
 }
-
 
 //xsサイズ
 @media (max-width: 576px) {
@@ -205,7 +214,14 @@
 //ナビゲーション上のアプリロゴ
 .logo {
     width: 150px;
-    height: 37.5px;
+    height: 40px;
+}
+
+//ヘッダーのロゴ
+.navbar-brand {
+    padding-top: 0;
+    padding-bottom: 7px;
+    margin-right: 2px;
 }
 
 //ゲストトップページのカルーセル
@@ -305,6 +321,60 @@
   max-height: 640px;
 }
 
+/*投稿ページローディング関係　始*/
+.page_load_status {
+  display: none;
+}
+
+//ローディングドット
+.loader-ellips {
+  font-size: 20px;
+  position: relative;
+  width: 4em;
+  height: 1em;
+  margin: 10px auto;
+}
+
+//ローディングドット
+.loader-ellips__dot {
+  display: block;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.5em;
+  background: #555;
+  position: absolute;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+  animation-iteration-count: infinite;
+}
+
+//ローディングドット
+.loader-ellips__dot:nth-child(1),
+.loader-ellips__dot:nth-child(2) {
+  left: 0;
+}
+.loader-ellips__dot:nth-child(3) { left: 1.5em; }
+.loader-ellips__dot:nth-child(4) { left: 3em; }
+@keyframes reveal {
+  from { transform: scale(0.001); }
+  to { transform: scale(1); }
+}
+@keyframes slide {
+  to { transform: translateX(1.5em) }
+}
+.loader-ellips__dot:nth-child(1) {
+  animation-name: reveal;
+}
+.loader-ellips__dot:nth-child(2),
+.loader-ellips__dot:nth-child(3) {
+  animation-name: slide;
+}
+.loader-ellips__dot:nth-child(4) {
+  animation-name: reveal;
+  animation-direction: reverse;
+}
+/*投稿ページローディング関係　終*/
+
 //ホバー時フォロー中ボタンの色変更
 .follow_button:hover {
   background-color: #d0211c;
@@ -379,7 +449,7 @@ button:hover .unfollow_button {
 //コメント入力エリアの周りの囲い
 .new_comment_box {
     position: relative;
-    margin: 2em 0;
+    margin: 1em 0;
     padding: 0.5em 1em;
     border: solid 3px #e8e8e8;
     border-radius: 8px;
@@ -424,7 +494,7 @@ textarea {
   background-color: #FFFFFF;
 }
 
-//左側(認証ユーザー以外)のコメント
+// 左側(認証ユーザー以外)のコメント 始
 .user_comment {
   margin: 7px 0;
 }
@@ -450,8 +520,9 @@ textarea {
   font-size: 1rem;
   text-align: left;
 }
+// 終
 
-//右側(認証ユーザー)の緑コメント
+//右側(認証ユーザー)の緑コメント 始
 .authenticated_user_comment {
   margin: 0 0;
 }
@@ -476,6 +547,7 @@ textarea {
   font-size: 1rem;
   text-align: left;
 }
+// ここまで　終
 
 //カテゴリーのフォントサイズ
 .p_category {
@@ -485,4 +557,77 @@ textarea {
 //ハッシュアイコンのフォントサイズ
 .p_hash {
   font-size: 10px;
+}
+
+.btn-block{
+  margin-top: 0.5rem;
+}
+
+//投稿一覧のページ切り替えボタンのスタイル　始
+.posts_sort {
+  border: 2px dashed #e8e8e8;
+}
+.posts_sort:hover,{
+  border: 2px dashed #6c757d;
+  background-color: #e8e8e8;
+  color: #6c757d;
+}
+.posts_sort.disabled,
+.posts_sort:disabled {
+  color: #e8e8e8;
+  background-color: transparent;
+}
+.posts_sort:not(:disabled):not(.disabled):active,
+.posts_sort:not(:disabled):not(.disabled).active,
+.show > .posts_sort.dropdown-toggle {
+  color: #6c757d;
+  background-color: #e8e8e8;
+  border: 2px dashed #6c757d;
+}
+.posts_sort:focus,
+.posts_sort.focus {
+  box-shadow: 0 0 0 0.2rem rgba(232, 232, 232, 0.5);
+}
+.posts_sort:not(:disabled):not(.disabled):active:focus,
+.posts_sort:not(:disabled):not(.disabled).active:focus,
+.show > .posts_sort.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(232, 232, 232, 0.5);
+}
+//ここまで　終
+
+//ナビゲーションバーの検索ボタンアイコン 始
+.search_icon {
+  color: #00000080;
+}
+.search_link:hover,
+.search_link:active {
+  text-decoration: none;
+}
+//ここまで 終
+
+// 投稿検索フォームの囲いボックス
+.posts_search_box {
+  padding: 0.2em 0.5em;
+  margin: 5px 0 0 0;
+  color: #565656;
+  background: #e8e8e8;
+  box-shadow: 0px 0px 0px 10px #e8e8e8;
+  border: dashed 2px #ffffff;
+  border-radius: 15px;
+}
+
+// 投稿検索フォーム
+.posts_search_box form {
+  padding: 5px;
+  margin: 0;
+}
+
+//動物カテゴリーのフォーカス時の周りの色
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25);
+  border: 1px solid #ced4da;
+}
+
+.form-group {
+  margin-bottom: 0.5rem;
 }
