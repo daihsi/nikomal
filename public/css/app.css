@@ -17609,3 +17609,14 @@ textarea {
   margin-bottom: 0.5rem;
 }
 
+.is-invalid .select2-container--focus .select2-selection,
+.is-invalid .select2-container--open .select2-selection {
+  border-color: #e3342f;
+  box-shadow: 0 0 0 0.2rem rgba(227, 52, 47, 0.25);
+}
+
+.is-invalid .select2-dropdown,
+.is-invalid .select2-selection {
+  border-color: #e3342f;
+}
+
