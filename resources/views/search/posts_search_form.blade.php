@@ -19,17 +19,19 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label for="animals_name">動物カテゴリー</label>
-                                <select name="animals_name[]" id="animals_search" class="search_animals form-control @error('animals_name') is-invalid @enderror" size="5" autofocus multiple>
-                                    @foreach(config('animals.animals_optgroup') as $number => $attribute)
-                                        <optgroup label="{{ $attribute }}">
-                                            @foreach(config('animals.animals'. $number) as $index => $name)
-                                                <option value="{{ $index }}"
-                                                {{ collect(old('animals_name', $animals_name ?? null))->contains($index) ? 'selected' : '' }}
-                                                >{{ $name }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
+                                <div class="@error('animals_name') is-invalid @enderror">
+                                    <select name="animals_name[]" id="animals_search" class="search_animals form-control" size="5" autofocus multiple>
+                                        @foreach(config('animals.animals_optgroup') as $number => $attribute)
+                                            <optgroup label="{{ $attribute }}">
+                                                @foreach(config('animals.animals'. $number) as $index => $name)
+                                                    <option value="{{ $index }}"
+                                                    {{ collect(old('animals_name', $animals_name ?? null))->contains($index) ? 'selected' : '' }}
+                                                    >{{ $name }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                </div>
 
                                 @error('animals_name')
                                     <span class="invalid-feedback" role="alert">

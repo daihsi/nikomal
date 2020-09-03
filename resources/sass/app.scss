@@ -631,3 +631,15 @@ textarea {
 .form-group {
   margin-bottom: 0.5rem;
 }
+
+.is-invalid {
+    .select2-container--focus .select2-selection,
+    .select2-container--open .select2-selection {
+        border-color: #e3342f;
+        box-shadow: 0 0 0 0.2rem rgba(227, 52, 47, 0.25);
+    }
+    .select2-dropdown,
+    .select2-selection {
+        border-color: #e3342f;
+    }
+}

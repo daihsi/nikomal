@@ -36,17 +36,19 @@
                 </div>
                 <div class="form-group">
                     <label for="animals_name" class="col col-form-label"><span class="badge badge-danger mr-1">必須</span>動物カテゴリー</label>
-                    <select name="animals_name[]" id="animals_select" class="form-control @error('animals_name') is-invalid @enderror" size="5" autofocus multiple required>
-                        @foreach(config('animals.animals_optgroup') as $number => $attribute)
-                            <optgroup label="{{ $attribute }}">
-                                @foreach(config('animals.animals'. $number) as $index => $name)
-                                        <option value="{{ $index }}"
-                                        {{ collect(old('animals_name', $animals_name))->contains($index) ? 'selected' : '' }}
-                                        >{{ $name }}</option>
-                                @endforeach
-                            </optgroup>
-                        @endforeach
-                    </select>
+                    <div class="@error('animals_name) is-invalid @enderror">
+                        <select name="animals_name[]" id="animals_select" class="form-control" size="5" autofocus multiple required>
+                            @foreach(config('animals.animals_optgroup') as $number => $attribute)
+                                <optgroup label="{{ $attribute }}">
+                                    @foreach(config('animals.animals'. $number) as $index => $name)
+                                            <option value="{{ $index }}"
+                                            {{ collect(old('animals_name', $animals_name))->contains($index) ? 'selected' : '' }}
+                                            >{{ $name }}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
                     @error('animals_name')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
