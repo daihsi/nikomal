@@ -10,12 +10,8 @@
         <div class="col-xl-7 col-lg-6 col-12 mt-5">
             {{-- タブ一覧 --}}
             @include('commons.navtabs_post_show')
-            {{-- コメントフォーム --}}
-            @if (Auth::check())
-                @include('comments.comment_form')
-            @endif
-            {{-- コメント一覧 --}}
-            @include('posts.comments')
+            {{-- いいねユーザー一覧 --}}
+            @include('posts.like_users')
         </div>
     </div>
 </div>
