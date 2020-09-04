@@ -21,9 +21,11 @@
     "require-dev": {
         "facade/ignition": "^1.4",
         "fzaninotto/faker": "^1.9.1",
+        "laravel/dusk": "^6.4",
         "laravel/ui": "^1.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
+        "php-webdriver/webdriver": "^1.8",
         "phpunit/phpunit": "^8.0"
     },
     "config": {
