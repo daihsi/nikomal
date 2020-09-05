@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 
 class RegisterRequest extends FormRequest
 {
@@ -30,4 +33,15 @@ class RegisterRequest extends FormRequest
         'avatar' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048', 'nullable']
         ];
     }
+
+    //フラッシュメッセージのみ追加し、オーバーライド
+    protected function failedValidation(Validator $validator)
+    {
+        $this->merge(['validated' => 'true']);
+        // リダイレクト先
+        throw new HttpResponseException(
+        back()->withInput($this->input)->withErrors($validator)->with('msg_error', 'ユーザー登録に失敗しました')
+        );
+    }
+
 }

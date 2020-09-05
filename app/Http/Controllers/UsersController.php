@@ -38,7 +38,7 @@ class UsersController extends Controller
             return view ('users.edit', ['user' => $user,]);
         }
         else {
-            return back();
+            return back()->with('msg_error', '編集ページにアクセスできません');
         }
     }
     
@@ -76,7 +76,9 @@ class UsersController extends Controller
             'self_introduction' => $request->self_introduction,
         ])->save();
 
-        return redirect()->route('users.show', ['user' => $user]);
+        return redirect()
+            ->route('users.show', ['user' => $user])
+            ->with('msg_success', '変更を保存しました');
     }
 
     public function followings($id)

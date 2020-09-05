@@ -10,7 +10,6 @@ $(document).ready(function() {
         placeholder: '選択してください', 
         language: 'ja',
         width: '100%',
-        closeOnSelect: false,
     });
 });
 
@@ -22,6 +21,5 @@ $(document).ready(function() {
         placeholder: '選択してください', 
         language: 'ja',
         width: '100%',
-        closeOnSelect: false,
     });
 });

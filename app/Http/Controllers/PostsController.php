@@ -81,7 +81,7 @@ class PostsController extends Controller
             'image' => $url,
         ]);
 
-        return redirect('/');
+        return redirect('/')->with('msg_success', '新規投稿しました');
     }
 
     /**
@@ -131,7 +131,7 @@ class PostsController extends Controller
             ]);
         }
         else {
-            return back();
+            return back()->with('msg_error', '編集ページにアクセスできません');
         }
     }
 
@@ -182,7 +182,7 @@ class PostsController extends Controller
             'content' => $request->content,
         ])->save();
         
-        return redirect('/');
+        return redirect('/')->with('msg_success', '変更を保存しました');
     }
 
     /**
@@ -203,10 +203,10 @@ class PostsController extends Controller
                 }
             }
             $post->delete();
-            return redirect('/');
+            return redirect('/')->with('msg_success', '投稿削除しました');
         }
         else {
-            return back();
+            return back()->with('msg_error', '投稿削除できません');
         }
     }
 
