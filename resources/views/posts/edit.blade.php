@@ -36,7 +36,7 @@
                 </div>
                 <div class="form-group">
                     <label for="animals_name" class="col col-form-label"><span class="badge badge-danger mr-1">必須</span>動物カテゴリー</label>
-                    <div class="@error('animals_name) is-invalid @enderror">
+                    <div class="@error('animals_name') is-invalid @enderror">
                         <select name="animals_name[]" id="animals_select" class="form-control" size="5" autofocus multiple required>
                             @foreach(config('animals.animals_optgroup') as $number => $attribute)
                                 <optgroup label="{{ $attribute }}">
