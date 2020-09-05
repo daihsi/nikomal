@@ -21,9 +21,13 @@
 
 </head>
 <body>
+
+    {{-- フラッシュメッセージ --}}
+    @include('commons.flash_messages')
+
     {{-- ナビゲーションバー --}}
     @include('commons.navbar')
-        
+
     <main>
         @yield('content')
     </main>

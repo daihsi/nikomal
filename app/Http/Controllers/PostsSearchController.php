@@ -15,26 +15,29 @@ class PostsSearchController extends Controller
         $animals = $request->animals_name;
         $keyword = $request->keyword;
 
-        //どちらにも値が入っている場合の検索
-        if (filled($animals) && filled($keyword)) {
-            $query->where('content', 'LIKE', '%'.$keyword.'%')
-                ->whereHas('postCategorys', function($query) use($animals) {
-                    $query->whereIn('name', $animals);
-                });
-        }
+        if (filled($animals) || filled($keyword)) {
 
-        //キーワードのみ値が入っている場合の検索
-        elseif (filled($keyword) && empty($animals)) {
-            $query->where('content', 'LIKE', '%'.$keyword.'%');
+            //どちらにも値が入っている場合の検索
+            if (filled($animals) && filled($keyword)) {
+                $query->where('content', 'LIKE', '%'.$keyword.'%')
+                    ->whereHas('postCategorys', function($query) use($animals) {
+                        $query->whereIn('name', $animals);
+                    });
+            }
+    
+            //キーワードのみ値が入っている場合の検索
+            elseif (filled($keyword) && empty($animals)) {
+                $query->where('content', 'LIKE', '%'.$keyword.'%');
+            }
+    
+            //動物カテゴリーのみ値が入っている場合の検索
+            elseif (filled($animals) && empty($keyword)) {
+                $query->whereHas('postCategorys', function($query) use($animals) {
+                        $query->whereIn('name', $animals);
+                    });
+            }
+            $count = $query->count();
         }
-
-        //動物カテゴリーのみ値が入っている場合の検索
-        elseif (filled($animals) && empty($keyword)) {
-            $query->whereHas('postCategorys', function($query) use($animals) {
-                    $query->whereIn('name', $animals);
-                });
-        }
-
         $posts = $query->with('postImages', 'postCategorys')
                     ->orderBy('created_at', 'desc')
                     ->simplePaginate(12)
@@ -43,6 +46,7 @@ class PostsSearchController extends Controller
                 'posts' => $posts,
                 'keyword' => $keyword,
                 'animals_name' => $animals,
+                'count' => $count ?? null,
             ]);
     }
 
@@ -55,11 +59,13 @@ class PostsSearchController extends Controller
         $query->whereHas('postCategorys', function($query) use($animal) {
                 $query->whereIn('name', $animal);
             });
+        $count = $query->count();
         $posts = $query->with('postImages', 'postCategorys')
                     ->orderBy('created_at', 'desc')
                     ->simplePaginate(12);
         return view('posts.search',[
                 'posts' => $posts,
+                'count' => $count,
             ]);
     }
 }
