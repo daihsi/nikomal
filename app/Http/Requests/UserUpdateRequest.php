@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 
 class UserUpdateRequest extends FormRequest
 {
@@ -29,4 +32,15 @@ class UserUpdateRequest extends FormRequest
         'self_introduction' => ['string', 'max:150', 'nullable'],
         ];
     }
+
+    //フラッシュメッセージのみ追加し、オーバーライド
+    protected function failedValidation(Validator $validator)
+    {
+        $this->merge(['validated' => 'true']);
+        // リダイレクト先
+        throw new HttpResponseException(
+        back()->withInput($this->input)->withErrors($validator)->with('msg_error', 'ユーザー編集に失敗しました')
+        );
+    }
+
 }
