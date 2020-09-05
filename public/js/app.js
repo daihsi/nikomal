@@ -48000,6 +48000,8 @@ __webpack_require__(/*! ./reset_button */ "./resources/js/reset_button.js");
 
 __webpack_require__(/*! ./toastr */ "./resources/js/toastr.js");
 
+__webpack_require__(/*! ./dialog */ "./resources/js/dialog.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -48044,6 +48046,37 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/dialog.js":
+/*!********************************!*\
+  !*** ./resources/js/dialog.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+$(function () {
+  //投稿・コメント削除ダイヤログ
+  $('.delete_alert').click(function () {
+    if (confirm('削除してよろしいですか？')) {
+      $('#delete_form').submit();
+    } else {
+      return false;
+    }
+  }); //ログアウトダイヤログ
+
+  $('.logout_alert').click(function (event) {
+    if (confirm('ログアウトしてよろしいですか？')) {
+      event.preventDefault();
+      $('#logout-form').submit();
+    } else {
+      return false;
+    }
+  });
+});
 
 /***/ }),
 

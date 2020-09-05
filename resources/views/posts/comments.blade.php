@@ -15,11 +15,11 @@
                                 <div class="authenticated_user_comment">
                                     <p>{!! nl2br(e($comment->comment)) !!}</p>
                                 </div>
-                                <form method="POST" action="{{ route('posts.uncomment', $comment->id) }}" class="mb-3">
+                                <form method="POST" action="{{ route('posts.uncomment', $comment->id) }}" class="mb-3" id="delete_form">
                                     <small>{{ $comment->created_at->format('Y/m/d H:i') }}</small>
                                     @method('DELETE')
                                     @csrf
-                                    <button type="submit" class="btn btn-link comment_trash text-danger"><i class="far fa-trash-alt"></i>削除</button>
+                                    <button type="button" class="btn btn-link comment_trash text-danger delete_alert"><i class="far fa-trash-alt"></i>削除</button>
                                 </form>
                             </div>
                         </div>

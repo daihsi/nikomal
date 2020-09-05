@@ -59,10 +59,9 @@
                             <div class="dropdown-menu dropdown-menu-right navbar-light" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ url('/') }}"><i class="fas fa-home fa-lg toppage_icon"></i>トップページ</a>
                                 <a class="dropdown-item" href="{{ route('users.show', Auth::user()->id) }}"><i class="fas fa-address-card fa-lg profile_icon"></i>マイプロフィール</a>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt fa-lg logout_icon"></i>{{ __('Logout') }}
+                                <a class="dropdown-item logout_alert" href="{{ route('logout') }}" >
+                                    <i class="fas fa-sign-out-alt fa-lg logout_icon"></i>
+                                    {{ __('Logout') }}
                                 </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
