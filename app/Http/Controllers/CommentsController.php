@@ -19,10 +19,10 @@ class CommentsController extends Controller
                     'post_id' => $request->post_id,
                     'comment' => $request->comment,
                 ]);
-            return back();
+            return back()->with('msg_success', '投稿にコメントしました');
         }
         else {
-            return back();
+            return back()->with('msg_error', 'ログインしてください');
         }
     }
 
@@ -35,10 +35,10 @@ class CommentsController extends Controller
         //認証ユーザーidとコメントユーザーidを比較
         if (\Auth::id() === $comment->user_id) {
             $comment->delete();
-            return back();
+            return back()->with('msg_success', 'コメントを削除しました');
         }
         else {
-            return back();
+            return back()->with('msg_error', 'コメントを削除できません');;
         }
     }
 }
