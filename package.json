@@ -30,6 +30,7 @@
         "imagesloaded": "^4.1.4",
         "infinite-scroll": "^3.0.6",
         "masonry-layout": "^4.2.2",
-        "select2": "^4.0.13"
+        "select2": "^4.0.13",
+        "toastr": "^2.1.4"
     }
 }
