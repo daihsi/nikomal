@@ -1,5 +1,5 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Sawarabi+Gothic&display=swap');
 
 // Variables
 @import 'variables';
@@ -64,6 +64,12 @@
   #navbar_user_name {
     font-size: 4.5vw;
   }
+
+  //ゲストトップページの見出し
+  .top_headline {
+    font-size: 1rem;
+  }
+
 }
 
 @media (min-width: 345px) and (max-width: 576px) {
@@ -71,6 +77,11 @@
   #post_image_preview,
   #edit_post_image_preview {
     max-height: 340px;
+  }
+
+  //ゲストトップページの見出し
+  .top_headline {
+    font-size: 1.2rem;
   }
 
 }
@@ -218,6 +229,11 @@
 .logo {
     width: 150px;
     height: 40px;
+}
+
+//ゲストトップページの見出し
+.top_headline {
+  line-height: 1.6;
 }
 
 //ヘッダーのロゴ
