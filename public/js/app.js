@@ -48002,6 +48002,8 @@ __webpack_require__(/*! ./toastr */ "./resources/js/toastr.js");
 
 __webpack_require__(/*! ./dialog */ "./resources/js/dialog.js");
 
+__webpack_require__(/*! ./like_button */ "./resources/js/like_button.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -48112,6 +48114,70 @@ var infScroll = new InfiniteScroll(comment_area, {
 
 /***/ }),
 
+/***/ "./resources/js/like_button.js":
+/*!*************************************!*\
+  !*** ./resources/js/like_button.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+
+$(function () {
+  //いいね登録・解除処理
+  $(document).on('click', '.like_button', function () {
+    //全体ではなくクリックされた要素のみ指定
+    var $this = $(this); //投稿id(文字列のみ)を取得
+
+    var post_id = $this.attr('data-id');
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: '/posts/' + post_id + '/like',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        'id': post_id
+      }
+    }).done(function (data) {
+      //いいね登録成功時
+      if (data['like'] === true) {
+        toastr.success('投稿にいいねしました'); //アイコンの色変更(ピンク色へ)
+
+        $this.attr('class', 'like_button btn btn like_now_icon fas fa-heart fa-lg');
+        $this.next('span').text(data['p_count']); //投稿詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
+
+        if ($('.p_count_badge').length) {
+          $('.p_count_badge').text(data['p_count']);
+        } //ユーザー詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
+        else if ($('.u_count_badge').length) {
+            $('.u_count_badge').text(data['u_count']);
+          }
+      } //いいね解除成功時
+      else if (data['unlike'] === false) {
+          toastr.success('投稿のいいねを外しました'); //アイコンの色変更(白色へ)
+
+          $this.attr('class', 'like_button btn btn like_icon far fa-heart fa-lg');
+          $this.next('span').text(data['p_count']); //投稿詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
+
+          if ($('.p_count_badge').length) {
+            $('.p_count_badge').text(data['p_count']);
+          } //ユーザー詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
+          else if ($('.u_count_badge').length) {
+              $('.u_count_badge').text(data['u_count']);
+            }
+        }
+    }).fail(function (data) {
+      toastr.error('失敗しました');
+    });
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/posts_masonry_layout.js":
 /*!**********************************************!*\
   !*** ./resources/js/posts_masonry_layout.js ***!
@@ -48134,39 +48200,41 @@ jQueryBridget('masonry', Masonry, $);
 imagesLoaded.makeJQueryPlugin($); //トップページ、個別ユーザー投稿一覧、個別ユーザーいいね投稿一覧
 //いいねランキングページ、検索一覧ページ
 
-var $post_card_container = $('#post_card_container').masonry({
-  itemSelector: 'none',
-  // select none at first
-  columnWidth: '.post_sizer',
-  percentPosition: true,
-  stagger: 30,
-  visibleStyle: {
-    transform: 'translateY(0)',
-    opacity: 1
-  },
-  hiddenStyle: {
-    transform: 'translateY(100px)',
-    opacity: 0
-  }
-});
-var msnry = $post_card_container.data('masonry');
-$post_card_container.imagesLoaded(function () {
-  $post_card_container.masonry('option', {
-    itemSelector: '.post_item'
+$(function () {
+  var $post_card_container = $('#post_card_container').masonry({
+    itemSelector: 'none',
+    // select none at first
+    columnWidth: '.post_sizer',
+    percentPosition: true,
+    stagger: 30,
+    visibleStyle: {
+      transform: 'translateY(0)',
+      opacity: 1
+    },
+    hiddenStyle: {
+      transform: 'translateY(100px)',
+      opacity: 0
+    }
   });
-  var $items = $post_card_container.find('.post_item');
-  $post_card_container.masonry('appended', $items);
-});
-InfiniteScroll.imagesLoaded = imagesLoaded;
-$post_card_container.infiniteScroll({
-  path: '.pagination_next',
-  append: '.post_item',
-  outlayer: msnry,
-  button: '.view_more_button',
-  history: false,
-  scrollThreshold: false,
-  hideNav: '.pagination',
-  status: '.page_load_status'
+  var msnry = $post_card_container.data('masonry');
+  $post_card_container.imagesLoaded(function () {
+    $post_card_container.masonry('option', {
+      itemSelector: '.post_item'
+    });
+    var $items = $post_card_container.find('.post_item');
+    $post_card_container.masonry('appended', $items);
+  });
+  InfiniteScroll.imagesLoaded = imagesLoaded;
+  $post_card_container.infiniteScroll({
+    path: '.pagination_next',
+    append: '.post_item',
+    outlayer: msnry,
+    button: '.view_more_button',
+    history: false,
+    scrollThreshold: false,
+    hideNav: '.pagination',
+    status: '.page_load_status'
+  });
 });
 
 /***/ }),

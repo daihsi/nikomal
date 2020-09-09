@@ -14,7 +14,7 @@
 Route::get('/', 'PostsController@index');
 
 //投稿詳細ページ(いいねユーザー一覧)
-Route::get('posts/{id}/like', 'PostsController@likes')->name('post.likes');
+Route::get('posts/{id}/likes', 'PostsController@likes')->name('post.likes');
 
 //投稿検索表示ページ
 Route::get('posts/search', 'PostsSearchController@index')->name('posts.search');
@@ -47,11 +47,8 @@ Route::group(['middleware' => ['auth']], function() {
     //ユーザー編集
     Route::resource('users', 'UsersController', ['only' => ['edit', 'update']]);
 
-    //いいね登録
-    Route::group(['prefix' => 'posts/{id}'], function() {
-        Route::post('like', 'LikesController@store')->name('posts.like');
-        Route::delete('unlike', 'LikesController@destroy')->name('posts.unlike');
-    });
+    //いいね登録・解除(非同期通信)
+    Route::post('posts/{id}/like', 'LikesController@store')->name('posts.like');
 
     //いいねが多い順の投稿一覧
     Route::get('posts/popular', 'PostsPopularController@index')->name('posts.popular');
@@ -60,7 +57,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('posts', 'PostsController', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
 
     //コメント投稿・削除
-    Route::post('/comments', 'CommentsController@store')->name('posts.comment');
+    Route::post('comments', 'CommentsController@store')->name('posts.comment');
     Route::delete('comments/{id}', 'CommentsController@destroy')->name('posts.uncomment');
 });
 
