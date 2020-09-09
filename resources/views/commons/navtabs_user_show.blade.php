@@ -24,7 +24,7 @@
     <li class="nav-item">
         <a href="{{ route('users.likes', ['id' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.likes') ? 'active' : '' }} text-dark">
             いいね
-            <span class="badge badge-white badge-pill">{{ $user->likes_count }}</span>
+            <span class="badge badge-white badge-pill u_count_badge">{{ $user->likes_count }}</span>
         </a>
     </li>
 </ul>

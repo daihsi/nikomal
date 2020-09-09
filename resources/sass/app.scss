@@ -416,7 +416,7 @@ button:hover .unfollow_button {
 }
 
 //平常時のいいね中ボタンのスタイル
-.like_now_button, .like_button {
+.like_now_icon {
   color: #FF0461;
   background-color:#fffff;
   padding: 0;
@@ -430,7 +430,7 @@ button:hover .unfollow_button {
 }
 
 //平常時のいいねボタンのスタイル
-.like_button {
+.like_icon {
   color: #BBBBBB;
   background-color:#fffff;
   padding: 0;
@@ -444,7 +444,7 @@ button:hover .unfollow_button {
 }
 
 //カーソルが乗った時のいいね、いいね中ボタンのスタイル
-.like_now_button:hover, .like_button:hover {
+.like_button:hover {
   background-color: #FFD5EC;
   color: #FF0461;
 }
