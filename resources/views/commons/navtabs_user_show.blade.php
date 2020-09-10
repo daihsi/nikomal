@@ -10,14 +10,14 @@
     <li class="nav-item">
         <a href="{{ route('users.followings', ['id' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.followings') ? 'active' : '' }} text-dark">
             フォロー
-            <span class="badge badge-white badge-pill">{{ $user->followings_count }}</span>
+            <span class="badge badge-white badge-pill follow_count_badge">{{ $user->followings_count }}</span>
         </a>
     </li>
     {{-- フォロワー一覧タブ --}}
     <li class="nav-item">
         <a href="{{ route('users.followers', ['id' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.followers') ? 'active' : '' }} text-dark">
             フォロワー
-            <span class="badge badge-white badge-pill">{{ $user->followers_count }}</span>
+            <span class="badge badge-white badge-pill follower_count_badge">{{ $user->followers_count }}</span>
         </a>
     </li>
     {{-- いいえね一覧タブ --}}

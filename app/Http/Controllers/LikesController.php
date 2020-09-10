@@ -10,6 +10,7 @@ class LikesController extends Controller
     public function store($id)
     {
         $user = \Auth::user();
+        $auth_id = $user->id;
         $like = $user->like($id);
         $post = Post::findOrFail($id);
 
@@ -21,6 +22,7 @@ class LikesController extends Controller
                             'like' => true,
                             'p_count' => $p_count,
                             'u_count' => $u_count,
+                            'auth_id' => $auth_id,
                         ]);
         }
 
@@ -32,6 +34,7 @@ class LikesController extends Controller
                             'unlike' => false,
                             'p_count' => $p_count,
                             'u_count' => $u_count,
+                            'auth_id' => $auth_id,
                         ]);
         }
     }

@@ -29,7 +29,7 @@ Auth::routes();
 Route::group(['prefix' => 'users/{id}'], function() {
     Route::get('following', 'UsersController@followings')->name('users.followings');
     Route::get('follower', 'UsersController@followers')->name('users.followers');
-    Route::get('like', 'UsersController@likes')->name('users.likes');
+    Route::get('likes', 'UsersController@likes')->name('users.likes');
 });
 
 //登録ユーザー詳細ページ
@@ -39,10 +39,7 @@ Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
 Route::group(['middleware' => ['auth']], function() {
 
     //フォロー・アンフォロー
-    Route::group(['prefix' => 'users/{id}'], function() {
-        Route::post('follow', 'UserFollowController@store')->name('user.follow');
-        Route::delete('unfollow', 'UserFollowController@destroy')->name('user.unfollow');
-    });
+    Route::post('users/{id}/follow', 'UserFollowController@store')->name('user.follow');
 
     //ユーザー編集
     Route::resource('users', 'UsersController', ['only' => ['edit', 'update']]);
