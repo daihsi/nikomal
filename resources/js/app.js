@@ -7,3 +7,4 @@ require('./reset_button');
 require('./toastr');
 require('./dialog');
 require('./like_button');
+require('./follow_button');

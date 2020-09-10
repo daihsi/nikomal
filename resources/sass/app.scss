@@ -21,13 +21,22 @@
 
 @media (max-width: 315px) {
 
-  .follow_button,
-  .action_follow {
-    font-size: 10px;
+  //ホバー時フォロー中ボタンの色変更
+  .follow_button:hover {
+    background-color: #d0211c;
+    border-color: #c51f1a;
+    font-size: 0 !important;
+  }
+  
+  //ホバー時のフォロー中ボタンテキスト変更
+  .follow_button:hover:before {
+    font-size: 10px !important;
+    content: "フォロー解除" !important;
   }
 
-  .unfollow_button {
-    font-size: 9px;
+  //フォロー・フォロー中ボタン
+  .follow {
+    font-size: 10px;
   }
 
   //投稿検索ボタン・リセットボタン
@@ -398,21 +407,29 @@
 .follow_button:hover {
   background-color: #d0211c;
   border-color: #c51f1a;
+  font-size: 0;
 }
 
-//ホバー時のアンフォローボタン文字(通常は非表示)
-button .unfollow_button {
-  display: none;
+//ホバー時のフォロー中ボタンテキスト変更
+.follow_button:hover:before {
+  font-size: 0.875rem;
+  content: "フォロー解除";
 }
 
-//ホバー時は通常フォロー中のボタン文字を非表示
-button:hover .follow_now_button {
-  display: none;
+//active時のフォロー中ボタン色変更
+.follow_button:not(:disabled):not(.disabled):active,
+.follow_button:not(:disabled):not(.disabled).active,
+.show > .follow_button.dropdown-toggle {
+  color: #fff;
+  background-color: #c51f1a;
+  border-color: #b91d19;
 }
 
-//ホバー時のアンフォローボタン文字の表示
-button:hover .unfollow_button {
-  display: inline;
+//activrefocus時のフォロー中ボタンボーダー色変更
+.follow_button:not(:disabled):not(.disabled):active:focus,
+.follow_button:not(:disabled):not(.disabled).active:focus,
+.show > .follow_button.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(231, 82, 78, 0.5);
 }
 
 //平常時のいいね中ボタンのスタイル

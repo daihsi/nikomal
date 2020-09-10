@@ -39,10 +39,7 @@ Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
 Route::group(['middleware' => ['auth']], function() {
 
     //フォロー・アンフォロー
-    Route::group(['prefix' => 'users/{id}'], function() {
-        Route::post('follow', 'UserFollowController@store')->name('user.follow');
-        Route::delete('unfollow', 'UserFollowController@destroy')->name('user.unfollow');
-    });
+    Route::post('users/{id}/follow', 'UserFollowController@store')->name('user.follow');
 
     //ユーザー編集
     Route::resource('users', 'UsersController', ['only' => ['edit', 'update']]);
