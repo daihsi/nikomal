@@ -29,7 +29,7 @@ Auth::routes();
 Route::group(['prefix' => 'users/{id}'], function() {
     Route::get('following', 'UsersController@followings')->name('users.followings');
     Route::get('follower', 'UsersController@followers')->name('users.followers');
-    Route::get('like', 'UsersController@likes')->name('users.likes');
+    Route::get('likes', 'UsersController@likes')->name('users.likes');
 });
 
 //登録ユーザー詳細ページ
