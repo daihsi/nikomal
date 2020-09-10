@@ -48066,7 +48066,7 @@ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"
 
 $(function () {
   //投稿・コメント削除ダイヤログ
-  $('.delete_alert').click(function () {
+  $(document).on('click', '.delete_alert', function () {
     if (confirm('削除してよろしいですか？')) {
       $('#delete_form').submit();
     } else {
