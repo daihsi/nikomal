@@ -14,7 +14,7 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
@@ -31,5 +31,8 @@
     <main>
         @yield('content')
     </main>
+
+    {{-- ページトップへ戻るボタン --}}
+    <div id="page_top_button"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
 </body>
 </html>

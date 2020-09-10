@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10 col-10">
              <div id="carouselExampleFade" class="carousel slide carousel-fade" data-intrebal=4000 data-touch=true data-ride="carousel">
-                <div class="carousel-inner shadow p-2 mb-5 bg-white rounded">
+                <div class="carousel-inner shadow p-2 mb-3 bg-white rounded">
                     <div class="carousel-item active">
                         <img class="animalsCarousel" src="{{ asset('storage/images/smile4.jpg') }}" alt="イヌの笑顔"> 
                     </div>
@@ -31,26 +31,37 @@
         </div>
     </div>
 </div>
-  
+
+<!-- 見出し -->
+<div class="text-center">
+    <h4 class="font-weight-bold mb-4 top_headline">
+        さぁ、動物たちの笑っている表情を<br>
+        投稿共有して一緒に癒されましょう
+    </h4>
+</div>
+<div class="text-center">
+    <a class="btn btn-outline-success mr-2" href="{{ route('register') }}">はじめる</a>
+    <a class="btn btn-outline-info" href="#">nikomalについて</a>
+</div>
+
+<!-- ゲストユーザーログイン -->
+<form method="POST" action="{{ route('login') }}" accept-charset="UTF-8" class="text-center mt-3">
+    @csrf
+    <input type="hidden" name="email" value="guest@example.com">
+    <input type="hidden" name="password" value="guest123456789">
+    <button type="submit" class="btn btn-warning">
+        かんたんログイン
+    </button>
+</form>
+
+<!-- ボーダー -->
 <div class="container">
     <div class="row">
-        <div class="col-12 text-center">
-            <h2 class="font-weight-bold mt-4 mb-4">
-                <p>さぁ、動物たちの笑っている表情を</p>
-                <p>投稿共有して一緒に癒されましょう</p>
-            </h2>
-            <a class="btn btn-success btn-lg mr-5" href="#">投稿する</a>
-            <a class="btn btn-outline-info btn-lg" href="#">はじめに</a>
-        </div>
-    </div>
-</div>
-    
-<div class="container">
-    <div class="row justify-content-center">
         <div class="col-12">
             <div class="border mb-5 mt-5"></div>
         </div>
     </div>
 </div>
 
-<h3 class="text-center font-weight-bold mb-5">みんなの投稿</h3>
+<!-- 投稿見出し -->
+<h5 class="text-center font-weight-bold mb-4 top_headline">みんなの投稿</h5>

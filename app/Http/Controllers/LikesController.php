@@ -3,18 +3,39 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Post;
 
 class LikesController extends Controller
 {
     public function store($id)
     {
-        \Auth::user()->like($id);
-        return back()->with('msg_success', '投稿にいいねしました');
-    }
+        $user = \Auth::user();
+        $auth_id = $user->id;
+        $like = $user->like($id);
+        $post = Post::findOrFail($id);
 
-    public function destroy($id)
-    {
-        \Auth::user()->like($id);
-        return back()->with('msg_success', '投稿のいいねを外しました');
+        //いいね登録の場合
+        if ($like === true) {
+            $p_count = $post->likes()->count();
+            $u_count = $user->likes()->count();
+            return response()->json([
+                            'like' => true,
+                            'p_count' => $p_count,
+                            'u_count' => $u_count,
+                            'auth_id' => $auth_id,
+                        ]);
+        }
+
+        //いいね解除の場合
+        elseif ($like === false) {
+            $p_count = $post->likes()->count();
+            $u_count = $user->likes()->count();
+            return response()->json([
+                            'unlike' => false,
+                            'p_count' => $p_count,
+                            'u_count' => $u_count,
+                            'auth_id' => $auth_id,
+                        ]);
+        }
     }
 }

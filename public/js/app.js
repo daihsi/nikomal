@@ -48000,6 +48000,14 @@ __webpack_require__(/*! ./reset_button */ "./resources/js/reset_button.js");
 
 __webpack_require__(/*! ./toastr */ "./resources/js/toastr.js");
 
+__webpack_require__(/*! ./dialog */ "./resources/js/dialog.js");
+
+__webpack_require__(/*! ./like_button */ "./resources/js/like_button.js");
+
+__webpack_require__(/*! ./follow_button */ "./resources/js/follow_button.js");
+
+__webpack_require__(/*! ./page_top_button */ "./resources/js/page_top_button.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -48047,6 +48055,111 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
+/***/ "./resources/js/dialog.js":
+/*!********************************!*\
+  !*** ./resources/js/dialog.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+$(function () {
+  //投稿・コメント削除ダイヤログ
+  $(document).on('click', '.delete_alert', function () {
+    if (confirm('削除してよろしいですか？')) {
+      $('#delete_form').submit();
+    } else {
+      return false;
+    }
+  }); //ログアウトダイヤログ
+
+  $('.logout_alert').click(function (event) {
+    if (confirm('ログアウトしてよろしいですか？')) {
+      event.preventDefault();
+      $('#logout-form').submit();
+    } else {
+      return false;
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/follow_button.js":
+/*!***************************************!*\
+  !*** ./resources/js/follow_button.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+
+$(function () {
+  //いいね登録・解除処理
+  $(document).on('click', '.follow', function () {
+    //全体ではなくクリックされた要素のみ指定
+    var $this = $(this); //現在のファイルパスを取得
+
+    var url = location.pathname; //投稿id(文字列のみ)を取得
+
+    var user_id = $this.attr('data-id');
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: '/users/' + user_id + '/follow',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        'id': user_id
+      }
+    }).done(function (data) {
+      var following_path = '/users/' + data['auth_id'] + '/following';
+      var follower_path = '/users/' + data['auth_id'] + '/follower'; //フォロー成功時
+
+      if (data['follow'] === true) {
+        toastr.success('フォローしました'); //ボタン変更
+
+        $this.attr('class', 'follow btn btn-primary btn-sm rounded-pill follow_button');
+        $this.text('フォロー中'); //現在のURLが認証ユーザーの詳細ページだった場合(フォロー・フォロワーページ)
+
+        if (url === following_path || url === follower_path) {
+          //投稿詳細ページのナビゲーションタブのフォローカウントがコンテンツに含まれていた場合
+          if ($('.follow_count_badge').length) {
+            $('.follow_count_badge').text(data['follow_count']);
+          } //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
+          else if ($('.follower_count_badge').length) {
+              $('.follower_count_badge').text(data['follower_count']);
+            }
+        }
+      } //アンフォロー成功時
+      else if (data['unfollow'] === false) {
+          toastr.success('フォローを外しました'); //ボタン変更
+
+          $this.attr('class', 'follow btn btn-outline-primary btn-sm rounded-pill');
+          $this.text('フォロー'); //現在のURLが認証ユーザーの詳細ページだった場合(フォロー・フォロワーページ)
+
+          if (url === following_path || url === follower_path) {
+            //ユーザー詳細ページのナビゲーションタブのフォローカウントがコンテンツに含まれていた場合
+            if ($('.follow_count_badge').length) {
+              $('.follow_count_badge').text(data['follow_count']);
+            } //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
+            else if ($('.follower_count_badge').length) {
+                $('.follower_count_badge').text(data['follower_count']);
+              }
+          }
+        }
+    }).fail(function (data) {
+      toastr.error('失敗しました');
+    });
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/infinite_scroll.js":
 /*!*****************************************!*\
   !*** ./resources/js/infinite_scroll.js ***!
@@ -48079,6 +48192,125 @@ var infScroll = new InfiniteScroll(comment_area, {
 
 /***/ }),
 
+/***/ "./resources/js/like_button.js":
+/*!*************************************!*\
+  !*** ./resources/js/like_button.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+
+$(function () {
+  //いいね登録・解除処理
+  $(document).on('click', '.like_button', function () {
+    //全体ではなくクリックされた要素のみ指定
+    var $this = $(this); //現在のファイルパスを取得
+
+    var url = location.pathname; //投稿id(文字列のみ)を取得
+
+    var post_id = $this.attr('data-id');
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: '/posts/' + post_id + '/like',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        'id': post_id
+      }
+    }).done(function (data) {
+      var p_likes_path = '/posts/' + post_id + '/likes';
+      var u_likes_path = '/users/' + data['auth_id'] + '/likes'; //いいね登録成功時
+
+      if (data['like'] === true) {
+        toastr.success('投稿にいいねしました'); //アイコンの色変更(ピンク色へ)
+
+        $this.attr('class', 'like_button btn btn like_now_icon fas fa-heart fa-lg');
+        $this.next('span').text(data['p_count']); //現在のURLが認証ユーザーの詳細ページだった場合(いいねページ)
+        //または投稿詳細ページ(いいねページ)
+
+        if (url === p_likes_path || url === u_likes_path) {
+          //投稿詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
+          if ($('.p_count_badge').length) {
+            $('.p_count_badge').text(data['p_count']);
+          } //ユーザー詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
+          else if ($('.u_count_badge').length) {
+              $('.u_count_badge').text(data['u_count']);
+            }
+        }
+      } //いいね解除成功時
+      else if (data['unlike'] === false) {
+          toastr.success('投稿のいいねを外しました'); //アイコンの色変更(白色へ)
+
+          $this.attr('class', 'like_button btn btn like_icon far fa-heart fa-lg');
+          $this.next('span').text(data['p_count']); //現在のURLが認証ユーザーの詳細ページだった場合(いいねページ)
+          //または投稿詳細ページ(いいねページ)
+
+          if (url === p_likes_path || url === u_likes_path) {
+            //投稿詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
+            if ($('.p_count_badge').length) {
+              $('.p_count_badge').text(data['p_count']);
+            } //ユーザー詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
+            else if ($('.u_count_badge').length) {
+                $('.u_count_badge').text(data['u_count']);
+              }
+          }
+        }
+    }).fail(function (data) {
+      toastr.error('失敗しました');
+    });
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/page_top_button.js":
+/*!*****************************************!*\
+  !*** ./resources/js/page_top_button.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+$(function () {
+  var appear = false;
+  var pagetop = $('#page_top_button');
+  $(window).scroll(function () {
+    //500pxスクロールした場合ボタン出現
+    if ($(this).scrollTop() > 500) {
+      if (appear == false) {
+        appear = true; //下から10pxの位置に0.3秒かけて出現
+
+        pagetop.stop().animate({
+          'bottom': '10px'
+        }, 300);
+      }
+    } else {
+      if (appear) {
+        appear = false; //下から-70pxの位置に0.3秒かけて隠れる
+
+        pagetop.stop().animate({
+          'bottom': '-70px'
+        }, 300);
+      }
+    }
+  }); //0.5秒かけてページトップへ戻る
+
+  pagetop.click(function () {
+    $('body, html').animate({
+      scrollTop: 0
+    }, 500);
+    return false;
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/posts_masonry_layout.js":
 /*!**********************************************!*\
   !*** ./resources/js/posts_masonry_layout.js ***!
@@ -48101,39 +48333,41 @@ jQueryBridget('masonry', Masonry, $);
 imagesLoaded.makeJQueryPlugin($); //トップページ、個別ユーザー投稿一覧、個別ユーザーいいね投稿一覧
 //いいねランキングページ、検索一覧ページ
 
-var $post_card_container = $('#post_card_container').masonry({
-  itemSelector: 'none',
-  // select none at first
-  columnWidth: '.post_sizer',
-  percentPosition: true,
-  stagger: 30,
-  visibleStyle: {
-    transform: 'translateY(0)',
-    opacity: 1
-  },
-  hiddenStyle: {
-    transform: 'translateY(100px)',
-    opacity: 0
-  }
-});
-var msnry = $post_card_container.data('masonry');
-$post_card_container.imagesLoaded(function () {
-  $post_card_container.masonry('option', {
-    itemSelector: '.post_item'
+$(function () {
+  var $post_card_container = $('#post_card_container').masonry({
+    itemSelector: 'none',
+    // select none at first
+    columnWidth: '.post_sizer',
+    percentPosition: true,
+    stagger: 30,
+    visibleStyle: {
+      transform: 'translateY(0)',
+      opacity: 1
+    },
+    hiddenStyle: {
+      transform: 'translateY(100px)',
+      opacity: 0
+    }
   });
-  var $items = $post_card_container.find('.post_item');
-  $post_card_container.masonry('appended', $items);
-});
-InfiniteScroll.imagesLoaded = imagesLoaded;
-$post_card_container.infiniteScroll({
-  path: '.pagination_next',
-  append: '.post_item',
-  outlayer: msnry,
-  button: '.view_more_button',
-  history: false,
-  scrollThreshold: false,
-  hideNav: '.pagination',
-  status: '.page_load_status'
+  var msnry = $post_card_container.data('masonry');
+  $post_card_container.imagesLoaded(function () {
+    $post_card_container.masonry('option', {
+      itemSelector: '.post_item'
+    });
+    var $items = $post_card_container.find('.post_item');
+    $post_card_container.masonry('appended', $items);
+  });
+  InfiniteScroll.imagesLoaded = imagesLoaded;
+  $post_card_container.infiniteScroll({
+    path: '.pagination_next',
+    append: '.post_item',
+    outlayer: msnry,
+    button: '.view_more_button',
+    history: false,
+    scrollThreshold: false,
+    hideNav: '.pagination',
+    status: '.page_load_status'
+  });
 });
 
 /***/ }),

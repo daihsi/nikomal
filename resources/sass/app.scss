@@ -1,5 +1,5 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Sawarabi+Gothic&display=swap');
 
 // Variables
 @import 'variables';
@@ -21,13 +21,22 @@
 
 @media (max-width: 315px) {
 
-  .follow_button,
-  .action_follow {
-    font-size: 10px;
+  //ホバー時フォロー中ボタンの色変更
+  .follow_button:hover {
+    background-color: #d0211c;
+    border-color: #c51f1a;
+    font-size: 0 !important;
+  }
+  
+  //ホバー時のフォロー中ボタンテキスト変更
+  .follow_button:hover:before {
+    font-size: 10px !important;
+    content: "フォロー解除" !important;
   }
 
-  .unfollow_button {
-    font-size: 9px;
+  //フォロー・フォロー中ボタン
+  .follow {
+    font-size: 10px;
   }
 
   //投稿検索ボタン・リセットボタン
@@ -64,6 +73,12 @@
   #navbar_user_name {
     font-size: 4.5vw;
   }
+
+  //ゲストトップページの見出し
+  .top_headline {
+    font-size: 1rem;
+  }
+
 }
 
 @media (min-width: 345px) and (max-width: 576px) {
@@ -71,6 +86,11 @@
   #post_image_preview,
   #edit_post_image_preview {
     max-height: 340px;
+  }
+
+  //ゲストトップページの見出し
+  .top_headline {
+    font-size: 1.2rem;
   }
 
 }
@@ -218,6 +238,11 @@
 .logo {
     width: 150px;
     height: 40px;
+}
+
+//ゲストトップページの見出し
+.top_headline {
+  line-height: 1.6;
 }
 
 //ヘッダーのロゴ
@@ -382,25 +407,33 @@
 .follow_button:hover {
   background-color: #d0211c;
   border-color: #c51f1a;
+  font-size: 0;
 }
 
-//ホバー時のアンフォローボタン文字(通常は非表示)
-button .unfollow_button {
-  display: none;
+//ホバー時のフォロー中ボタンテキスト変更
+.follow_button:hover:before {
+  font-size: 0.875rem;
+  content: "フォロー解除";
 }
 
-//ホバー時は通常フォロー中のボタン文字を非表示
-button:hover .follow_now_button {
-  display: none;
+//active時のフォロー中ボタン色変更
+.follow_button:not(:disabled):not(.disabled):active,
+.follow_button:not(:disabled):not(.disabled).active,
+.show > .follow_button.dropdown-toggle {
+  color: #fff;
+  background-color: #c51f1a;
+  border-color: #b91d19;
 }
 
-//ホバー時のアンフォローボタン文字の表示
-button:hover .unfollow_button {
-  display: inline;
+//activrefocus時のフォロー中ボタンボーダー色変更
+.follow_button:not(:disabled):not(.disabled):active:focus,
+.follow_button:not(:disabled):not(.disabled).active:focus,
+.show > .follow_button.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(231, 82, 78, 0.5);
 }
 
 //平常時のいいね中ボタンのスタイル
-.like_now_button, .like_button {
+.like_now_icon {
   color: #FF0461;
   background-color:#fffff;
   padding: 0;
@@ -414,7 +447,7 @@ button:hover .unfollow_button {
 }
 
 //平常時のいいねボタンのスタイル
-.like_button {
+.like_icon {
   color: #BBBBBB;
   background-color:#fffff;
   padding: 0;
@@ -428,7 +461,7 @@ button:hover .unfollow_button {
 }
 
 //カーソルが乗った時のいいね、いいね中ボタンのスタイル
-.like_now_button:hover, .like_button:hover {
+.like_button:hover {
   background-color: #FFD5EC;
   color: #FF0461;
 }
@@ -646,3 +679,48 @@ textarea {
         border-color: #e3342f;
     }
 }
+
+/* ページトップへ戻るボタン関係　始り */
+//ページトップへ戻るボタン
+#page_top_button {
+  width: 70px;
+  height: 70px;
+  position: fixed;
+  right: 10px;
+  bottom: -70px;
+  background: #7ed957;
+  opacity: 0.7;
+  border-radius: 50%;
+}
+
+//ページトップへ戻るボタン
+#page_top_button a {
+  position: relative;
+  display: block;
+  width: 70px;
+  height: 70px;
+  text-decoration: none;
+}
+
+//ページトップへ戻るボタンアイコン
+#page_top_button i {
+  font-size: 35px;
+  color: #ffffff;
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  top: -5px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  text-align: center;
+}
+
+//ページトップへ戻るボタンポジション
+@media screen and (min-width: 1500px){
+  #page_top_button {
+    right: calc(50% - 750px);
+  }
+}
+/* ページトップへ戻るボタン関係　終り  */
