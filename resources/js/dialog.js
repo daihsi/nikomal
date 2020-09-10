@@ -3,7 +3,7 @@ var $ = require('jquery');
 $(function(){
 
     //投稿・コメント削除ダイヤログ
-    $('.delete_alert').click(function() {
+    $(document).on('click', '.delete_alert', function() {
         if(confirm('削除してよろしいですか？')) {
             $('#delete_form').submit();
         }
