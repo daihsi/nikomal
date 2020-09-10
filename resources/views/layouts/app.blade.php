@@ -31,5 +31,8 @@
     <main>
         @yield('content')
     </main>
+
+    {{-- ページトップへ戻るボタン --}}
+    <div id="page_top_button"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
 </body>
 </html>
