@@ -3,8 +3,6 @@
 namespace Tests\Browser;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use App\User;
@@ -53,23 +51,6 @@ class RegisterTest extends DuskTestCase
                     ->assertPathIs('/register')
                     ->assertSee('ユーザー登録に失敗しました') //toastrのフラッシュメッセージが表示されているか確認
                     ->screenshot('register');
-        });
-    }
-
-    //画像プレビューに画像が表示されているかテスト
-    public function testAvatarUpload()
-    {
-        Storage::fake('users_avatar');
-        $upload_file = UploadedFile::fake()->image('avatar_test.jpg')->size(2048);
-        $upload_file->move('storage/framework/testing/disks/users_avatar');
-        $file_name = $upload_file->getFilename();
-
-        $this->browse(function ($browser) use ($file_name) {
-            $browser->visit('/register')
-                    ->click('#avatarUploadButton')
-                    ->attach('#avatarUpload', 'storage/framework/testing/disks/users_avatar/'.$file_name)
-                    ->screenshot('users_avatar')
-                    ->assertSourceHas('image/'); //プレビュー用のソースコードに切り替わっているか確認
         });
     }
 
