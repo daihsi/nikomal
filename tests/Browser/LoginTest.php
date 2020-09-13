@@ -17,24 +17,6 @@ class LoginTest extends DuskTestCase
      * @return void
      */
 
-    //ログインテスト
-    public function testLogin()
-    {
-        $password = 123456789;
-        $user = factory(User::class)->create([
-                    'password' => bcrypt($password),
-                ]);
-        $this->browse(function ($browser) use ($user, $password) {
-            $browser->visit('/login')
-                    ->type('email', $user->email)
-                    ->type('password', $password)
-                    ->press('ログイン')
-                    ->assertPathIs('/')
-                    ->assertSee('ログインしました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('login');
-        });
-    }
-
     //ヘッダーナビゲーションからログインページへ遷移しているかテスト
     public function testValidationLogin()
     {
@@ -49,6 +31,24 @@ class LoginTest extends DuskTestCase
                     ->press('ログイン')
                     ->assertPathIs('/login')
                     ->assertSee('ログイン') //ログインページのテキスト表示されているか確認
+                    ->screenshot('login');
+        });
+    }
+
+    //ログインテスト
+    public function testLogin()
+    {
+        $password = 123456789;
+        $user = factory(User::class)->create([
+                    'password' => bcrypt($password),
+                ]);
+        $this->browse(function ($browser) use ($user, $password) {
+            $browser->visit('/login')
+                    ->type('email', $user->email)
+                    ->type('password', $password)
+                    ->press('ログイン')
+                    ->assertPathIs('/')
+                    ->assertSee('ログインしました') //toastrのフラッシュメッセージが表示されているか確認
                     ->screenshot('login');
         });
     }
