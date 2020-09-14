@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
 
 class UserFollowController extends Controller
 {
@@ -10,27 +11,30 @@ class UserFollowController extends Controller
         $user = \Auth::user();
         $auth_id = $user->id;
         $follow = $user->follow($id);
+        $follower_count = User::findOrFail($id)->followers()->count();
 
         //フォローの場合
         if ($follow === true) {
-            $follow_count = $user->followings()->count();
-            $follower_count = $user->followers()->count();
+            $auth_follow_count = $user->followings()->count();
+            $auth_follower_count = $user->followers()->count();
             return response()->json([
                             'follow' => true,
-                            'follow_count' => $follow_count,
                             'follower_count' => $follower_count,
+                            'auth_follow_count' => $auth_follow_count,
+                            'auth_follower_count' => $auth_follower_count,
                             'auth_id' => $auth_id,
                         ]);
         }
 
         //アンフォローの場合
         elseif ($follow === false) {
-            $follow_count = $user->followings()->count();
-            $follower_count = $user->followers()->count();
+            $auth_follow_count = $user->followings()->count();
+            $auth_follower_count = $user->followers()->count();
             return response()->json([
                             'unfollow' => false,
-                            'follow_count' => $follow_count,
                             'follower_count' => $follower_count,
+                            'auth_follow_count' => $auth_follow_count,
+                            'auth_follower_count' => $auth_follower_count,
                             'auth_id' => $auth_id,
                         ]);
         }

@@ -24,8 +24,16 @@ $(function() {
             data: {'id': user_id},
         })
         .done(function(data) {
+
+            //認証ユーザーのユーザー詳細ページパス
             var following_path = '/users/' + data['auth_id'] + '/following';
             var follower_path = '/users/' + data['auth_id'] + '/follower';
+
+            //認証ユーザー以外のユーザー詳細ページパス
+            var user = '/users/' + user_id;
+            var user_following_path = user + '/following';
+            var user_follower_path = user + '/follower';
+            var user_like_path = user + '/likes';
 
             //フォロー成功時
             if (data['follow'] === true) {
@@ -40,11 +48,21 @@ $(function() {
 
                     //投稿詳細ページのナビゲーションタブのフォローカウントがコンテンツに含まれていた場合
                     if ($('.follow_count_badge').length) {
-                        $('.follow_count_badge').text(data['follow_count']);
+                        $('.follow_count_badge').text(data['auth_follow_count']);
                     }
 
                     //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
                     else if ($('.follower_count_badge').length) {
+                        $('.follower_count_badge').text(data['auth_follower_count']);
+                    }
+                }
+
+                //現在のURLが認証ユーザー以外の詳細ページだった場合かつ
+                //URLのパラメータとフォローユーザーidが同じだった場合
+                else if (url === user_follower_path || url === user_following_path || url === user_like_path || url === user) {
+
+                    //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
+                    if ($('.follower_count_badge').length) {
                         $('.follower_count_badge').text(data['follower_count']);
                     }
                 }
@@ -63,11 +81,21 @@ $(function() {
 
                     //ユーザー詳細ページのナビゲーションタブのフォローカウントがコンテンツに含まれていた場合
                     if ($('.follow_count_badge').length) {
-                        $('.follow_count_badge').text(data['follow_count']);
+                        $('.follow_count_badge').text(data['auth_follow_count']);
                     }
 
                     //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
                     else if ($('.follower_count_badge').length) {
+                        $('.follower_count_badge').text(data['auth_follower_count']);
+                    }
+                }
+
+                //現在のURLが認証ユーザー以外の詳細ページだった場合かつ
+                //URLのパラメータとフォローユーザーidが同じだった場合
+                else if (url === user_follower_path || url === user_following_path || url === user_like_path || url === user) {
+
+                    //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
+                    if ($('.follower_count_badge').length) {
                         $('.follower_count_badge').text(data['follower_count']);
                     }
                 }
