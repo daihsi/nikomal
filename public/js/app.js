@@ -48006,7 +48006,7 @@ __webpack_require__(/*! ./like_button */ "./resources/js/like_button.js");
 
 __webpack_require__(/*! ./follow_button */ "./resources/js/follow_button.js");
 
-__webpack_require__(/*! ./page_top_button */ "./resources/js/page_top_button.js");
+__webpack_require__(/*! ./smooth_scroll */ "./resources/js/smooth_scroll.js");
 
 /***/ }),
 
@@ -48065,10 +48065,22 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 $(function () {
-  //投稿・コメント削除ダイヤログ
-  $(document).on('click', '.delete_alert', function () {
-    if (confirm('削除してよろしいですか？')) {
-      $('#delete_form').submit();
+  //コメント削除ダイヤログ
+  $(document).on('click', '.comment_delete_alert', function () {
+    var $this = $(this);
+
+    if (confirm('コメントを削除してよろしいですか？')) {
+      $this.submit();
+    } else {
+      return false;
+    }
+  }); //投稿削除ダイヤログ
+
+  $(document).on('click', '.post_delete_alert', function () {
+    var $this = $(this);
+
+    if (confirm('投稿を削除してよろしいですか？')) {
+      $this.submit();
     } else {
       return false;
     }
@@ -48117,8 +48129,14 @@ $(function () {
         'id': user_id
       }
     }).done(function (data) {
+      //認証ユーザーのユーザー詳細ページパス
       var following_path = '/users/' + data['auth_id'] + '/following';
-      var follower_path = '/users/' + data['auth_id'] + '/follower'; //フォロー成功時
+      var follower_path = '/users/' + data['auth_id'] + '/follower'; //認証ユーザー以外のユーザー詳細ページパス
+
+      var user = '/users/' + user_id;
+      var user_following_path = user + '/following';
+      var user_follower_path = user + '/follower';
+      var user_like_path = user + '/likes'; //フォロー成功時
 
       if (data['follow'] === true) {
         toastr.success('フォローしました'); //ボタン変更
@@ -48129,12 +48147,19 @@ $(function () {
         if (url === following_path || url === follower_path) {
           //投稿詳細ページのナビゲーションタブのフォローカウントがコンテンツに含まれていた場合
           if ($('.follow_count_badge').length) {
-            $('.follow_count_badge').text(data['follow_count']);
+            $('.follow_count_badge').text(data['auth_follow_count']);
           } //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
           else if ($('.follower_count_badge').length) {
+              $('.follower_count_badge').text(data['auth_follower_count']);
+            }
+        } //現在のURLが認証ユーザー以外の詳細ページだった場合かつ
+        //URLのパラメータとフォローユーザーidが同じだった場合
+        else if (url === user_follower_path || url === user_following_path || url === user_like_path || url === user) {
+            //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
+            if ($('.follower_count_badge').length) {
               $('.follower_count_badge').text(data['follower_count']);
             }
-        }
+          }
       } //アンフォロー成功時
       else if (data['unfollow'] === false) {
           toastr.success('フォローを外しました'); //ボタン変更
@@ -48145,12 +48170,19 @@ $(function () {
           if (url === following_path || url === follower_path) {
             //ユーザー詳細ページのナビゲーションタブのフォローカウントがコンテンツに含まれていた場合
             if ($('.follow_count_badge').length) {
-              $('.follow_count_badge').text(data['follow_count']);
+              $('.follow_count_badge').text(data['auth_follow_count']);
             } //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
             else if ($('.follower_count_badge').length) {
+                $('.follower_count_badge').text(data['auth_follower_count']);
+              }
+          } //現在のURLが認証ユーザー以外の詳細ページだった場合かつ
+          //URLのパラメータとフォローユーザーidが同じだった場合
+          else if (url === user_follower_path || url === user_following_path || url === user_like_path || url === user) {
+              //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
+              if ($('.follower_count_badge').length) {
                 $('.follower_count_badge').text(data['follower_count']);
               }
-          }
+            }
         }
     }).fail(function (data) {
       toastr.error('失敗しました');
@@ -48223,8 +48255,10 @@ $(function () {
         'id': post_id
       }
     }).done(function (data) {
-      var p_likes_path = '/posts/' + post_id + '/likes';
-      var u_likes_path = '/users/' + data['auth_id'] + '/likes'; //いいね登録成功時
+      var post = '/posts/' + post_id;
+      var p_likes_path = post + '/likes';
+      var user = '/users/' + data['auth_id'];
+      var u_likes_path = user + '/likes'; //いいね登録成功時
 
       if (data['like'] === true) {
         toastr.success('投稿にいいねしました'); //アイコンの色変更(ピンク色へ)
@@ -48233,7 +48267,7 @@ $(function () {
         $this.next('span').text(data['p_count']); //現在のURLが認証ユーザーの詳細ページだった場合(いいねページ)
         //または投稿詳細ページ(いいねページ)
 
-        if (url === p_likes_path || url === u_likes_path) {
+        if (url === post || url === p_likes_path || url === user || url === u_likes_path) {
           //投稿詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
           if ($('.p_count_badge').length) {
             $('.p_count_badge').text(data['p_count']);
@@ -48250,7 +48284,7 @@ $(function () {
           $this.next('span').text(data['p_count']); //現在のURLが認証ユーザーの詳細ページだった場合(いいねページ)
           //または投稿詳細ページ(いいねページ)
 
-          if (url === p_likes_path || url === u_likes_path) {
+          if (url === post || url === p_likes_path || url === user || url === u_likes_path) {
             //投稿詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
             if ($('.p_count_badge').length) {
               $('.p_count_badge').text(data['p_count']);
@@ -48263,49 +48297,6 @@ $(function () {
     }).fail(function (data) {
       toastr.error('失敗しました');
     });
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/page_top_button.js":
-/*!*****************************************!*\
-  !*** ./resources/js/page_top_button.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-
-$(function () {
-  var appear = false;
-  var pagetop = $('#page_top_button');
-  $(window).scroll(function () {
-    //500pxスクロールした場合ボタン出現
-    if ($(this).scrollTop() > 500) {
-      if (appear == false) {
-        appear = true; //下から10pxの位置に0.3秒かけて出現
-
-        pagetop.stop().animate({
-          'bottom': '10px'
-        }, 300);
-      }
-    } else {
-      if (appear) {
-        appear = false; //下から-70pxの位置に0.3秒かけて隠れる
-
-        pagetop.stop().animate({
-          'bottom': '-70px'
-        }, 300);
-      }
-    }
-  }); //0.5秒かけてページトップへ戻る
-
-  pagetop.click(function () {
-    $('body, html').animate({
-      scrollTop: 0
-    }, 500);
-    return false;
   });
 });
 
@@ -48493,6 +48484,49 @@ $(document).ready(function () {
     placeholder: '選択してください',
     language: 'ja',
     width: '100%'
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/smooth_scroll.js":
+/*!***************************************!*\
+  !*** ./resources/js/smooth_scroll.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+$(function () {
+  var appear = false;
+  var pagetop = $('#page_top_button');
+  $(window).scroll(function () {
+    //500pxスクロールした場合ボタン出現
+    if ($(this).scrollTop() > 500) {
+      if (appear == false) {
+        appear = true; //下から10pxの位置に0.3秒かけて出現
+
+        pagetop.stop().animate({
+          'bottom': '10px'
+        }, 300);
+      }
+    } else {
+      if (appear) {
+        appear = false; //下から-70pxの位置に0.3秒かけて隠れる
+
+        pagetop.stop().animate({
+          'bottom': '-70px'
+        }, 300);
+      }
+    }
+  }); //0.5秒かけてページトップへ戻る
+
+  pagetop.click(function () {
+    $('body, html').animate({
+      scrollTop: 0
+    }, 500);
+    return false;
   });
 });
 

@@ -2,10 +2,22 @@ var $ = require('jquery');
 
 $(function(){
 
-    //投稿・コメント削除ダイヤログ
-    $(document).on('click', '.delete_alert', function() {
-        if(confirm('削除してよろしいですか？')) {
-            $('#delete_form').submit();
+    //コメント削除ダイヤログ
+    $(document).on('click', '.comment_delete_alert', function() {
+        var $this = $(this);
+        if(confirm('コメントを削除してよろしいですか？')) {
+            $this.submit();
+        }
+        else {
+            return false;
+        }
+    });
+
+    //投稿削除ダイヤログ
+    $(document).on('click', '.post_delete_alert', function() {
+        var $this = $(this);
+        if(confirm('投稿を削除してよろしいですか？')) {
+            $this.submit();
         }
         else {
             return false;

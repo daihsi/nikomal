@@ -17,38 +17,64 @@ class LoginTest extends DuskTestCase
      * @return void
      */
 
+    //ヘッダーナビゲーションからログインページへ遷移しているかテスト
+    public function testValidationLogin()
+    {
+        //パスワードを間違えたと仮定
+        $password = 12345678;
+        $user = factory(User::class)->create();
+
+        $this->browse(function ($browser) use($user, $password) {
+            $browser->visit('/login')
+                    ->type('email', $user->email)
+                    ->type('password', $password)
+                    ->press('ログイン')
+                    ->assertPathIs('/login')
+                    ->assertSee('ログイン') //ログインページのテキスト表示されているか確認
+                    ->screenshot('login');
+        });
+    }
+
     //ログインテスト
     public function testLogin()
     {
         $password = 123456789;
         $user = factory(User::class)->create([
                     'password' => bcrypt($password),
-                    'remember_token' => null,
                 ]);
         $this->browse(function ($browser) use ($user, $password) {
             $browser->visit('/login')
-                    ->assertSee('ログイン')
                     ->type('email', $user->email)
                     ->type('password', $password)
-                    ->screenshot('form')
                     ->press('ログイン')
-                    ->pause(5000)
-                    ->assertPathIs('/');
+                    ->assertPathIs('/')
+                    ->assertSee('ログインしました') //toastrのフラッシュメッセージが表示されているか確認
+                    ->screenshot('login');
         });
     }
 
-    public function testtest()
+    //ヘッダーナビゲーションからログインページへ遷移しているかテスト
+    public function testLoginLink()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                    ->screenshot('test')
-                    ->assertSeeLink('ログイン')
-                    ->clicklink('ログイン');
-                    //->screenshot('test')
-                    //->waitForLocation('/')
-                    //->assertPathIs('/');
-                    //->assertSee('テストタスク');
-                    //->assertPathIs('/');
+                    ->clickLink('ログイン')
+                    ->assertPathIs('/login');
+        });
+    }
+
+    //ログアウトテスト(確認ダイヤログもテスト)
+    public function testLogout()
+    {
+        $user = factory(User::class)->create();
+        $this->browse(function ($browser) use ($user) {
+            $browser->loginAs($user)
+                    ->visit('/')
+                    ->click('#navbarDropdown')
+                    ->click('.logout_alert')
+                    ->assertDialogOpened('ログアウトしてよろしいですか？')
+                    ->acceptDialog() //ダイアログのokボタンを押す
+                    ->screenshot('logout');
         });
     }
 }
