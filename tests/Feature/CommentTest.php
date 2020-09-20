@@ -64,9 +64,7 @@ class CommentTest extends TestCase
 
         //コメントリクエスト、リダイレクトの確認
         $this->from($url)
-            ->post(route('posts.comment'), $data)
-            ->assertStatus(302)
-            ->assertRedirect($url);
+            ->post(route('posts.comment'), $data);
 
         //データベースにデータが存在するか確認
         $this->assertDatabaseHas('comments', $data);
@@ -76,28 +74,25 @@ class CommentTest extends TestCase
     public function testDeletePostComment()
     {
         $this->actingAs($this->factory_user);
+
         $post_id = $this->post->id;
-        $comment = $this->comment;
+        $comment_id = $this->comment->id;
+
+        $url = route('posts.show', $post_id);
 
         //リクエストする為のデータをまとめる
         $data = [
                 'post_id' => $post_id,
-                'comment' => $comment->comment,
+                'comment_id' => $comment_id,
+                'comment_length' => 4,
             ];
-        $url = route('posts.show', $post_id);
-        $this->post(route('posts.comment'), $data);
 
-        //削除するコメントのモデルのインスタンスを取得
-        $delete_comment = Comment::find($comment->id);
-
-        //コメント削除リクエスト、リダイレクトの確認
+        //コメント削除リクエスト
         $this->from($url)
-            ->delete(route('posts.uncomment', $comment->id))
-            ->assertStatus(302)
-            ->assertRedirect($url);
+            ->delete(route('posts.uncomment', $comment_id), $data);
 
         //コメントがデータベースから削除されたか確認
-        $this->assertDeleted($delete_comment);
+        $this->assertDeleted($this->comment);
     }
 
     //コメントリクエストが、ゲストユーザーができないようになっているかテスト

@@ -17774,10 +17774,12 @@ textarea {
   position: relative;
   margin: 0 0 0 20px;
   padding: 8px;
+  min-width: 30px;
   border-radius: 12px;
   background: #edf1ee;
   font-size: 1rem;
   text-align: left;
+  word-break: break-all;
 }
 
 .authenticated_user_comment {
@@ -17799,10 +17801,12 @@ textarea {
   position: relative;
   margin: 0 20px 0 0;
   padding: 8px;
+  min-width: 30px;
   border-radius: 12px;
   background: #7ed957;
   font-size: 1rem;
   text-align: left;
+  word-break: break-all;
 }
 
 .p_category {

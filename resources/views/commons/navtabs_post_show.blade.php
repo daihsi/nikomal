@@ -3,7 +3,7 @@
     <li class="nav-item">
         <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="nav-link {{ Request::routeIs('posts.show') ? 'active' : '' }} text-dark">
             コメント
-            <span class="badge badge-white badge-pill">{{ $post->postComments->count() }}</span>
+            <span class="badge badge-white badge-pill p_comment_count_badge">{{ $post->postComments->count() }}</span>
         </a>
     </li>
     {{-- 投稿いいねユーザータブ --}}

@@ -197,8 +197,8 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //スクロールしてページの一番下位にあるコメントを確認
-            $browser->assertSee($comment12)
-                    ->press('もっと見る')
+            $browser->waitForText($comment12)
+                    ->assertSee($comment12)
                     ->driver
                     ->executeScript('window.scrollTo(2500, 3500);');
 

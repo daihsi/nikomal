@@ -96,7 +96,7 @@ class PostsController extends Controller
         $post_images = $post->postImages;
         $post_categorys = $post->postCategorys;
         $post->loadRelationshipCounts();
-        $comments = $post->postComments()->orderBy('created_at', 'desc')->simplePaginate(12);
+        $comments = $post->postComments()->orderBy('created_at', 'desc')->simplePaginate(11);
 
         return view('posts.show',[
             'post' => $post,

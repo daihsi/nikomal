@@ -205,7 +205,6 @@
     max-width:530px;
     max-height:430px;
   }
-
 }
 
 //lgサイズ
@@ -550,11 +549,12 @@ textarea {
   position: relative; 
   margin: 0 0 0 20px;
   padding: 8px;
-  //max-width: 505px;
+  min-width: 30px;
   border-radius: 12px;
   background: #edf1ee;
   font-size: 1rem;
   text-align: left;
+  word-break: break-all;
 }
 // 終
 
@@ -577,11 +577,12 @@ textarea {
   position: relative; 
   margin: 0 20px 0 0;
   padding: 8px;
-  //max-width: 505px;
+  min-width: 30px;
   border-radius: 12px;
   background: #7ed957;
   font-size: 1rem;
   text-align: left;
+  word-break: break-all;
 }
 // ここまで　終
 
