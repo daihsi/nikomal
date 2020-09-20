@@ -32,13 +32,27 @@ class CommentRequest extends FormRequest
         ];
     }
 
-    //フラッシュメッセージのみ追加し、オーバーライド
+    public function messages()
+    {
+        return [
+            'post_id.required' => '投稿IDを入力してください',
+            'post_id.exists' => '投稿IDがデータベースに存在しません',
+            'comment.required' => 'コメントを入力してください',
+            'comment.max' => 'コメントは150字以下で入力してください',
+            'comment.string' => 'コメントは文字列で入力してください',
+        ];
+    }
+
+    //json形式でエラー情報を返す
     protected function failedValidation(Validator $validator)
     {
-        $this->merge(['validated' => 'true']);
-        // リダイレクト先
+        $response['data'] = [];
+        $response['status'] = 'NG';
+        $response['summary'] = 'Failed validation';
+        $response['errors'] = $validator->errors()->toArray();
+
         throw new HttpResponseException(
-        back()->withInput($this->input)->withErrors($validator)->with('msg_error', 'コメント投稿に失敗しました')
-        );
+                response()->json($response, 422)
+            );
     }
 }
