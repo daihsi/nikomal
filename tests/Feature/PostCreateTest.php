@@ -141,6 +141,7 @@ class PostCreateTest extends TestCase
         $this->assertFalse($result);
         $expectedFailed = [
             'content' => ['Max' => [150],],
+            'animals_name' => ['Array' => [],],
         ];
         //どこがエラーになったか検証
         $this->assertEquals($expectedFailed, $validator->failed());
@@ -169,6 +170,7 @@ class PostCreateTest extends TestCase
         $this->assertFalse($result);
         $expectedFailed = [
             'image' => ['Mimes' => ['jpeg', 'png', 'jpg'], 'Max' => [2048],],
+            'animals_name' => ['Array' => [],],
         ];
         //どこがエラーになったか検証
         $this->assertEquals($expectedFailed, $validator->failed());
@@ -209,10 +211,7 @@ class PostCreateTest extends TestCase
             'image' => $this->upload_file,
             'animals_name' => $animals_name,
         ];
-        $response = $this->post(route('posts.store', $factory_user->id), $data)
-                        ->assertStatus(302)
-                        //リダイレクト先の確認
-                        ->assertRedirect('/');
+        $response = $this->post(route('posts.store', $factory_user->id), $data);
 
         //トップページに投稿が表示されているか確認
         $this->get('/')
@@ -239,10 +238,7 @@ class PostCreateTest extends TestCase
             'image' => $this->upload_file,
             'animals_name' => $animals_name,
         ];
-        $response = $this->post(route('posts.store', $factory_user->id), $data)
-                        ->assertStatus(302)
-                        //リダイレクト先の確認
-                        ->assertRedirect('/');
+        $response = $this->post(route('posts.store', $factory_user->id), $data);
 
         //ユーザー詳細ページに投稿が表示されているか確認
         $this->get(route('users.show', $factory_user->id))

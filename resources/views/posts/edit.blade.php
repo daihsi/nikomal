@@ -56,7 +56,7 @@
                     @enderror
                 </div>
                 <div class="form-group text-center mb-3">
-                    <button type="submit" class="btn btn-outline-success mt-3">編集する</button>
+                    <button type="submit" class="btn btn-outline-success mt-3">変更内容を保存する</button>
                 </div>
             </div>
         </div>
