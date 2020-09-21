@@ -50,7 +50,7 @@ class PostTest extends DuskTestCase
         });
     }
 
-    //新規投稿バリデーションエラーテスト
+    //新規投稿バリデーションエラー表示テスト
     public function testValidationPostCreate()
     {
         $animals = factory(Animal::class, 4)->make();
@@ -60,7 +60,8 @@ class PostTest extends DuskTestCase
                     ->visitRoute('posts.create')
                     ->type('content', $this->content->content);
             foreach ($animals as $animal) {
-                $browser->select('animals_name[]', $animal->name);
+                $browser->select('animals_name[]', $animal->name)
+                        ->assertSelected('animals_name[]', $animal->name);
             }
 
             //失敗フラッシュメッセージが表示されているか
