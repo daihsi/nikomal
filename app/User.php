@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\ResetPasswordJP as ResetPasswordNotificationJP;
 
 class User extends Authenticatable
 {
@@ -36,6 +37,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    //パスワードリセットメール日本語化
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotificationJP($token));
+    }
 
     //Postモデルとのリレーション
     public function posts()
