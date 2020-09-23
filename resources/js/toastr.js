@@ -5,6 +5,7 @@ $(function() {
     toastr.options = {
         "closeButton": true,
         "positionClass": "toast-top-center",
+        "timeOut": "5000",
     };
     if($('.msg_success').length) {
         toastr.success(msg_success);

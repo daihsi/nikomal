@@ -48316,7 +48316,7 @@ $(function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "comment_delete_dialog", function() { return comment_delete_dialog; });
-var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"); //コメント削除ダイアログ
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"); //コメント削除ダイアログ関数
 
 
 function comment_delete_dialog() {
@@ -48505,8 +48505,6 @@ $(function () {
     path: '.comment_next',
     append: '.balloon',
     history: false,
-    //button: '.comment_more_button',
-    //scrollThreshold: false,
     hideNav: '.pagination',
     status: '.page_load_status'
   });
@@ -48856,7 +48854,8 @@ var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js"
 $(function () {
   toastr.options = {
     "closeButton": true,
-    "positionClass": "toast-top-center"
+    "positionClass": "toast-top-center",
+    "timeOut": "5000"
   };
 
   if ($('.msg_success').length) {
