@@ -1,11 +1,22 @@
 var $ = require('jquery');
 
+//コメント削除ダイアログ関数
+export function comment_delete_dialog() {
+    if(confirm('コメントを削除してよろしいですか？')) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 $(function(){
 
-    //投稿・コメント削除ダイヤログ
-    $(document).on('click', '.delete_alert', function() {
-        if(confirm('削除してよろしいですか？')) {
-            $('#delete_form').submit();
+    //投稿削除ダイヤログ
+    $(document).on('click', '.post_delete_alert', function() {
+        var $this = $(this);
+        if(confirm('投稿を削除してよろしいですか？')) {
+            $this.submit();
         }
         else {
             return false;

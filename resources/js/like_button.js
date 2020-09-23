@@ -24,8 +24,10 @@ $(function() {
             data: {'id': post_id},
         })
         .done(function(data) {
-            var p_likes_path = '/posts/' + post_id + '/likes';
-            var u_likes_path = '/users/' + data['auth_id'] + '/likes';
+            var post = '/posts/' + post_id;
+            var p_likes_path = post + '/likes';
+            var user = '/users/' + data['auth_id'];
+            var u_likes_path = user + '/likes';
 
             //いいね登録成功時
             if (data['like'] === true) {
@@ -37,7 +39,7 @@ $(function() {
 
                 //現在のURLが認証ユーザーの詳細ページだった場合(いいねページ)
                 //または投稿詳細ページ(いいねページ)
-                if (url === p_likes_path || url === u_likes_path) {
+                if (url === post || url === p_likes_path || url === user || url === u_likes_path) {
 
                     //投稿詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
                     if ($('.p_count_badge').length) {
@@ -61,7 +63,7 @@ $(function() {
 
                 //現在のURLが認証ユーザーの詳細ページだった場合(いいねページ)
                 //または投稿詳細ページ(いいねページ)
-                if (url === p_likes_path || url === u_likes_path) {
+                if (url === post || url === p_likes_path || url === user || url === u_likes_path) {
 
                     //投稿詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
                     if ($('.p_count_badge').length) {

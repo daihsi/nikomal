@@ -9,7 +9,7 @@ use App\User;
 
 class RegisterTest extends DuskTestCase
 {
-    //use DatabaseMigrations;
+    use DatabaseMigrations;
     /**
      * A Dusk test example.
      *
@@ -21,19 +21,20 @@ class RegisterTest extends DuskTestCase
     {
         $password = '123456789';
         $user = factory(User::class)->make();
-        $this->browse(function (Browser $browser) {
+        $this->browse(function ($browser) use ($user, $password) {
             $browser->visit('/register')
-                    ->screenshot('Register')
-                    ->type('name', 'test1')
-                    ->type('email', 'test1@test1.com')
-                    ->type('password', '11111111')
-                    ->type('password_confirmation', '11111111')
-                    ->press('登録する');
-                    //->assertPathIs('/');
+                    ->type('name', $user->name)
+                    ->type('email', $user->email)
+                    ->type('password', $password)
+                    ->type('password_confirmation', $password)
+                    ->press('登録する')
+                    ->assertPathIs('/')
+                    ->assertSee('ユーザー登録完了しました') //toastrのフラッシュメッセージが表示されているか確認
+                    ->screenshot('register');
         });
     }
 
-    //バリデーションに引っ掛かった際のテスト
+    //バリデーションで登録ページにリダイレクトしたかテスト
     public function testValidationRegister()
     {
         //名前欄の入力が、一文字多い
@@ -46,10 +47,20 @@ class RegisterTest extends DuskTestCase
                     ->type('email', $user->email)
                     ->type('password', $password)
                     ->type('password_confirmation', $password)
-                    ->screenshot('test')
                     ->press('登録する')
+                    ->assertPathIs('/register')
+                    ->assertSee('ユーザー登録に失敗しました') //toastrのフラッシュメッセージが表示されているか確認
+                    ->screenshot('register');
+        });
+    }
+
+    //ヘッダーナビゲーションから登録ページへ遷移しているかテスト
+    public function testLinkRegister()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/')
+                    ->clickLink('ユーザー登録')
                     ->assertPathIs('/register');
-                    //->dump();
         });
     }
 }

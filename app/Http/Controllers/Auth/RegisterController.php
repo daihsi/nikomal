@@ -50,7 +50,8 @@ class RegisterController extends Controller
         event(new Registered($user = $this->create($request->validated())));
         $this->guard()->login($user);
         return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
+                        ?: redirect($this->redirectPath())
+                        ->with('msg_success', 'ユーザー登録完了しました');
     }
     
     /**

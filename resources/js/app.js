@@ -8,4 +8,7 @@ require('./toastr');
 require('./dialog');
 require('./like_button');
 require('./follow_button');
-require('./page_top_button');
+require('./smooth_scroll');
+require('./comment');
+require('./format_date');
+require('./nl2br');

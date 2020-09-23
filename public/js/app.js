@@ -48006,7 +48006,13 @@ __webpack_require__(/*! ./like_button */ "./resources/js/like_button.js");
 
 __webpack_require__(/*! ./follow_button */ "./resources/js/follow_button.js");
 
-__webpack_require__(/*! ./page_top_button */ "./resources/js/page_top_button.js");
+__webpack_require__(/*! ./smooth_scroll */ "./resources/js/smooth_scroll.js");
+
+__webpack_require__(/*! ./comment */ "./resources/js/comment.js");
+
+__webpack_require__(/*! ./format_date */ "./resources/js/format_date.js");
+
+__webpack_require__(/*! ./nl2br */ "./resources/js/nl2br.js");
 
 /***/ }),
 
@@ -48055,20 +48061,278 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
+/***/ "./resources/js/comment.js":
+/*!*********************************!*\
+  !*** ./resources/js/comment.js ***!
+  \*********************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _format_date__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./format_date */ "./resources/js/format_date.js");
+/* harmony import */ var _nl2br__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./nl2br */ "./resources/js/nl2br.js");
+/* harmony import */ var _dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dialog */ "./resources/js/dialog.js");
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+
+
+
+
+var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+
+$(function () {
+  //新規コメント投稿
+  $(document).on('click', '.comment_button', function () {
+    //フォームの値を取得
+    var comment = $('#comment').val();
+    var post_id = $('#post_id').val(); //コメントが未入力なら処理終了
+
+    if (comment === "") {
+      toastr.error('コメントが未入力です');
+      return false;
+    } //コメント入力値があれば
+    else {
+        $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          url: '/comments',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            'post_id': post_id,
+            'comment': comment
+          }
+        }).done(function (data) {
+          //成功フラッシュメッセージを表示
+          toastr.success('コメント投稿しました'); //入力値をクリア
+
+          $('#comment').val(''); //コメントがない場合の表示があればそれを消去
+
+          if ($('.no_comment').length) {
+            $('.no_comment').remove();
+          } //ナビゲーションタブのコメントカウント
+
+
+          if ($('.p_comment_count_badge').length) {
+            $('.p_comment_count_badge').text(data['comment_count']);
+          } //バリデーションのクラスがあればクラス名を削除
+
+
+          if ($('.is-invalid').length) {
+            $('#comment').removeClass('is-invalid');
+          }
+
+          var html = ''; //ユーザーのアバター画像がnullの場合は、こちらの画像を使用
+
+          var img_src = "/storage/images/default_icon.png"; //コメントしたユーザーの情報
+
+          var user_id = data['comment']['user']['id'];
+          var name = data['comment']['user']['name'];
+          var avatar = data['comment']['user']['avatar']; //コメントの情報
+
+          var comment_id = data['comment']['id'];
+          var comment = Object(_nl2br__WEBPACK_IMPORTED_MODULE_1__["nl2br"])(data['comment']['comment']); //nl2br関数の使用
+
+          var created_at = Object(_format_date__WEBPACK_IMPORTED_MODULE_0__["formatDate"])(new Date(data['comment']['created_at']), 'YYYY/MM/DD hh:mm'); //formatDate関数の使用
+          //アバター画像がnullならば
+
+          if (!avatar) {
+            html = "\n                            <div class=\"balloon overflow-hidden my-2 w-100\" data-comment-id=\"".concat(comment_id, "\">\n                                <div class=\"balloon_chatting w-100 text-right\">\n                                    <a href=\"/users/").concat(user_id, "\" class=\"text-dark mr-auto font-weight-bold\"><div class=\"card-title\">").concat(name, "<img src=\"").concat(img_src, "\" class=\"rounded-circle ml-1\" width=\"40\" height=\"40\" alt=\"").concat(name, "\u306E\u30A2\u30D0\u30BF\u30FC\u753B\u50CF\u3002\u8A73\u7D30\u307A\u30FC\u30B8\u3078\u306E\u30EA\u30F3\u30AF\"></div></a>\n                                    <div class=\"authenticated_user_comment\">\n                                        <p>").concat(comment, "</p>\n                                    </div>\n                                    <div class=\"mb-2\">\n                                        <small>").concat(created_at, "</small>\n                                        <button type=\"button\" class=\"btn btn-link comment_trash text-danger comment_delete\" data-id=\"").concat(comment_id, "\"><i class=\"far fa-trash-alt\"></i>\u524A\u9664</button>\n                                    </div>\n                                </div>\n                            </div>\n                        ");
+          } //アバター画像があれば
+          else {
+              html = "\n                            <div class=\"balloon overflow-hidden my-2 w-100\" data-comment-id=\"".concat(comment_id, "\">\n                                <div class=\"balloon_chatting w-100 text-right\">\n                                    <a href=\"/users/").concat(user_id, "\" class=\"text-dark mr-auto font-weight-bold\"><div class=\"card-title\">").concat(name, "<img src=\"").concat(avatar, "\" class=\"rounded-circle ml-1\" width=\"40\" height=\"40\" alt=\"").concat(name, "\u306E\u30A2\u30D0\u30BF\u30FC\u753B\u50CF\u3002\u8A73\u7D30\u307A\u30FC\u30B8\u3078\u306E\u30EA\u30F3\u30AF\"></div></a>\n                                    <div class=\"authenticated_user_comment\">\n                                        <p>").concat(comment, "</p>\n                                    </div>\n                                    <div class=\"mb-2\">\n                                        <small>").concat(created_at, "</small>\n                                        <button type=\"button\" class=\"btn btn-link comment_trash text-danger comment_delete\" data-id=\"").concat(comment_id, "\"><i class=\"far fa-trash-alt\"></i>\u524A\u9664</button>\n                                    </div>\n                                </div>\n                            </div>\n                            ");
+            } //コメントエリアに先頭にコメントを追加
+
+
+          $('#comment_area').prepend(html); //一番最後のページのコメントを取得したらここの処理は入らない
+
+          if ($('.balloon').length !== data['comment_count']) {
+            //各ページの最後のコメントをコメントが投稿されるたびにコンテンツから削除
+            //次ページを読みこんだ際重複するため(1ページ11コメント)
+            if ($('.balloon').length % 11 === 1) {
+              $('#comment_area .balloon:last').detach();
+            }
+          }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+          //もし前のバリデーションエラーメッセージが残っていれば
+          //メッセージを削除
+          if ($('.invalid-feedback').length) {
+            $('.invalid-feedback').remove();
+          } //失敗フラッシュメッセージを表示
+
+
+          toastr.error('コメント投稿に失敗しました');
+          var text = $.parseJSON(jqXHR.responseText); //バリデーションエラーメッセージ取得
+
+          var errors = text.errors;
+
+          for (var key in errors) {
+            //繰り返してメッセージをコードに挿入
+            var errorMessage = errors[key][0];
+            var error_html = "\n                                        <span class=\"invalid-feedback\" role=\"alert\">\n                                            <strong>".concat(errorMessage, "</strong>\n                                        </span>\n                                    "); //失敗したことを明示するスタイルを追加
+            //エラーメッセージを追加
+
+            $('#comment').addClass('is-invalid');
+            $('#comment_msg_error').append(error_html);
+          }
+        });
+      }
+  }); //コメント削除
+
+  $(document).on('click', '.comment_delete', function () {
+    var $this = $(this); //ダイアログでokが押された場合コメント削除処理に入る
+
+    if (Object(_dialog__WEBPACK_IMPORTED_MODULE_2__["comment_delete_dialog"])(true)) {
+      //二重送信防止用のスタイルを追加
+      $this.css('pointer-events', 'none'); //コメントidを取得
+
+      var d_comment_id = $this.attr('data-id'); //投稿idを取得
+
+      var post_id = $('#post_id').val(); //コメントの要素数を取得
+
+      var comment_length = $('.balloon').length;
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: '/comments/' + d_comment_id,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          'comment_id': d_comment_id,
+          'comment_length': comment_length,
+          'post_id': post_id,
+          '_method': 'DELETE'
+        }
+      }).done(function (data) {
+        var html = ''; //コメントの所有者ではなかったらメッセージを表示して処理終了
+
+        if (data['message']) {
+          toastr.error(data['message']);
+          return false;
+        } //成功フラッシュメッセージを表示
+
+
+        toastr.success('コメントを削除しました'); //バリデーションエラー明示中であれば一旦バリデーションエラークラス属性を削除
+
+        if ($('.is-invalid').length) {
+          $('#comment').removeClass('is-invalid');
+        } //ナビゲーションタブのコメントカウント
+
+
+        if ($('.p_comment_count_badge').length) {
+          $('.p_comment_count_badge').text(data['comment_count']);
+        } //削除されたコメントをフロント側でも削除
+
+
+        $this.parents('.balloon').remove(); //コメントが0になったらコメントが無い時の表示にし処理終了
+
+        if (data['comment_count'] === 0) {
+          var _html = "\n                                <div class=\"d-flex justify-content-center align-items-center no_comment\" style=\"font-size:16px; height:200px; color:rgba(0,0,0,0.4);\">\n                                    \u307E\u3060\u30B3\u30E1\u30F3\u30C8\u304C\u3042\u308A\u307E\u305B\u3093\n                                </div>\n                                ";
+          $('#comment_area').append(_html); //二重送信防止用のスタイル解除
+
+          $this.css('pointer-events', '');
+          return false;
+        }
+        /*
+            ここからはコメントを削除した際に出る
+            次ページとのコメント差分をエリアに追加する処理
+        */
+        //ページが最後であればここの処理は入らない
+
+
+        if ($('.balloon').length !== data['comment_count']) {
+          //認証ユーザーID取得
+          var auth_id = data['auth_id']; //ユーザーのアバター画像がnullの場合は、こちらの画像を使用
+
+          var img_src = "/storage/images/default_icon.png"; //コメントしたユーザーの情報
+
+          var user_id = data['comment']['user']['id'];
+          var name = data['comment']['user']['name'];
+          var avatar = data['comment']['user']['avatar']; //コメントの情報
+
+          var comment_id = data['comment']['id'];
+          var comment = Object(_nl2br__WEBPACK_IMPORTED_MODULE_1__["nl2br"])(data['comment']['comment']); //nl2br関数の使用
+
+          var created_at = Object(_format_date__WEBPACK_IMPORTED_MODULE_0__["formatDate"])(new Date(data['comment']['created_at']), 'YYYY/MM/DD hh:mm'); //formatDate関数の使用
+          //認証ユーザーコメントならばこちらのコード生成
+
+          if (auth_id === user_id) {
+            //アバター画像がnullならば
+            if (!avatar) {
+              html = "\n                                    <div class=\"balloon overflow-hidden my-2 w-100\" data-comment-id=\"".concat(comment_id, "\">\n                                        <div class=\"balloon_chatting w-100 text-right\">\n                                            <a href=\"/users/").concat(user_id, "\" class=\"text-dark mr-auto font-weight-bold\"><div class=\"card-title\">").concat(name, "<img src=\"").concat(img_src, "\" class=\"rounded-circle ml-1\" width=\"40\" height=\"40\" alt=\"").concat(name, "\u306E\u30A2\u30D0\u30BF\u30FC\u753B\u50CF\u3002\u8A73\u7D30\u307A\u30FC\u30B8\u3078\u306E\u30EA\u30F3\u30AF\"></div></a>\n                                            <div class=\"authenticated_user_comment\">\n                                                <p>").concat(comment, "</p>\n                                            </div>\n                                            <div class=\"mb-2\">\n                                                <small>").concat(created_at, "</small>\n                                                <button type=\"button\" class=\"btn btn-link comment_trash text-danger comment_delete\" data-id=\"").concat(comment_id, "\"><i class=\"far fa-trash-alt\"></i>\u524A\u9664</button>\n                                            </div>\n                                        </div>\n                                    </div>\n                                ");
+            } //アバター画像があれば
+            else {
+                html = "\n                                    <div class=\"balloon overflow-hidden my-2 w-100\" data-comment-id=\"".concat(comment_id, "\">\n                                        <div class=\"balloon_chatting w-100 text-right\">\n                                            <a href=\"/users/").concat(user_id, "\" class=\"text-dark mr-auto font-weight-bold\"><div class=\"card-title\">").concat(name, "<img src=\"").concat(avatar, "\" class=\"rounded-circle ml-1\" width=\"40\" height=\"40\" alt=\"").concat(name, "\u306E\u30A2\u30D0\u30BF\u30FC\u753B\u50CF\u3002\u8A73\u7D30\u307A\u30FC\u30B8\u3078\u306E\u30EA\u30F3\u30AF\"></div></a>\n                                            <div class=\"authenticated_user_comment\">\n                                                <p>").concat(comment, "</p>\n                                            </div>\n                                            <div class=\"mb-2\">\n                                                <small>").concat(created_at, "</small>\n                                                <button type=\"button\" class=\"btn btn-link comment_trash text-danger comment_delete\" data-id=\"").concat(comment_id, "\"><i class=\"far fa-trash-alt\"></i>\u524A\u9664</button>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    ");
+              }
+          } //認証ユーザー以外のコメントならばこちらのコード生成
+          else {
+              //アバター画像がnullならば
+              if (!avatar) {
+                html = "\n                                    <div class=\"balloon overflow-hidden my-2 w-100\" data-comment-id=\"".concat(comment_id, "\">\n                                        <div class=\"balloon_chatting overflow-hidden w-100 text-left\">\n                                            <a href=\"/users/").concat(user_id, "\" class=\"text-dark mr-auto font-weight-bold\"><div class=\"card-title\"><img src=\"").concat(img_src, "\" class=\"rounded-circle mr-1\" width=\"40\" height=\"40\" alt=\"").concat(name, "\u306E\u30A2\u30D0\u30BF\u30FC\u753B\u50CF\u3002\u8A73\u7D30\u307A\u30FC\u30B8\u3078\u306E\u30EA\u30F3\u30AF\">").concat(name, "</div></a>\n                                            <div class=\"user_comment\">\n                                                <p>").concat(comment, "</p>\n                                            </div>\n                                            <div class=\"mb-4 ml-4\">\n                                                <small>").concat(created_at, "</small>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    ");
+              } //アバター画像があれば
+              else {
+                  html = "\n                                    <div class=\"balloon overflow-hidden my-2 w-100\" data-comment-id=\"".concat(comment_id, "\">\n                                        <div class=\"balloon_chatting overflow-hidden w-100 text-left\">\n                                            <a href=\"/users/").concat(user_id, "\" class=\"text-dark mr-auto font-weight-bold\"><div class=\"card-title\"><img src=\"").concat(avatar, "\" class=\"rounded-circle mr-1\" width=\"40\" height=\"40\" alt=\"").concat(name, "\u306E\u30A2\u30D0\u30BF\u30FC\u753B\u50CF\u3002\u8A73\u7D30\u307A\u30FC\u30B8\u3078\u306E\u30EA\u30F3\u30AF\">").concat(name, "</div></a>\n                                            <div class=\"user_comment\">\n                                                <p>").concat(comment, "</p>\n                                            </div>\n                                            <div class=\"mb-4 ml-4\">\n                                                <small>").concat(created_at, "</small>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    ");
+                }
+            } //次ページを読みこんだ際要素が消えているためこの条件式 (1ページ11コメント)
+
+
+          if ($('.balloon').length % 11 === 10) {
+            //コメントエリアの最後にコメントを追加
+            $('#comment_area').append(html);
+          } //二重送信防止用のスタイル解除
+
+
+          $this.css('pointer-events', '');
+        }
+        /*
+            ここまでがコメントの追加処理
+        */
+
+      }).fail(function (data) {
+        //失敗フラッシュメッセージを表示
+        toastr.error('コメント削除に失敗しました'); //二重送信防止用のスタイル解除
+
+        $this.css('pointer-events', '');
+      });
+    } //ダイアログのキャンセルを押したら処理終了
+    else {
+        return false;
+      }
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/dialog.js":
 /*!********************************!*\
   !*** ./resources/js/dialog.js ***!
   \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: comment_delete_dialog */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "comment_delete_dialog", function() { return comment_delete_dialog; });
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"); //コメント削除ダイアログ
 
+
+function comment_delete_dialog() {
+  if (confirm('コメントを削除してよろしいですか？')) {
+    return true;
+  } else {
+    return false;
+  }
+}
 $(function () {
-  //投稿・コメント削除ダイヤログ
-  $(document).on('click', '.delete_alert', function () {
-    if (confirm('削除してよろしいですか？')) {
-      $('#delete_form').submit();
+  //投稿削除ダイヤログ
+  $(document).on('click', '.post_delete_alert', function () {
+    var $this = $(this);
+
+    if (confirm('投稿を削除してよろしいですか？')) {
+      $this.submit();
     } else {
       return false;
     }
@@ -48117,8 +48381,14 @@ $(function () {
         'id': user_id
       }
     }).done(function (data) {
+      //認証ユーザーのユーザー詳細ページパス
       var following_path = '/users/' + data['auth_id'] + '/following';
-      var follower_path = '/users/' + data['auth_id'] + '/follower'; //フォロー成功時
+      var follower_path = '/users/' + data['auth_id'] + '/follower'; //認証ユーザー以外のユーザー詳細ページパス
+
+      var user = '/users/' + user_id;
+      var user_following_path = user + '/following';
+      var user_follower_path = user + '/follower';
+      var user_like_path = user + '/likes'; //フォロー成功時
 
       if (data['follow'] === true) {
         toastr.success('フォローしました'); //ボタン変更
@@ -48129,12 +48399,19 @@ $(function () {
         if (url === following_path || url === follower_path) {
           //投稿詳細ページのナビゲーションタブのフォローカウントがコンテンツに含まれていた場合
           if ($('.follow_count_badge').length) {
-            $('.follow_count_badge').text(data['follow_count']);
+            $('.follow_count_badge').text(data['auth_follow_count']);
           } //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
           else if ($('.follower_count_badge').length) {
+              $('.follower_count_badge').text(data['auth_follower_count']);
+            }
+        } //現在のURLが認証ユーザー以外の詳細ページだった場合かつ
+        //URLのパラメータとフォローユーザーidが同じだった場合
+        else if (url === user_follower_path || url === user_following_path || url === user_like_path || url === user) {
+            //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
+            if ($('.follower_count_badge').length) {
               $('.follower_count_badge').text(data['follower_count']);
             }
-        }
+          }
       } //アンフォロー成功時
       else if (data['unfollow'] === false) {
           toastr.success('フォローを外しました'); //ボタン変更
@@ -48145,18 +48422,54 @@ $(function () {
           if (url === following_path || url === follower_path) {
             //ユーザー詳細ページのナビゲーションタブのフォローカウントがコンテンツに含まれていた場合
             if ($('.follow_count_badge').length) {
-              $('.follow_count_badge').text(data['follow_count']);
+              $('.follow_count_badge').text(data['auth_follow_count']);
             } //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
             else if ($('.follower_count_badge').length) {
+                $('.follower_count_badge').text(data['auth_follower_count']);
+              }
+          } //現在のURLが認証ユーザー以外の詳細ページだった場合かつ
+          //URLのパラメータとフォローユーザーidが同じだった場合
+          else if (url === user_follower_path || url === user_following_path || url === user_like_path || url === user) {
+              //ユーザー詳細ページのナビゲーションタブのフォロワーカウントがコンテンツに含まれていた場合
+              if ($('.follower_count_badge').length) {
                 $('.follower_count_badge').text(data['follower_count']);
               }
-          }
+            }
         }
     }).fail(function (data) {
       toastr.error('失敗しました');
     });
   });
 });
+
+/***/ }),
+
+/***/ "./resources/js/format_date.js":
+/*!*************************************!*\
+  !*** ./resources/js/format_date.js ***!
+  \*************************************/
+/*! exports provided: formatDate */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatDate", function() { return formatDate; });
+//データ年月日フォーマット関数
+function formatDate(date, format) {
+  // 年
+  format = format.replace(/YYYY/g, date.getFullYear()); //月
+
+  format = format.replace(/MM/g, ('0' + (date.getMonth() + 1)).slice(-2)); //日
+
+  format = format.replace(/DD/g, ('0' + date.getDate()).slice(-2)); //時
+
+  format = format.replace(/hh/g, ('0' + date.getHours()).slice(-2)); //分
+
+  format = format.replace(/mm/g, ('0' + date.getMinutes()).slice(-2)); //秒
+
+  format = format.replace(/ss/g, ('0' + date.getSeconds()).slice(-2));
+  return format;
+}
 
 /***/ }),
 
@@ -48167,27 +48480,36 @@ $(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+var jQueryBridget = __webpack_require__(/*! jquery-bridget */ "./node_modules/jquery-bridget/jquery-bridget.js");
+
 var InfiniteScroll = __webpack_require__(/*! infinite-scroll */ "./node_modules/infinite-scroll/js/index.js");
 
-var user_list = document.getElementById('user_list');
-var infScroll = new InfiniteScroll(user_list, {
-  path: '.pagination_next',
-  append: '.user_card',
-  history: false,
-  button: '.view_more_button',
-  scrollThreshold: false,
-  hideNav: '.pagination',
-  status: '.page_load_status'
-});
-var comment_area = document.getElementById('comment_area');
-var infScroll = new InfiniteScroll(comment_area, {
-  path: '.comment_next',
-  append: '.balloon',
-  history: false,
-  button: '.comment_more_button',
-  scrollThreshold: false,
-  hideNav: '.pagination',
-  status: '.page_load_status'
+jQueryBridget('infiniteScroll', InfiniteScroll, $); //ユーザー一覧、フォロー一覧、フォロワー一覧
+
+$(function () {
+  $('#user_list').infiniteScroll({
+    path: '.pagination_next',
+    append: '.user_card',
+    history: false,
+    button: '.view_more_button',
+    scrollThreshold: false,
+    hideNav: '.pagination',
+    status: '.page_load_status'
+  });
+}); //コメント一覧
+
+$(function () {
+  $('#comment_area').infiniteScroll({
+    path: '.comment_next',
+    append: '.balloon',
+    history: false,
+    //button: '.comment_more_button',
+    //scrollThreshold: false,
+    hideNav: '.pagination',
+    status: '.page_load_status'
+  });
 });
 
 /***/ }),
@@ -48223,8 +48545,10 @@ $(function () {
         'id': post_id
       }
     }).done(function (data) {
-      var p_likes_path = '/posts/' + post_id + '/likes';
-      var u_likes_path = '/users/' + data['auth_id'] + '/likes'; //いいね登録成功時
+      var post = '/posts/' + post_id;
+      var p_likes_path = post + '/likes';
+      var user = '/users/' + data['auth_id'];
+      var u_likes_path = user + '/likes'; //いいね登録成功時
 
       if (data['like'] === true) {
         toastr.success('投稿にいいねしました'); //アイコンの色変更(ピンク色へ)
@@ -48233,7 +48557,7 @@ $(function () {
         $this.next('span').text(data['p_count']); //現在のURLが認証ユーザーの詳細ページだった場合(いいねページ)
         //または投稿詳細ページ(いいねページ)
 
-        if (url === p_likes_path || url === u_likes_path) {
+        if (url === post || url === p_likes_path || url === user || url === u_likes_path) {
           //投稿詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
           if ($('.p_count_badge').length) {
             $('.p_count_badge').text(data['p_count']);
@@ -48250,7 +48574,7 @@ $(function () {
           $this.next('span').text(data['p_count']); //現在のURLが認証ユーザーの詳細ページだった場合(いいねページ)
           //または投稿詳細ページ(いいねページ)
 
-          if (url === p_likes_path || url === u_likes_path) {
+          if (url === post || url === p_likes_path || url === user || url === u_likes_path) {
             //投稿詳細ページのナビゲーションタブのいいねカウントがコンテンツに含まれていた場合
             if ($('.p_count_badge').length) {
               $('.p_count_badge').text(data['p_count']);
@@ -48268,46 +48592,23 @@ $(function () {
 
 /***/ }),
 
-/***/ "./resources/js/page_top_button.js":
-/*!*****************************************!*\
-  !*** ./resources/js/page_top_button.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./resources/js/nl2br.js":
+/*!*******************************!*\
+  !*** ./resources/js/nl2br.js ***!
+  \*******************************/
+/*! exports provided: nl2br */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-
-$(function () {
-  var appear = false;
-  var pagetop = $('#page_top_button');
-  $(window).scroll(function () {
-    //500pxスクロールした場合ボタン出現
-    if ($(this).scrollTop() > 500) {
-      if (appear == false) {
-        appear = true; //下から10pxの位置に0.3秒かけて出現
-
-        pagetop.stop().animate({
-          'bottom': '10px'
-        }, 300);
-      }
-    } else {
-      if (appear) {
-        appear = false; //下から-70pxの位置に0.3秒かけて隠れる
-
-        pagetop.stop().animate({
-          'bottom': '-70px'
-        }, 300);
-      }
-    }
-  }); //0.5秒かけてページトップへ戻る
-
-  pagetop.click(function () {
-    $('body, html').animate({
-      scrollTop: 0
-    }, 500);
-    return false;
-  });
-});
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "nl2br", function() { return nl2br; });
+//textarea等で作成保存したデータの表示
+//nl2br()の表示のような関数
+function nl2br(str) {
+  str = str.replace(/\r\n/g, "<br />");
+  str = str.replace(/(\n|\r)/g, "<br />");
+  return str;
+}
 
 /***/ }),
 
@@ -48493,6 +48794,49 @@ $(document).ready(function () {
     placeholder: '選択してください',
     language: 'ja',
     width: '100%'
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/smooth_scroll.js":
+/*!***************************************!*\
+  !*** ./resources/js/smooth_scroll.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+$(function () {
+  var appear = false;
+  var pagetop = $('#page_top_button');
+  $(window).scroll(function () {
+    //500pxスクロールした場合ボタン出現
+    if ($(this).scrollTop() > 500) {
+      if (appear == false) {
+        appear = true; //下から10pxの位置に0.3秒かけて出現
+
+        pagetop.stop().animate({
+          'bottom': '10px'
+        }, 300);
+      }
+    } else {
+      if (appear) {
+        appear = false; //下から-70pxの位置に0.3秒かけて隠れる
+
+        pagetop.stop().animate({
+          'bottom': '-70px'
+        }, 300);
+      }
+    }
+  }); //0.5秒かけてページトップへ戻る
+
+  pagetop.click(function () {
+    $('body, html').animate({
+      scrollTop: 0
+    }, 500);
+    return false;
   });
 });
 

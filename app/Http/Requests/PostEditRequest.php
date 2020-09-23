@@ -29,7 +29,8 @@ class PostEditRequest extends FormRequest
         return [
             'content' => ['required', 'string', 'max:150'],
             'image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048', 'nullable'],
-            'animals_name' => ['required'],
+            'animals_name' => ['required', 'array', 'max:3'],
+            'animals_name.*' => ['distinct'],
         ];
     }
 
@@ -46,7 +47,9 @@ class PostEditRequest extends FormRequest
     public function messages()
     {
         return [
-            'animals_name.required' => '動物を選択してください', 
+            'animals_name.required' => '動物カテゴリーを選択してください', 
+            'animals_name.max' => '動物カテゴリーは3個以下で選択してください', 
+            'animals_name.*' => '動物カテゴリーが重複しています',
         ];
     }
 }
