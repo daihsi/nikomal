@@ -38,6 +38,13 @@ Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
 //認証ユーザーのみ
 Route::group(['middleware' => ['auth']], function() {
 
+    //メールアドレス変更関係
+    Route::group(['prefix' => 'email/'], function() {
+        Route::get('reset', 'Auth\ResetEmailController@showLinkRequestForm')->name('email.request');
+        Route::post('email', 'Auth\ResetEmailController@sendResetLinkEmail')->name('email.email');
+        Route::get('reset/{token}', 'Auth\ResetEmailController@showReset')->name('email.reset');
+    });
+
     //フォロー・アンフォロー
     Route::post('users/{id}/follow', 'UserFollowController@store')->name('user.follow');
 
