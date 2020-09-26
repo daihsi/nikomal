@@ -7,6 +7,7 @@
         <div class="col-12 col-sm-9 col-md-8 col-lg-6 col-xl-5">
             <form method="POST" action="{{ route('password.email') }}" accept-charset="UTF-8">
                 @csrf
+                <input name="guest_login_email" type="hidden" value="guest@example.com">
                 <div class="form-group">
                     <label for="email" class="col col-form-label">{{ __('E-Mail Address') }}</label>
                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="メールアドレスを入力してください" required autocomplete="email" autofocus>
