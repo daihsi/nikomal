@@ -29,7 +29,7 @@ class RegisterRequest extends FormRequest
         return[
         'name' => ['required', 'string', 'max:15'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'password' => ['required', 'string', 'between:8,15', 'confirmed'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
         'avatar' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048', 'nullable']
         ];
     }

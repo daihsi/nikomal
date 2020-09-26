@@ -73,7 +73,7 @@ class UserTest extends TestCase
         $expectedFailed = [
             'name' => ['Max' => [15],],
             'email' => ['Max' => [255],],
-            'password' => ['Between' => [8,15],],
+            'password' => ['Min' => [8],],
         ];
         //どこがエラーになったか検証
         $this->assertEquals($expectedFailed, $validator->failed());
