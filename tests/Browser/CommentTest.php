@@ -167,4 +167,49 @@ class CommentTest extends DuskTestCase
                 ->screenshot('comment');
         });
     }
+
+    //管理ユーザーでログイン
+    //コメント投稿、他ユーザーコメントの削除ができるかテスト
+    public function testAdminComment()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $comment = factory(Comment::class)->make();
+        factory(Comment::class, 3)->create([
+                'user_id' => $this->factory_user->id,
+                'post_id' => $this->post->id,
+            ]);
+        $this->browse(function ($browser) use ($admin, $comment) {
+
+            //管理ユーザーでコメント投稿
+            $browser->loginAs($admin)
+                    ->visitRoute('posts.show', $this->post)
+                    ->type('comment', $comment->comment)
+                    ->press('コメントする')
+                    ->pause(500)
+                    ->assertSee($comment->comment)
+                    ->assertSee('コメント投稿しました')
+                    ->screenshot('comment');
+
+            //管理ユーザーの投稿したコメント削除
+            $browser->click('.comment_delete')
+                    ->acceptDialog()
+                    ->pause(500)
+                    ->assertDontSee($comment->comment)
+                    ->assertSee('コメントを削除しました')
+                    ->screenshot('comment');
+
+            //管理ユーザーのコメントがなくなったいま
+            //他ユーザーのコメントを削除するためのボタンが存在するか確認
+            //管理ユーザーが他のユーザーのコメントを削除
+            $browser->assertPresent('.comment_delete')
+                    ->click('.comment_delete')
+                    ->acceptDialog()
+                    ->pause(500)
+                    ->assertDontSee($this->comments[0]->comment)
+                    ->assertSee('コメントを削除しました')
+                    ->screenshot('comment');
+        });
+    }
 }
