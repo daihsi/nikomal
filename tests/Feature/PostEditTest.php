@@ -30,7 +30,7 @@ class PostEditTest extends TestCase
 
         //一つの投稿と関係リレーションデータ同時生成
         $this->factory_user = factory(User::class)->create();
-        $this->posts = factory(Post::class)->create([
+        $this->posts = factory(Post::class, 1)->create([
                     'user_id' => $this->factory_user->id,
                     ])
                     ->each(function ($post) {
@@ -329,5 +329,24 @@ class PostEditTest extends TestCase
         
         //データが真であるか確認
         $this->assertTrue($result);
+    }
+
+    //管理ユーザーでログイン
+    //管理ユーザーで投稿削除可能かテスト
+    //成功フラッシュメッセージが表示されているか確認
+    public function testAdminDeletePost()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $url = route('posts.show', $this->posts[0]);
+
+        //管理ユーザーでログイン
+        $this->actingAs($admin)
+            ->from($url)
+            ->delete(route('posts.destroy', $this->posts[0]))
+            ->assertStatus(302)
+            ->assertRedirect('/')
+            ->assertSessionHas('msg_success', '投稿削除しました');
     }
 }
