@@ -54,7 +54,7 @@ $(function() {
             }
 
             //いいね解除成功時
-            else if (data['unlike'] === false) {
+            else if (data['like'] === false) {
                 toastr.success('投稿のいいねを外しました');
 
                 //アイコンの色変更(白色へ)
