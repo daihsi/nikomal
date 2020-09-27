@@ -48247,7 +48247,9 @@ $(function () {
           //認証ユーザーID取得
           var auth_id = data['auth_id']; //ユーザーのアバター画像がnullの場合は、こちらの画像を使用
 
-          var img_src = "/storage/images/default_icon.png"; //コメントしたユーザーの情報
+          var img_src = "/storage/images/default_icon.png"; //管理ユーザーでログインしているか
+
+          var admin = data['admin']; //コメントしたユーザーの情報
 
           var user_id = data['comment']['user']['id'];
           var name = data['comment']['user']['name'];
@@ -48281,7 +48283,15 @@ $(function () {
 
           if ($('.balloon').length % 11 === 10) {
             //コメントエリアの最後にコメントを追加
-            $('#comment_area').append(html);
+            $('#comment_area').append(html); //コメントの所有者ではない且つ管理ユーザーでログインしている場合
+            //コメント削除ボタンが出現
+
+            if (auth_id !== user_id && admin == true) {
+              var admin_html = "\n                                                <button type=\"button\" class=\"btn btn-link comment_trash text-danger comment_delete\" data-id=\"".concat(comment_id, "\"><i class=\"far fa-trash-alt\"></i>\u524A\u9664</button>\n                                            ");
+              var d_admin = $('.balloon:last').find('.mb-4');
+              d_admin.removeClass('ml-4');
+              d_admin.prepend(admin_html);
+            }
           } //二重送信防止用のスタイル解除
 
 

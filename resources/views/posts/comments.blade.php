@@ -37,7 +37,10 @@
                             <div class="user_comment">
                                 <p>{!! nl2br(e($comment->comment)) !!}</p>
                             </div>
-                            <div class="mb-4 ml-4">
+                            <div class="mb-4 @cannot('admin') ml-4 @endcannot">
+                                @can('admin')
+                                    <button type="button" class="btn btn-link comment_trash text-danger comment_delete" data-id="{{ $comment->id }}"><i class="far fa-trash-alt"></i>削除</button>
+                                @endcan
                                 <small>{{ $comment->created_at->format('Y/m/d H:i') }}</small>
                             </div>
                         </div>

@@ -238,6 +238,9 @@ $(function() {
                     //ユーザーのアバター画像がnullの場合は、こちらの画像を使用
                     let img_src = "/storage/images/default_icon.png";
 
+                    //管理ユーザーでログインしているか
+                    let admin = data['admin'];
+
                     //コメントしたユーザーの情報
                     let user_id = data['comment']['user']['id'];
                     let name = data['comment']['user']['name'];
@@ -331,6 +334,17 @@ $(function() {
 
                         //コメントエリアの最後にコメントを追加
                         $('#comment_area').append(html);
+
+                        //コメントの所有者ではない且つ管理ユーザーでログインしている場合
+                        //コメント削除ボタンが出現
+                        if (auth_id !== user_id && admin == true) {
+                            let admin_html = `
+                                                <button type="button" class="btn btn-link comment_trash text-danger comment_delete" data-id="${comment_id}"><i class="far fa-trash-alt"></i>削除</button>
+                                            `;
+                            let d_admin = $('.balloon:last').find('.mb-4');
+                            d_admin.removeClass('ml-4');
+                            d_admin.prepend(admin_html);
+                        }
                     }
 
                     //二重送信防止用のスタイル解除
