@@ -22,6 +22,8 @@
         <div class="d-flex justify-content-end mt-3">
             @if(Auth::id() === $post->user_id)
                 <a href="{{ route('posts.edit', $post->id) }}" class="d-block justify-content-start"><button class="btn btn-outline-success btn-sm rounded-pill fas fa-edit mt-1">編集</button></a>
+            @endif
+            @if(Auth::id() === $post->user_id || Gate::allows('admin'))
                 <form method="POST" action="{{ route('posts.destroy', $post->id) }}" class="mr-auto post_delete_alert" id="post_delete_form">
                     @method('DELETE')
                     @csrf
