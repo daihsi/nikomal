@@ -163,4 +163,37 @@ class PasswordResetTest extends DuskTestCase
                     ->screenshot('password_reset');
         });
     }
+
+    //管理ユーザーは、パスワード再設定フォームにアクセスできないかテスト
+    //リダイレクトの確認
+    //失敗フラッシュメッセージが表示されているか確認
+    public function testAdminInaccessiblePasswordResetPage()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $this->browse(function ($browser) use ($admin) {
+            $browser->loginAs($admin)
+                    ->visit('/')
+                    ->visitRoute('password.request')
+                    ->assertPathIs('/')
+                    ->assertSee('管理ユーザーはパスワード再設定ができません')
+                    ->screenshot('password_reset');
+        });
+    }
+
+    //ナビゲーションバーにパスワード再設定フォームのリンクが表示されていないかテスト
+    public function testNavbarPasswordResetLinkNotDisplayed()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $this->browse(function ($browser) use ($admin) {
+            $browser->loginAs($admin)
+                    ->visit('/')
+                    ->click('#navbarDropdown')
+                    ->assertMissing('.password_reset_icon')
+                    ->screenshot('password_reset');
+        });
+    }
 }

@@ -288,4 +288,20 @@ class EmailResetTest extends TestCase
                     'new_email' => $data['new_email'],
                 ]);
     }
+
+    //管理ユーザーはメールアドレス再設定フォームにアクセスできないかテスト
+    //リダイレクトの確認
+    //失敗フラッシュメッセージが表示されているか確認
+    public function testAdminInaccessibleEmailResetPage()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $this->actingAs($admin)
+            ->from('/')
+            ->get(route('email.request'))
+            ->assertStatus(302)
+            ->assertRedirect('/')
+            ->assertSessionHas('msg_error', '管理ユーザーはメールアドレス再設定ができません');
+    }
 }

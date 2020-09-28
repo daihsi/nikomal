@@ -430,4 +430,20 @@ class PasswordResetTest extends TestCase
         //どこがエラーになったのか検証
         $this->assertEquals($expectedFailed, $validator->failed());
     }
+
+    //管理ユーザーはパスワード再設定フォームにアクセスできないかテスト
+    //リダイレクトの確認
+    //失敗フラッシュメッセージが表示されているか確認
+    public function testAdminInaccessiblePasswordResetPage()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $this->actingAs($admin)
+            ->from('/')
+            ->get(route('password.request'))
+            ->assertStatus(302)
+            ->assertRedirect('/')
+            ->assertSessionHas('msg_error', '管理ユーザーはパスワード再設定ができません');
+    }
 }
