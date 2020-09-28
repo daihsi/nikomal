@@ -39,7 +39,7 @@ class UserFollowTest extends TestCase
                 'user_id' => $this->facker_user1->id,
                 'follow_id' => $this->facker_user2->id
             ]);
-        $this->response->delete(route('user.unfollow', $this->facker_user2->id));
+        $this->response->post(route('user.follow', $this->facker_user2->id));
 
         //中間テーブルにフォロー関係のデータが正常に削除されているか
         $this->assertDatabaseMissing('user_follow', [
@@ -79,28 +79,6 @@ class UserFollowTest extends TestCase
         $this->assertDatabaseMissing('user_follow', [
                 'id' => 1,
             ]);
-    }
-
-    //アクション後のフォローボタンの切り替わりが正常かテスト
-    public function testFollowButton()
-    {
-        $url = route('users.show', $this->facker_user2->id);
-
-        //ボタンが切り替わる前の確認
-        $this->get($url)
-            ->assertViewIs('users.show')
-            ->assertSee('<button type="submit" class="btn btn-outline-primary btn-sm rounded-pill action_follow">フォロー</button>');
-
-        //リクエスト後のリダイレクトを確認
-        $this->response->from($url)
-            ->post(route('user.follow', $this->facker_user2->id))
-            ->assertStatus(302)
-            ->assertRedirect($url);
-
-        //フォローボタンが切り替わったか確認
-        $this->get($url)
-            ->assertViewIs('users.show')
-            ->assertSee('<span class="follow_now_button">フォロー中</span><');
     }
 
     //認証ユーザー自身にフォローボタンが表示されていないかテスト
@@ -154,5 +132,18 @@ class UserFollowTest extends TestCase
         $this->get(route('users.followers', $this->facker_user1->id))
             ->assertSeeText($this->facker_user2->name)
             ->assertSeeText($this->facker_user3->name);
+    }
+
+    //管理ユーザーがフォローしようとして失敗するかテスト
+    //レスポンスに失敗メッセージが含まれているか確認
+    public function testCannotAdminUserFollow()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $error = ['error' => '管理ユーザーはフォローができません'];
+        $this->actingAs($admin)
+            ->post(route('user.follow', $this->facker_user1->id))
+            ->assertJson($error);
     }
 }
