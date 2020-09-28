@@ -1,4 +1,4 @@
-@if(Auth::check())
+@if(Auth::check() && !Gate::allows('admin'))
     @if(Auth::id() != $user->id)
         @if(Auth::user()->isFollowing($user->id))
             {{-- アンフォローボタン --}}

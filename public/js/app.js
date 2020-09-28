@@ -48391,7 +48391,14 @@ $(function () {
         'id': user_id
       }
     }).done(function (data) {
-      //認証ユーザーのユーザー詳細ページパス
+      //管理ユーザーがフォローしようとしたら
+      //エラー表示したのち処理終了
+      if (data['error']) {
+        toastr.error(data['error']);
+        return false;
+      } //認証ユーザーのユーザー詳細ページパス
+
+
       var following_path = '/users/' + data['auth_id'] + '/following';
       var follower_path = '/users/' + data['auth_id'] + '/follower'; //認証ユーザー以外のユーザー詳細ページパス
 
@@ -48423,7 +48430,7 @@ $(function () {
             }
           }
       } //アンフォロー成功時
-      else if (data['unfollow'] === false) {
+      else if (data['follow'] === false) {
           toastr.success('フォローを外しました'); //ボタン変更
 
           $this.attr('class', 'follow btn btn-outline-primary btn-sm rounded-pill');
