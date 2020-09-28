@@ -17,6 +17,11 @@ class ResetEmailController extends Controller
     //メールアドレス変更フォームへ移動
     public function showLinkRequestForm()
     {
+        //管理ユーザーはアクセスできないよう条件追加
+        if (\Gate::allows('admin')) {
+            return back()
+                ->with('msg_error', '管理ユーザーはメールアドレス再設定ができません');
+        }
         return view('auth.emails.email');
     }
 
