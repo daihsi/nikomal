@@ -24,6 +24,13 @@ $(function() {
             data: {'id': post_id},
         })
         .done(function(data) {
+
+            //管理ユーザーがいいねしようとしたら
+            //エラー表示したのち処理終了
+            if (data['error']) {
+                toastr.error(data['error']);
+                return false;
+            }
             var post = '/posts/' + post_id;
             var p_likes_path = post + '/likes';
             var user = '/users/' + data['auth_id'];
