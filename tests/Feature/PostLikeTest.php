@@ -76,22 +76,13 @@ class PostLikeTest extends TestCase
     }
 
     //いいね登録が正常に行われているか、データベースに保存してあるかテスト
-    public function testtes()
+    public function testPostLikeNomal()
     {
-        //ログインユーザー用のいいねボタンの表示になっているか確認
         $this->actingAs($this->factory_user);
-        $this->get('/')
-            ->assertSee('<button type="submit" class="btn btn like_button far fa-heart fa-lg"></button>');
 
         //いいねリクスト、リダイレクトの確認
         $this->from('/')
-            ->post(route('posts.like', $this->post->id))
-            ->assertStatus(302)
-            ->assertRedirect('/');
-
-        //いいねした後のボタン表示に切り替わっているか確認
-        $this->get('/')
-            ->assertSee('<button type="submit" class="btn btn like_now_button fas fa-heart fa-lg"></button>');
+            ->post(route('posts.like', $this->post->id));
 
         $this->assertDatabaseHas('likes', [
                 'user_id' => $this->factory_user->id,
@@ -116,13 +107,7 @@ class PostLikeTest extends TestCase
 
         //いいね削除リクエスト
         $this->from('/')
-            ->delete(route('posts.unlike', $this->post->id))
-            ->assertStatus(302)
-            ->assertRedirect('/');
-
-        //いいね前のボタン表示に切り替わっているか確認
-        $this->get('/')
-            ->assertSee('<button type="submit" class="btn btn like_button far fa-heart fa-lg"></button>');
+            ->post(route('posts.like', $this->post->id));
 
         //削除されたかデータベースの確認
         $this->assertDeleted('likes', [
@@ -175,8 +160,7 @@ class PostLikeTest extends TestCase
 
         //いいねした投稿が全て表示されているか確認
         foreach ($user->likes as $like) {
-            $response->assertSee($like->content)
-                    ->assertSee('<button type="submit" class="btn btn like_now_button fas fa-heart fa-lg"></button>');
+            $response->assertSee($like->content);
         }
     }
 
@@ -190,7 +174,7 @@ class PostLikeTest extends TestCase
         }
 
         //1投稿をいいね解除
-        $this->delete(route('posts.unlike', $this->post->id));
+        $this->post(route('posts.like', $this->post->id));
 
         //いいね一覧ページへ。いいね解除投稿が表示されていないか確認
         $this->get(route('users.likes', $user->id))
@@ -270,5 +254,18 @@ class PostLikeTest extends TestCase
         //投稿がいいねが多い順で表示されているか取得
         $this->get(route('posts.popular'))
             ->assertSeeInOrder($data);
+    }
+
+    //管理ユーザーがいいねしようとして失敗するかテスト
+    //レスポンスに失敗メッセージが含まれているか確認
+    public function testFailureLikePostAdmin()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $error = ['error' => '管理ユーザーはいいねができません'];
+        $this->actingAs($admin)
+            ->post(route('posts.like', $this->post->id))
+            ->assertJson($error);
     }
 }
