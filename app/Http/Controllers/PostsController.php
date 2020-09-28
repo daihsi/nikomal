@@ -194,11 +194,13 @@ class PostsController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
-        
-        if (\Auth::id() === $post->user_id) {
+
+        //投稿所有者と管理ユーザーは投稿削除可能
+        if (\Auth::id() === $post->user_id || \Gate::allows('admin')) {
             foreach ($post->postImages as $post_image) {
                 if (!empty($post_image->image)) {
-                    //既存ファイルの削除
+
+                    //s3内の既存ファイルの削除
                     Storage::disk('s3')->delete('post_images/'.basename($post_image->image));
                 }
             }

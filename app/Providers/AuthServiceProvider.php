@@ -25,6 +25,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        //管理者は一意である下記メールアドレスが条件
+        Gate::define('admin', function ($user) {
+            return $user->email === 'admin@example.com';
+        });
+
+        //簡単ログインユーザーは一意である下記メールアドレスが条件
+        Gate::define('guest_login_user', function ($user) {
+            return $user->email === 'guest@example.com';
+        });
     }
 }

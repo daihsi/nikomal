@@ -110,4 +110,57 @@ class PostEditTest extends DuskTestCase
                     ->screenshot('post');
         });
     }
+
+    //投稿削除テスト
+    public function testPostDelete()
+    {
+        $post = factory(Post::class)->create([
+                    'user_id' => $this->user->id,
+                ]);
+        //削除ボタン、編集ボタンを確認
+        //削除しリダイレクト先と成功フラッシュメッセージが表示されているか確認
+        $this->browse(function ($browser) use ($post) {
+            $browser->loginAs($this->user)
+                    ->visitRoute('posts.show', $post->id)
+                    ->assertPresent('.post_delete_alert')
+                    ->assertPresent('.fa-edit')
+                    ->click('.post_delete_alert')
+                    ->acceptDialog()
+                    ->pause(500)
+                    ->assertPathIs('/')
+                    ->assertSee('投稿削除しました')
+                    ->screenshot('post');
+        });
+    }
+
+    //管理ユーザーでの他ユーザーの投稿削除テスト
+    public function testAdminDeletePost()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $post = factory(Post::class)->create([
+                    'user_id' => $this->user->id,
+                ]);
+        $this->browse(function ($browser) use ($admin, $post) {
+
+            //管理ユーザーでログイン
+            //他ユーザーの投稿詳細にアクセス
+            //削除ボタンの表示を確認、編集ボタンがないことを確認
+            //削除しリダイレクト先と成功フラッシュメッセージが表示されているか確認
+            $browser->loginAs($admin)
+                    ->visitRoute('posts.show', $post->id)
+                    ->assertPresent('.post_delete_alert')
+                    ->assertMissing('.fa-edit')
+                    ->click('.post_delete_alert')
+                    ->acceptDialog()
+                    ->pause(500)
+                    ->assertPathIs('/')
+                    ->assertSee('投稿削除しました')
+                    ->screenshot('post');
+        });
+
+        //データベースに削除した投稿が残っていないか確認
+        $this->assertDeleted($post);
+    }
 }

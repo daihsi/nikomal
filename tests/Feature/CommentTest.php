@@ -265,8 +265,38 @@ class CommentTest extends TestCase
     }
 
     //ゲストユーザーにはコメント入力エリアが表示されていないかテスト
-    public function testCommentTextArea() {
+    public function testCommentTextArea()
+    {
         $this->get(route('posts.show', $this->post->id))
             ->assertDontSee('<textarea></textarea>');
+    }
+
+    //管理ユーザーが他ユーザーのコメントを削除できるかテスト
+    public function testAdminDeleteComment()
+    {
+        //管理ユーザーでログイン
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $this->actingAs($admin);
+
+        $post_id = $this->post->id;
+        $comment_id = $this->comment->id;
+
+        $url = route('posts.show', $post_id);
+
+        //リクエストする為のデータをまとめる
+        $data = [
+                'post_id' => $post_id,
+                'comment_id' => $comment_id,
+                'comment_length' => 4,
+            ];
+
+        //コメント削除リクエスト
+        $this->from($url)
+            ->delete(route('posts.uncomment', $comment_id), $data);
+
+        //コメントがデータベースから削除されたか確認
+        $this->assertDeleted($this->comment);
     }
 }

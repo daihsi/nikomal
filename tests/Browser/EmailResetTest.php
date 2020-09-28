@@ -107,4 +107,37 @@ class EmailResetTest extends DuskTestCase
                 ->assertPathIs('/email/reset');
         });
     }
+
+    //管理ユーザーは、メールアドレス再設定フォームにアクセスできないかテスト
+    //リダイレクトの確認
+    //失敗フラッシュメッセージが表示されているか確認
+    public function testAdminInaccessibleEmailResetPage()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $this->browse(function ($browser) use ($admin) {
+            $browser->loginAs($admin)
+                    ->visit('/')
+                    ->visitRoute('email.request')
+                    ->assertPathIs('/')
+                    ->assertSee('管理ユーザーはメールアドレス再設定ができません')
+                    ->screenshot('email_reset');
+        });
+    }
+
+    //ナビゲーションバーにメールアドレス再設定フォームのリンクが表示されていないかテスト
+    public function testNavbarEmailResetLinkNotDisplayed()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $this->browse(function ($browser) use ($admin) {
+            $browser->loginAs($admin)
+                    ->visit('/')
+                    ->click('#navbarDropdown')
+                    ->assertMissing('.email_reset_icon')
+                    ->screenshot('email_reset');
+        });
+    }
 }

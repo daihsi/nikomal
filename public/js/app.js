@@ -48247,7 +48247,9 @@ $(function () {
           //認証ユーザーID取得
           var auth_id = data['auth_id']; //ユーザーのアバター画像がnullの場合は、こちらの画像を使用
 
-          var img_src = "/storage/images/default_icon.png"; //コメントしたユーザーの情報
+          var img_src = "/storage/images/default_icon.png"; //管理ユーザーでログインしているか
+
+          var admin = data['admin']; //コメントしたユーザーの情報
 
           var user_id = data['comment']['user']['id'];
           var name = data['comment']['user']['name'];
@@ -48281,7 +48283,15 @@ $(function () {
 
           if ($('.balloon').length % 11 === 10) {
             //コメントエリアの最後にコメントを追加
-            $('#comment_area').append(html);
+            $('#comment_area').append(html); //コメントの所有者ではない且つ管理ユーザーでログインしている場合
+            //コメント削除ボタンが出現
+
+            if (auth_id !== user_id && admin == true) {
+              var admin_html = "\n                                                <button type=\"button\" class=\"btn btn-link comment_trash text-danger comment_delete\" data-id=\"".concat(comment_id, "\"><i class=\"far fa-trash-alt\"></i>\u524A\u9664</button>\n                                            ");
+              var d_admin = $('.balloon:last').find('.mb-4');
+              d_admin.removeClass('ml-4');
+              d_admin.prepend(admin_html);
+            }
           } //二重送信防止用のスタイル解除
 
 
@@ -48381,7 +48391,14 @@ $(function () {
         'id': user_id
       }
     }).done(function (data) {
-      //認証ユーザーのユーザー詳細ページパス
+      //管理ユーザーがフォローしようとしたら
+      //エラー表示したのち処理終了
+      if (data['error']) {
+        toastr.error(data['error']);
+        return false;
+      } //認証ユーザーのユーザー詳細ページパス
+
+
       var following_path = '/users/' + data['auth_id'] + '/following';
       var follower_path = '/users/' + data['auth_id'] + '/follower'; //認証ユーザー以外のユーザー詳細ページパス
 
@@ -48413,7 +48430,7 @@ $(function () {
             }
           }
       } //アンフォロー成功時
-      else if (data['unfollow'] === false) {
+      else if (data['follow'] === false) {
           toastr.success('フォローを外しました'); //ボタン変更
 
           $this.attr('class', 'follow btn btn-outline-primary btn-sm rounded-pill');
@@ -48543,6 +48560,13 @@ $(function () {
         'id': post_id
       }
     }).done(function (data) {
+      //管理ユーザーがいいねしようとしたら
+      //エラー表示したのち処理終了
+      if (data['error']) {
+        toastr.error(data['error']);
+        return false;
+      }
+
       var post = '/posts/' + post_id;
       var p_likes_path = post + '/likes';
       var user = '/users/' + data['auth_id'];
@@ -48565,7 +48589,7 @@ $(function () {
             }
         }
       } //いいね解除成功時
-      else if (data['unlike'] === false) {
+      else if (data['like'] === false) {
           toastr.success('投稿のいいねを外しました'); //アイコンの色変更(白色へ)
 
           $this.attr('class', 'like_button btn btn like_icon far fa-heart fa-lg');

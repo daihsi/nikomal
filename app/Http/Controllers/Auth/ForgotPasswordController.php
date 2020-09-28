@@ -23,6 +23,16 @@ class ForgotPasswordController extends Controller
 
     use SendsPasswordResetEmails;
 
+    public function showLinkRequestForm()
+    {
+        //管理ユーザーはアクセスできないよう条件追加
+        if (\Gate::allows('admin')) {
+            return back()
+                ->with('msg_error', '管理ユーザーはパスワード再設定ができません');
+        }
+        return view('auth.passwords.email');
+    }
+
     public function sendResetLinkEmail(ForgotPasswordRequest $request)
     {
         //元々のバリデーションルールを消去
