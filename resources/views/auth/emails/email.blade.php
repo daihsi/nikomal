@@ -2,16 +2,16 @@
 
 @section('content')
 <div class="container">
-    <h3 class="text-center font-weight-bold mt-5 mb-5">{{ __('Reset Password') }}</h3>
+    <h4 class="text-center font-weight-bold mt-5 mb-5">{{ __('Reset Email') }}</h4>
     <div class="row justify-content-center">
         <div class="col-12 col-sm-9 col-md-8 col-lg-6 col-xl-5">
-            <form method="POST" action="{{ route('password.email') }}" accept-charset="UTF-8">
+            <form method="POST" action="{{ route('email.email') }}" accept-charset="UTF-8">
                 @csrf
                 <input name="guest_login_email" type="hidden" value="guest@example.com">
                 <div class="form-group">
-                    <label for="email" class="col col-form-label">{{ __('E-Mail Address') }}</label>
-                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="メールアドレスを入力してください" required autocomplete="email" autofocus>
-                    @error('email')
+                    <label for="new_email" class="col col-form-label">{{ __('E-Mail Address') }}</label>
+                    <input id="new_email" type="email" class="form-control @error('new_email') is-invalid @enderror" name="new_email" value="{{ old('new_email') }}" placeholder="新しいメールアドレスを入力してください" required autocomplete="new_email" autofocus>
+                    @error('new_email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -20,7 +20,7 @@
 
                 <div class="form-group mt-4">
                     <button type="submit" class="btn btn-outline-success">
-                        {{ __('Send Password Reset Link') }}
+                        {{ __('Send Email Reset Link') }}
                     </button>
                 </div>
             </form>

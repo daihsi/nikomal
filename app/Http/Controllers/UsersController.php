@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Http\Requests\UserUpdateRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
@@ -79,6 +81,47 @@ class UsersController extends Controller
         return redirect()
             ->route('users.show', ['user' => $user])
             ->with('msg_success', '変更を保存しました');
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findorFail($id);
+        $posts = $user->posts()->with('postImages')->get();
+
+        //投稿が空ではない場合この処理に入る
+        //s3に保存してあるファイルを削除するため
+        //オブジェクトが空でないかを判定する条件式
+        if (!$posts->isEmpty()) {
+            foreach ($posts as $post) {
+                foreach ($post->postImages as $post_image) {
+                    if(!empty($post_image->image)) {
+                        Storage::disk('s3')
+                            ->delete('post_images/'.basename($post_image->image));
+                    }
+                }
+            }
+        }
+
+        //ユーザーのアバター画像が保存してあれば
+        //s3内のファイルを削除
+        if (!empty($user->avatar)) {
+            Storage::disk('s3')
+                ->delete('users_avatar/'.basename($user->avatar));
+        }
+
+        //ユーザー削除処理
+        $user->delete();
+
+        //リクエストしたページでリダイレクト先を変える
+        //条件式は、リクエストURLの前のURLの/users以下が
+        //空文字でなければというもの
+        //ユーザー一覧(/users),ユーザー詳細(/users/*)であるから
+        if (Str::after(url()->previous(), '/users') == "") {
+            return back()->with('msg_success', '「'.$user->name.'」のアカウントを削除しました');
+        }
+        else {
+            return redirect('/')->with('msg_success', '「'.$user->name.'」のアカウントを削除しました');
+        }
     }
 
     public function followings($id)

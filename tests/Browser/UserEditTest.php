@@ -6,6 +6,8 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use App\User;
+use App\Post;
+use App\Comment;
 
 class UserEditTest extends DuskTestCase
 {
@@ -92,6 +94,81 @@ class UserEditTest extends DuskTestCase
                     ->assertSee($auth_self_introduction)
                     ->assertSee($auth_name)
                     ->screenshot('user_edit');
+        });
+    }
+
+    //管理ユーザー以外がログインしてユーザー削除ボタンが現れていないかテスト
+    public function testNotDisplayedUserDeleteButton()
+    {
+        $users = factory(User::class, 2)->create();
+        $posts = factory(Post::class, 2)->create([
+                        'user_id' => $users[0]->id,
+                    ]);
+
+        //ユーザー一覧、ユーザー詳細ページでボタンが現れてないか確認
+        $this->browse(function ($browser) use ($users, $posts) {
+            $browser->loginAs($users[0])
+                    ->visitRoute('users.index')
+                    ->assertMissing('.user_delete_alert')
+                    ->visitRoute('users.show', $users[1]->id)
+                    ->assertMissing('.user_delete_alert')
+                    ->screenshot('user_delete');
+        });
+    }
+
+    //管理ユーザーによるユーザー削除テスト
+    public function testAdminDeleteUser()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $users = factory(User::class, 2)->create([
+                    'avatar' => null,
+                ]);
+
+        $this->browse(function ($browser) use ($admin, $users) {
+
+            //ユーザー一覧ページにアクセス
+            //削除ボタンが現れているか確認
+            //削除ボタン押下げ後、ダイヤログ確認のokボタンを押して削除
+            //成功フラッシュメッセージが表示されているか確認
+            $browser->loginAs($admin)
+                    ->visitRoute('users.index')
+                    ->assertRouteIs('users.index')
+                    ->assertPresent('.user_delete_alert')
+                    ->click('.user_delete_alert')
+                    ->acceptDialog()
+                    ->pause(500)
+                    ->assertSee('「'.$users[1]->name.'」のアカウントを削除しました')
+                    ->assertRouteIs('users.index')
+                    ->screenshot('user_delete');
+
+            //ユーザー詳細ページにアクセス
+            //削除ボタンが現れているか確認
+            //削除ボタン押下げ後、ダイヤログ確認のokボタンを押して削除
+            //成功フラッシュメッセージが表示されているか確認
+            $browser->visitRoute('users.show', $users[0]->id)
+                    ->assertRouteIs('users.show', $users[0]->id)
+                    ->assertPresent('.user_delete_alert')
+                    ->press('削除')
+                    ->acceptDialog()
+                    ->pause(500)
+                    ->assertSee('「'.$users[0]->name.'」のアカウントを削除しました')
+                    ->assertPathIs('/')
+                    ->screenshot('user_delete');
+
+            //削除したユーザーがコンテンツに表示していないか確認
+            $browser->visitRoute('users.index')
+                    ->assertDontSee($users[1]->name)
+                    ->assertDontSee($users[0]->name);
+
+            //簡単ログインユーザーを生成
+            //簡単ログインユーザーは削除できなようボタンが現れていないか確認
+            $guest_login_user = factory(User::class)->create([
+                                'email' => 'guest@example.com',
+                            ]);
+            $browser->visitRoute('users.show', $guest_login_user->id)
+                    ->assertMissing('.user_delete_alert');
         });
     }
 }

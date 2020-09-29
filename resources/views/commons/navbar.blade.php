@@ -59,6 +59,12 @@
                             <div class="dropdown-menu dropdown-menu-right navbar-light" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ url('/') }}"><i class="fas fa-home fa-lg toppage_icon"></i>トップページ</a>
                                 <a class="dropdown-item" href="{{ route('users.show', Auth::user()->id) }}"><i class="fas fa-address-card fa-lg profile_icon"></i>マイプロフィール</a>
+
+                                {{-- 管理ユーザーはメールアドレス変更、パスワード変更フォームにアクセスできない --}}
+                                @cannot('admin')
+                                    <a class="dropdown-item" href="{{ route('email.request') }}"><i class="fas fa-cog fa-lg email_reset_icon"></i>メールアドレス再設定</a>
+                                    <a class="dropdown-item" href="{{ route('password.request') }}"><i class="fas fa-key fa-lg password_reset_icon"></i>パスワード再設定</a>
+                                @endcannot
                                 <a class="dropdown-item logout_alert" href="#">
                                     <i class="fas fa-sign-out-alt fa-lg logout_icon"></i>
                                     {{ __('Logout') }}

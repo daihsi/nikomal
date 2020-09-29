@@ -18,7 +18,12 @@
                 <div class="d-lg-none d-block align-self-end">{!! link_to_route('users.edit', '編集', ['user' => $user->id], ['class' => 'btn btn-outline-success rounded-pill fas fa-user-edit']) !!}</div>
             @else
                 <div class="d-lg-none d-block align-self-end">
+
+                    {{-- フォローボタン --}}
                     @include('user_follow.follow_button')
+
+                    {{-- ユーザー削除ボタン --}}
+                    @include('user_delete.delete_button')
                 </div>
             @endif
         </div>
@@ -34,7 +39,12 @@
         @else
             <div class="flex-lg-column col-lg-6 pr-5 d-none d-lg-flex" style="max-width: 485px;">
                 <div class="align-self-end">
+
+                    {{-- フォローボタン --}}
                     @include('user_follow.follow_button')
+
+                    {{-- ユーザー削除ボタン --}}
+                    @include('user_delete.delete_button')
                 </div>
                 <div class="user_other font-weight-bold mt-3">{{ $user->name }}</div>
                 <div class="overflow-auto mt-1" style="max-height: 150px;">

@@ -191,4 +191,19 @@ class LikeTest extends DuskTestCase
                     ->screenshot('like');
         });
     }
+
+    //管理ユーザーはいいねボタンがいいねできないようになっているかテスト
+    //カウントは増えていないか
+    public function testCannotAdminPostLike()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $this->browse(function ($browser) use ($admin) {
+            $browser->loginAs($admin)
+                    ->visit('/')
+                    ->click('.far')
+                    ->assertSourceHas('<span class="align-self-end">0</span>');
+        });
+    }
 }

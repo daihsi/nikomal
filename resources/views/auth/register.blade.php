@@ -49,7 +49,7 @@
     
                 <div class="form-group mt-3">
                     <label for="password" class="col col-form-label">{{ __('Password') }}</label>
-                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="8字以上~15字以下で入力してください" autocomplete="new-password">
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="8字以上入力してください" autocomplete="new-password">
     
                     @error('password')
                         <span class="invalid-feedback" role="alert">

@@ -110,4 +110,17 @@ class FollowTest extends DuskTestCase
                     ->screenshot('follow');
         });
     }
+
+    //管理ユーザーでログインしたら、フォローボタンが表示されていないかテスト
+    public function testNotDisplayedFollowButton()
+    {
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+        $this->browse(function ($browser) use ($admin) {
+            $browser->loginAs($admin)
+                    ->visitRoute('users.index')
+                    ->assertSourceMissing('<button type="button" class="follow btn btn-outline-primary btn-sm rounded-pill">フォロー</button>');
+        });
+    }
 }

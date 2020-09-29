@@ -148,6 +148,7 @@ return [
     'attributes' => [
         'name' => 'ユーザー名',
         'email' => 'メールアドレス',
+        'new_email' => 'メールアドレス',
         'password' => 'パスワード',
         'avatar' => 'アバター画像',
         'self_introduction' => '自己紹介',

@@ -45,6 +45,9 @@ class CommentsController extends Controller
     //コメント所有ユーザーからの、コメント削除リクエスト
     public function destroy(Request $request)
     {
+        //管理ユーザーとしてログインしているか
+        $admin = \Gate::allows('admin');
+
         $comment_id = $request->comment_id;
         $comment_length = $request->comment_length;
         $post_id = $request->post_id;
@@ -54,7 +57,8 @@ class CommentsController extends Controller
         $auth_id = \Auth::id();
 
         //認証ユーザーidとコメントユーザーidを比較
-        if ($auth_id === $select_comment->user_id) {
+        //または管理ユーザーであれば削除処理に入る
+        if ($auth_id === $select_comment->user_id || \Gate::allows('admin')) {
 
             //コメント削除
             $select_comment->delete();
@@ -74,6 +78,7 @@ class CommentsController extends Controller
                     'comment' => $comment,
                     'auth_id' => $auth_id,
                     'comment_count' => $comment_count,
+                    'admin' => $admin,
                     ]);
         }
         else {
