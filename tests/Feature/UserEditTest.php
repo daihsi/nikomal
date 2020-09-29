@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
+use App\Post;
+use App\PostImage;
+use App\Animal;
+use App\Comment;
+
 class UserEditTest extends TestCase
 {
 
@@ -20,6 +25,35 @@ class UserEditTest extends TestCase
      *
      * @return void
      */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->users = factory(User::class, 2)->create();
+
+        //削除用の投稿を生成
+        $this->posts = factory(Post::class, 2)->create([
+                    'user_id' => $this->users[0]->id,
+                    ])
+                    ->each(function ($post) {
+                        //画像データの生成
+                        $post->postImages()
+                            ->save(
+                                factory(PostImage::class)->make()
+                            );
+                        //動物カテゴリーデータの生成
+                        $post->postCategorys()
+                            ->createMany(
+                                factory(Animal::class, 3)->make()
+                                ->toArray()
+                            );
+                    });
+
+        //削除用のコメントを生成
+        $this->comments = factory(Comment::class, 2)->create([
+                            'user_id' => $this->users[0]->id,
+                            'post_id' => $this->posts[0]->id,
+                        ]);
+    }
 
     //正常に認証ユーザーがユーザー詳細ページにアクセス
     //その後編集ページにアクセスできるか確認
@@ -79,7 +113,7 @@ class UserEditTest extends TestCase
             ->assertDontSee('編集');
 
         //登録ユーザーの編集ページにアクセスできないことを確認
-        $response = $this->get(route('users.edit', $factory_user->id))>assertStatus(302);
+        $response = $this->get(route('users.edit', $factory_user->id))->assertStatus(302);
     }
 
     //必須項目である名前欄を空でリクエストした場合のバリデーションテスト
@@ -224,17 +258,6 @@ class UserEditTest extends TestCase
         $result = $validator->passes();
         //データが真であるか確認
         $this->assertTrue($result);
-
-        $response = $this->from($url)->put(route('users.update', $factory_user->id),
-                [
-                    'name' => 'テスト',
-                    'file' => $avatar,
-                    'self_introduction' => str_repeat('あ', 150),
-                ]);
-        $this->assertDatabaseHas('users', $data);
-
-        //リクエストに成功したため、詳細ページにリダイレクトしているか確認
-        $response->assertStatus(302)->assertRedirect($url);
     }
 
     //詳細ページにリダイレクトした際に、情報が更新されて表示されているかテスト
@@ -267,5 +290,87 @@ class UserEditTest extends TestCase
             ->assertStatus(200)
             ->assertViewIs('users.show')
             ->assertSee($name, $self_introduction);
+    }
+
+    //管理ユーザー以外がユーザー削除リクエストで削除できていないかテスト
+    public function testCannotUserDeleteRequest()
+    {
+        //usersテーブル確認用データ
+        $u_data = [
+                    'id' => $this->users[0]->id,
+                    'name' => $this->users[0]->name,
+                    'email' => $this->users[0]->email,
+                ];
+
+        //postsテーブル確認用データ
+        $p_data = [
+                    'id' => $this->posts[0]->id,
+                    'content' => $this->posts[0]->content,
+                ];
+
+        //commentsテーブル確認用データ
+        $c_data = [
+                    'id' => $this->comments[0]->id,
+                    'comment' => $this->comments[0]->comment,
+                ];
+
+        //削除リクエストしたが403ステータスコード
+        //認可されてないためサーバー拒否したか確認
+        $this->actingAs($this->users[0])
+            ->from('/')
+            ->delete(route('users.destroy', $this->users[1]->id))
+            ->assertForbidden();
+
+        //データベースにデータが残っているか確認
+        $this->assertDatabaseHas('users', $u_data)
+            ->assertDatabaseHas('posts', $p_data)
+            ->assertDatabaseHas('comments', $c_data);
+    }
+
+    //管理ユーザーでユーザー削除テスト
+    public function testAdminDeleteUser()
+    {
+        //削除後のテーブル確認用データ(一意のidで確認)
+        $data = [
+                    'id' => $this->users[0]->id,
+                ];
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+
+        $index = route('users.index');
+        $show = route('users.show', $this->users[1]->id);
+
+        //ユーザー一覧でユーザー削除リクエスト
+        //リダイレクト先の確認
+        //成功フラッシュメッセージが表示されているか確認
+        $this->actingAs($admin)
+            ->from($index)
+            ->delete(route('users.destroy', $this->users[0]->id))
+            ->assertStatus(302)
+            ->assertRedirect($index)
+            ->assertSessionHas('msg_success', '「'.$this->users[0]->name.'」のアカウントを削除しました');
+
+        //各テーブルにデータが残っていないか確認
+        $this->assertDatabaseMissing('users', $data)
+            ->assertDatabaseMissing('post_images', $data)
+            ->assertDatabaseMissing('posts', $data)
+            ->assertDatabaseMissing('comments', $data);
+
+        //ユーザー詳細でユーザー削除リクエスト
+        //リダイレクト先の確認
+        //成功フラッシュメッセージが表示されているか確認
+        $this->from($show)
+            ->delete(route('users.destroy', $this->users[1]->id))
+            ->assertStatus(302)
+            ->assertRedirect('/')
+            ->assertSessionHas('msg_success', '「'.$this->users[1]->name.'」のアカウントを削除しました');
+
+        //各テーブルにデータが残っていないか確認
+        str_replace($this->users[0]->id, $this->users[1]->id, $data);
+        $this->assertDatabaseMissing('users', $data)
+            ->assertDatabaseMissing('post_images', $data)
+            ->assertDatabaseMissing('posts', $data)
+            ->assertDatabaseMissing('comments', $data);
     }
 }
