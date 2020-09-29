@@ -48346,6 +48346,16 @@ $(function () {
     } else {
       return false;
     }
+  }); //ユーザー削除ダイヤログ
+
+  $(document).on('click', '.user_delete_alert', function () {
+    var $this = $(this);
+
+    if (confirm('ユーザーアカウントを削除してよろしいですか？')) {
+      $this.submit();
+    } else {
+      return false;
+    }
   }); //ログアウトダイヤログ
 
   $('.logout_alert').click(function (event) {

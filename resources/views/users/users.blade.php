@@ -14,8 +14,12 @@
                         </a>
                         <div class="d-flex flex-column ml-2 align-self-center">
                             <a href="{{ route('users.show', $user->id) }}" class="btn btn-link text-dark font-weight-bold user_name">{{ $user->name }}</a>
+
                             {{-- フォロー/アンフォローボタン--}}
                             @include('user_follow.follow_button')
+
+                            {{-- ユーザー削除フォーム --}}
+                            @include('user_delete.delete_button')
                         </div>
                     </div>
                 </div>
