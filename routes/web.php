@@ -65,5 +65,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::delete('comments/{id}', 'CommentsController@destroy')->name('posts.uncomment');
 });
 
+//ユーザー削除(管理者認可があるユーザーのみこれを許可)
+Route::resource('users', 'UsersController', ['only' => ['destroy']])->middleware('can:admin');
+
 //投稿詳細ページ(コメント一覧)
 Route::resource('posts', 'PostsController', ['only' => 'show']);
