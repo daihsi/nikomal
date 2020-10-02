@@ -44,7 +44,7 @@ class SelectTest extends DuskTestCase
     }
 
     //検索フォームのselect2ボックスのテスト
-    public function testSearchSelect()
+    public function testSearchSelect(): void
     {
         //連想配列のインデックスを数字に変更
         $keys = array_keys(config('animals.animals1'));
@@ -67,7 +67,7 @@ class SelectTest extends DuskTestCase
     }
 
     //新規投稿・投稿編集フォームのselect2ボックスのテスト
-    public function testPostSelect()
+    public function testPostSelect(): void
     {
         //連想配列のインデックスを数字に変更
         $keys = array_keys(config('animals.animals1'));
@@ -103,7 +103,7 @@ class SelectTest extends DuskTestCase
 
     //バリデーションを通過せずリダイレクトした時に
     //セレクトボックスに値が保持されているか確認
-    public function testValidationSearchSelect()
+    public function testValidationSearchSelect(): void
     {
         //連想配列のインデックスを数字に変更
         $keys = array_keys(config('animals.animals1'));
@@ -135,7 +135,7 @@ class SelectTest extends DuskTestCase
 
     //バリデーションを通過せずリダイレクトした時に
     //セレクトボックスに値が保持されているか確認
-    public function testValidationPostSelect()
+    public function testValidationPostSelect(): void
     {
         //連想配列のインデックスを数字に変更
         $keys = array_keys(config('animals.animals1'));
@@ -170,15 +170,16 @@ class SelectTest extends DuskTestCase
 
     //検索が成功して検索ページに戻った際に
     //セレクトボックスに検索した値が保持されているかテスト
-    public function testSuccessSearchSelect()
+    public function testSuccessSearchSelect(): void
     {
         $post = $this->posts[0];
-        $animals_name = $post->postCategorys;
+        $array_animals_name = array_column($post->postCategorys->toArray(), 'name');
+        $animals_name = array_unique($array_animals_name);
 
         $this->browse(function ($browser) use ($animals_name) {
             $browser->visitRoute('posts.search');
-            foreach ($animals_name as $animal_name) {
-                $browser->select('animals_name[]', $animal_name->name);
+            foreach ($animals_name as $index => $name) {
+                $browser->select('animals_name[]', $name);
             }
 
             $browser->press('検索する')
@@ -187,8 +188,8 @@ class SelectTest extends DuskTestCase
                     ->screenshot('select');
 
             //セレクトボックスに値が保持されているか確認
-            foreach ($animals_name as $animal_name) {
-                $browser->assertSelected('animals_name[]', $animal_name->name);
+            foreach ($animals_name as $index => $name) {
+                $browser->assertSelected('animals_name[]', $name);
             }
         });
     }

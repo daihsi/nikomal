@@ -22,7 +22,7 @@ class UserTest extends TestCase
      */
 
     //項目入力必須が空の場合のバリデーションテスト
-    public function testRegisterRequestNull()
+    public function testRegisterRequestNull(): void
     {
         //ユーザー登録時に必須項目を空でリクエストしたと仮定
         $data = [
@@ -51,7 +51,7 @@ class UserTest extends TestCase
 
     //入力項目が桁数オーバーのためのバリデーションテスト
     //パスワードは桁が足りない時のバリデーション
-    public function testRegisterRequestOverflow()
+    public function testRegisterRequestOverflow(): void
     {
         //ユーザー登録時に名前、メールを桁数オーバーで
         //パスワードは桁が足りないと仮定
@@ -80,7 +80,7 @@ class UserTest extends TestCase
     }
 
     //メール、画像フォーマットのバリデーションテスト
-    public function testRegisterRequestFormat()
+    public function testRegisterRequestFormat(): void
     {
         //メール、画像のフォーマットを期待値と別のものがリクエストされたと仮定
         $data = [
@@ -108,7 +108,7 @@ class UserTest extends TestCase
 
 
     //アップロードされた画像ファイルが保存されているかテスト
-    public function testAbatarUploadImage()
+    public function testAbatarUploadImage(): void
     {
         Storage::fake('users_avatar');
         $upload_file = UploadedFile::fake()->image('avatar_test.jpg');
@@ -125,7 +125,7 @@ class UserTest extends TestCase
     }
 
     //ユーザー登録テスト
-    public function testNormalRegisterUser()
+    public function testNormalRegisterUser(): void
     {
         $test_password = '0987654321';
 
@@ -160,7 +160,7 @@ class UserTest extends TestCase
     }
 
     //ゲストユーザー用の表示になっているかテスト
-    public function testGuestUser()
+    public function testGuestUser(): void
     {
         $response = $this->get('/');
         //「さぁ、動物たちの笑っている表情を...」の文字列がトップページに
@@ -171,7 +171,7 @@ class UserTest extends TestCase
     }
 
     //ログインできているかテスト
-    public function testUserLogin()
+    public function testUserLogin(): void
     {
         $test_password = '0987654321';
 
@@ -201,7 +201,7 @@ class UserTest extends TestCase
     }
 
     //ログアウトできているかテスト
-    public function testUserLogout()
+    public function testUserLogout(): void
     {
         $test_password = '0987654321';
 

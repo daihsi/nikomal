@@ -36,13 +36,13 @@ class PostCreateTest extends TestCase
     }
 
     //ゲストユーザーが、新規投稿ページにアクセスできないようになっているかテスト
-    public function testGuestUserAccessPostCreatePage()
+    public function testGuestUserAccessPostCreatePage(): void
     {
         $this->get(route('posts.create'))->assertStatus(302);
     }
 
     //ゲストユーザーが、新規投稿できないようになっているかテスト
-    public function testGuestUserPostCreate()
+    public function testGuestUserPostCreate(): void
     {
         $this->post(route('posts.store'), [
             'content' => 'テストテスト'
@@ -53,7 +53,7 @@ class PostCreateTest extends TestCase
     }
 
     //新規投稿が正常にデータベースに保存されているかテスト
-    public function testNewPostCreate()
+    public function testNewPostCreate(): void
     {
         $factory_user = factory(User::class)->create();
         $this->actingAs($factory_user);
@@ -68,7 +68,7 @@ class PostCreateTest extends TestCase
         $data = [
             'content' => $post->content,
             'image' => $this->upload_file,
-            'animals_name' => $animals_name,
+            'animals_name' => $animals_name ?? null,
         ];
         $url = route('posts.create', $factory_user->id);
         $response = $this->from($url)->post(route('posts.store', $factory_user->id), $data);
@@ -80,22 +80,26 @@ class PostCreateTest extends TestCase
         ]);
         //animalsテーブルにデータが正常に保存してあるか確認
         $k = 1;
-        foreach($animals_name as $animal_name) {
-            $this->assertDatabaseHas('animals', [
-                'name' => $animal_name,
-            ]);
-            $animal_ids[] = $k++;
+        if (!empty($animals_name)) {
+            foreach($animals_name as $animal_name) {
+                $this->assertDatabaseHas('animals', [
+                    'name' => $animal_name,
+                ]);
+                $animal_ids[] = $k++;
+            }
         }
         //中間テーブルにデータが正常に保存してあるか確認
-        foreach($animal_ids as $animal_id){
-            $this->assertDatabaseHas('post_category', [
-                'animal_id' => $animal_id,
-            ]);
+        if (!empty($animal_ids)) {
+            foreach($animal_ids as $animal_id){
+                $this->assertDatabaseHas('post_category', [
+                    'animal_id' => $animal_id,
+                ]);
+            }
         }
     }
 
     //必須項目を空でリクエストした際のバリデーションテスト
-    public function testPostRequestNull()
+    public function testPostRequestNull(): void
     {
         $data = [
             'content' => null,
@@ -124,7 +128,7 @@ class PostCreateTest extends TestCase
     }
 
     //contentの桁あふれの際のバリデーションテスト
-    public function testPostRequestOverFlow()
+    public function testPostRequestOverFlow(): void
     {
         //contentが1文字多いと仮定
         $data = [
@@ -148,7 +152,7 @@ class PostCreateTest extends TestCase
     }
 
     //画像フォーマット、サイズの期待値外でのリクエストのバリデーションテスト
-    public function testPostRequestFormat()
+    public function testPostRequestFormat(): void
     {
         Storage::fake('post_images');
         $upload_file = UploadedFile::fake()->image('test.gif')->size(2049);
@@ -177,7 +181,7 @@ class PostCreateTest extends TestCase
     }
 
     //バリデーションの通過テスト
-    public function testPostRequestNomal()
+    public function testPostRequestNomal(): void
     {
         $animals_name = ['イヌ', 'ネコ', 'オラウータン'];
         $data = [
@@ -195,7 +199,7 @@ class PostCreateTest extends TestCase
     }
 
     //トップページに投稿が表示されているかテスト
-    public function testPostViewToppage()
+    public function testPostViewToppage(): void
     {
         $factory_user = factory(User::class)->create();
         $this->actingAs($factory_user);
@@ -209,7 +213,7 @@ class PostCreateTest extends TestCase
         $data = [
             'content' => $post->content,
             'image' => $this->upload_file,
-            'animals_name' => $animals_name,
+            'animals_name' => $animals_name ?? null,
         ];
         $response = $this->post(route('posts.store', $factory_user->id), $data);
 
@@ -218,11 +222,11 @@ class PostCreateTest extends TestCase
             ->assertStatus(200)
             ->assertViewIs('welcome')
             ->assertSee($post->content)
-            ->assertSeeTextInOrder($animals_name);
+            ->assertSeeTextInOrder($animals_name ?? null);
     }
 
     //ユーザー詳細ページに投稿が表示されているかテスト
-    public function testPostViewUserShowpage()
+    public function testPostViewUserShowpage(): void
     {
         $factory_user = factory(User::class)->create();
         $this->actingAs($factory_user);
@@ -236,7 +240,7 @@ class PostCreateTest extends TestCase
         $data = [
             'content' => $post->content,
             'image' => $this->upload_file,
-            'animals_name' => $animals_name,
+            'animals_name' => $animals_name ?? null,
         ];
         $response = $this->post(route('posts.store', $factory_user->id), $data);
 
@@ -245,6 +249,6 @@ class PostCreateTest extends TestCase
             ->assertStatus(200)
             ->assertViewIs('users.show')
             ->assertSee($post->content)
-            ->assertSeeTextInOrder($animals_name);
+            ->assertSeeTextInOrder($animals_name ?? null);
     }
 }

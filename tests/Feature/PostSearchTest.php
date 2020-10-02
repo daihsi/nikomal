@@ -61,7 +61,7 @@ class PostSearchTest extends TestCase
     }
 
     //複数条件検索で投稿が表示されているかテスト
-    public function testMultipleSearch()
+    public function testMultipleSearch(): void
     {
         //二つの値をいれて検索
         $data = [
@@ -69,12 +69,13 @@ class PostSearchTest extends TestCase
                 'animals_name' => Animal::find(1)->name,
             ];
         $this->get(route('posts.search'), $data)
-            ->assertSee($data['keyword'], $data['animals_name'])
+            ->assertSee($data['keyword'])
+            ->assertSee($data['animals_name'])
             ->assertOk();
     }
 
     //一つの条件検索で投稿が表示されているかテスト
-    public function testSingleSearch()
+    public function testSingleSearch(): void
     {
         $conditions1['keyword'] = Post::find(4)->content;
         $conditions2['animals_name'] = Animal::find(3)->name;
@@ -91,7 +92,7 @@ class PostSearchTest extends TestCase
     }
 
     //検索に該当する投稿が表示されていないかテスト
-    public function testNotSearch()
+    public function testNotSearch(): void
     {
         $data = [
                 'keyword' => 'テストテスト',
@@ -99,12 +100,13 @@ class PostSearchTest extends TestCase
             ];
 
         $this->get(route('posts.search'), $data)
-            ->assertDontSee($data['keyword'], $data['animals_name'])
+            ->assertDontSee($data['keyword'])
+            ->assertDontSee($data['animals_name'])
             ->assertOk();
     }
 
     //桁あふれと選択数過多によるバリデーションテスト
-    public function testPostSearchRequestOverFlow()
+    public function testPostSearchRequestOverFlow(): void
     {
         foreach(config('animals.animals1') as $index => $name) {
             $animals_name[] = $index;
@@ -112,7 +114,7 @@ class PostSearchTest extends TestCase
         //keywordが1文字多い・動物カテゴリーも10個以上選択したと仮定
         $data = [
             'keyword' => str_repeat('あ', 151),
-            'animals_name' => $animals_name,
+            'animals_name' => $animals_name ?? null,
         ];
         $request = new PostSearchRequest;
         $rules = $request->rules();
@@ -130,7 +132,7 @@ class PostSearchTest extends TestCase
     }
 
     //動物カテゴリーの選択が重複した時のバリデーションテスト
-    public function testPostSearchRequestDuplication()
+    public function testPostSearchRequestDuplication(): void
     {
         //動物カテゴリーを重複選択したと仮定
         $data = [
@@ -152,7 +154,7 @@ class PostSearchTest extends TestCase
     }
 
     //バリデーションの通過テスト
-    public function testPostSearchRequestNomal()
+    public function testPostSearchRequestNomal(): void
     {
         $animals_name = ['イヌ', 'ネコ', 'オラウータン', 'イノシシ',
                             'クジラ', 'サル', 'モグラ', 'カバ', 
@@ -174,7 +176,7 @@ class PostSearchTest extends TestCase
     }
 
     //カテゴリーリンクのカテゴリー別投稿検索をテスト
-    public function testCategoryLink()
+    public function testCategoryLink(): void
     {
         $animal = Animal::find(1);
         $animal_name = $animal->name;
@@ -185,7 +187,7 @@ class PostSearchTest extends TestCase
 
     //データが存在しないカテゴリーを検索したが
     //存在しないカテゴリーで、404エラーになったかテスト
-    public function testNotCategoryLink()
+    public function testNotCategoryLink(): void
     {
         $this->get('categorys/1000')
             ->assertStatus(404);

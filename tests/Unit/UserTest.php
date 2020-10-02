@@ -16,7 +16,7 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function testExample(): void
     {
         factory(User::class)->create();
         $this->assertTrue(true);

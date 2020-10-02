@@ -20,7 +20,7 @@ class PostPopularTest extends DuskTestCase
      */
 
     //いいねランキングページがいいね順で並んでいるかテスト
-    public function testPostPouplar()
+    public function testPostPouplar(): void
     {
         $users = factory(User::class, 3)->create();
         $posts = factory(Post::class, 3)->create([

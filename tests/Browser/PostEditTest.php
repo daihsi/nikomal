@@ -43,10 +43,11 @@ class PostEditTest extends DuskTestCase
     }
 
     //投稿編集テスト
-    public function testPostEdit()
+    public function testPostEdit(): void
     {
         $post = $this->post[0];
-        $edit_animals = factory(Animal::class, 3)->make();
+        $array_animals = array_column(factory(Animal::class, 3)->make()->toArray(), 'name');
+        $edit_animals = array_unique($array_animals);
 
         //投稿編集ページで既存のデータ値がフォームに入っているか確認
         $this->browse(function ($browser) use ($post, $edit_animals) {
@@ -69,11 +70,10 @@ class PostEditTest extends DuskTestCase
             $browser->type('content', $post->content)
                     ->click('#edit_post_image_preview')
                     ->attach('image', $this->edit_image->image);
-            foreach ($edit_animals as $edit_animal) {
-                $browser->select('animals_name[]', $edit_animal->name)
-                        ->assertSelected('animals_name[]', $edit_animal->name);
+            foreach ($edit_animals as $index => $name) {
+                $browser->select('animals_name[]', $name)
+                        ->assertSelected('animals_name[]', $name);
             }
-
             $browser->assertInputValue('content', $post->content)
                     ->assertSourceHas('image/')
                     ->screenshot('post');
@@ -81,10 +81,11 @@ class PostEditTest extends DuskTestCase
     }
 
     //投稿編集バリデーションエラー表示テスト
-    public function testValidationPostEdit()
+    public function testValidationPostEdit(): void
     {
         $post = $this->post[0];
-        $edit_animals = factory(Animal::class, 4)->make();
+        $array_animals = array_column(factory(Animal::class, 10)->make()->toArray(), 'name');
+        $edit_animals = array_unique($array_animals);
 
         $this->browse(function ($browser) use ($post, $edit_animals) {
             $browser->loginAs($this->user)
@@ -95,9 +96,9 @@ class PostEditTest extends DuskTestCase
                 $browser->click('.select2-selection__choice__remove');
             }
 
-            foreach ($edit_animals as $edit_animal) {
-                $browser->select('animals_name[]', $edit_animal->name)
-                        ->assertSelected('animals_name[]', $edit_animal->name);
+            foreach ($edit_animals as $index => $name) {
+                $browser->select('animals_name[]', $name)
+                        ->assertSelected('animals_name[]', $name);
             }
 
             //失敗フラッシュメッセージが表示されているか
@@ -112,7 +113,7 @@ class PostEditTest extends DuskTestCase
     }
 
     //投稿削除テスト
-    public function testPostDelete()
+    public function testPostDelete(): void
     {
         $post = factory(Post::class)->create([
                     'user_id' => $this->user->id,
@@ -134,7 +135,7 @@ class PostEditTest extends DuskTestCase
     }
 
     //管理ユーザーでの他ユーザーの投稿削除テスト
-    public function testAdminDeletePost()
+    public function testAdminDeletePost(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',

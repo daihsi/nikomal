@@ -26,7 +26,7 @@ class UserEditTest extends DuskTestCase
     }
 
     //ユーザー編集テスト
-    public function testUserEdit()
+    public function testUserEdit(): void
     {
         $auth_self_introduction = $this->auth_user->self_introduction;
         $auth_name = $this->auth_user->name;
@@ -63,7 +63,7 @@ class UserEditTest extends DuskTestCase
     }
 
     //ユーザー編集バリデーション通過しなかった際のテスト
-    public function testValidationUserEdit()
+    public function testValidationUserEdit(): void
     {
         $auth_self_introduction = $this->auth_user->self_introduction;
         $auth_name = $this->auth_user->name;
@@ -98,15 +98,12 @@ class UserEditTest extends DuskTestCase
     }
 
     //管理ユーザー以外がログインしてユーザー削除ボタンが現れていないかテスト
-    public function testNotDisplayedUserDeleteButton()
+    public function testNotDisplayedUserDeleteButton(): void
     {
         $users = factory(User::class, 2)->create();
-        $posts = factory(Post::class, 2)->create([
-                        'user_id' => $users[0]->id,
-                    ]);
 
         //ユーザー一覧、ユーザー詳細ページでボタンが現れてないか確認
-        $this->browse(function ($browser) use ($users, $posts) {
+        $this->browse(function ($browser) use ($users) {
             $browser->loginAs($users[0])
                     ->visitRoute('users.index')
                     ->assertMissing('.user_delete_alert')
@@ -117,7 +114,7 @@ class UserEditTest extends DuskTestCase
     }
 
     //管理ユーザーによるユーザー削除テスト
-    public function testAdminDeleteUser()
+    public function testAdminDeleteUser(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Post;
@@ -58,8 +59,14 @@ class PostEditTest extends TestCase
         $this->animals_name = array_rand(config('animals.animals'. $this->i), 3);
     }
 
+    public function tearDown(): void
+    {
+        Artisan::call('migrate:refresh');
+        parent::tearDown();
+    }
+
     //投稿者以外のユーザーが、投稿にアクセスしても編集・削除ボタンが表示されていないかテスト
-    public function testPostNoEditButton()
+    public function testPostNoEditButton(): void
     {
         $factory_userA = factory(User::class)->create();
         $factory_userB = factory(User::class)->create();
@@ -74,7 +81,7 @@ class PostEditTest extends TestCase
     }
 
     //投稿者以外が投稿編集ページにアクセスしても、前のページにリダイレクトされるかテスト
-    public function testPostEditpageAccessdenied()
+    public function testPostEditpageAccessdenied(): void
     {
         $factory_userA = factory(User::class)->create();
         $factory_userB = factory(User::class)->create();
@@ -90,16 +97,9 @@ class PostEditTest extends TestCase
     }
 
     //ゲストユーザー又は投稿所有者以外が、新規投稿できないようになっているかテスト
-    public function testGuestUserPostCreate()
+    public function testGuestUserPostCreate(): void
     {
         $user = $this->factory_user;
-        $posts = $user->posts;
-
-        //一つだけ投稿を取得
-        foreach ($posts as $post) {
-            $post = $post;
-            break;
-        }
 
         //更新データを作成
         $update_post = factory(Post::class)->make([
@@ -110,7 +110,7 @@ class PostEditTest extends TestCase
                 'animals_name' => ['テスト:イヌ', 'テスト:ネコ', 'テスト:クマ'],
             ];
 
-        $this->put(route('posts.update', $post->id), $data);
+        $this->put(route('posts.update', $this->posts[0]->id), $data);
 
         //postsテーブルにデータが保存されていないか確認
         $this->assertDatabaseMissing('posts', [
@@ -126,17 +126,10 @@ class PostEditTest extends TestCase
     }
 
     //投稿編集データがデータベースに更新されているか
-    public function testPostEdit()
+    public function testPostEdit(): void
     {
         $user = $this->factory_user;
         $this->actingAs($user);
-        $posts = $user->posts;
-
-        //一つだけ投稿を取得
-        foreach ($posts as $post) {
-            $post = $post;
-            break;
-        }
 
         //更新データを作成
         $update_post = factory(Post::class)->make([
@@ -148,12 +141,12 @@ class PostEditTest extends TestCase
             ];
 
         //更新リクエスト後、リダイレクト先の確認
-        $this->put(route('posts.update', $post->id), $data)
+        $this->put(route('posts.update', $this->posts[0]->id), $data)
             ->assertStatus(302)
             ->assertRedirect('/');
 
         //更新した投稿のリレーション情報を取得
-        $animals = $post->postCategorys;
+        $animals = $this->posts[0]->postCategorys;
 
         //postsテーブルにデータが更新保存してあるか確認
         $this->assertDatabaseHas('posts', [
@@ -172,38 +165,33 @@ class PostEditTest extends TestCase
         }
 
         //post_categoryテーブルにデータが更新保存してあるか確認
-        foreach($animal_ids as $animal_id){
-            $this->assertDatabaseHas('post_category', [
-                'animal_id' => $animal_id,
-                'post_id' => $post->id,
-            ]);
+        if (!empty($animal_ids)) {
+            foreach($animal_ids as $animal_id){
+                $this->assertDatabaseHas('post_category', [
+                    'animal_id' => $animal_id,
+                    'post_id' => $this->posts[0]->id,
+                ]);
+            }
         }
     }
 
     //投稿が削除されているかテスト
-    public function testPostDelete()
+    public function testPostDelete(): void
     {
         $user = $this->factory_user;
         $this->actingAs($user);
-        $posts = $user->posts;
-
-        //一つだけ投稿を取得
-        foreach ($posts as $post) {
-            $post = $post;
-            break;
-        }
 
         //リレーションデータ取得
-        $animals = $post->postCategorys;
+        $animals = $this->posts[0]->postCategorys;
         $data = [
-                'content' => $post->content,
+                'content' => $this->posts[0]->content,
                 'user_id' => $user->id,
-                'post_id' => $post->id,
-                'image' => $post->postImages,
+                'post_id' => $this->posts[0]->id,
+                'image' => $this->posts[0]->postImages,
             ];
 
         //削除リクエスト後、リダイレクト先の確認
-        $this->delete(route('posts.destroy', $post->id))
+        $this->delete(route('posts.destroy', $this->posts[0]->id))
             ->assertStatus(302)
             ->assertRedirect('/');
 
@@ -228,7 +216,7 @@ class PostEditTest extends TestCase
     }
 
     //必須項目が空でリクエストされた場合のバリデーションテスト
-    public function testPostEditRequestNull()
+    public function testPostEditRequestNull(): void
     {
         //キャプショと動物カテゴリーが空でリクエストされたと仮定
         $data = [
@@ -256,7 +244,7 @@ class PostEditTest extends TestCase
     }
 
     //contentの桁あふれの際のバリデーションテスト
-    public function testtPostEditRequestOverFlow()
+    public function testtPostEditRequestOverFlow(): void
     {
         //contentが1文字多いと仮定
         $data = [
@@ -282,7 +270,7 @@ class PostEditTest extends TestCase
     }
 
     //画像フォーマット、サイズの期待値外でのリクエストのバリデーションテスト
-    public function testtPostEditRequestFormat()
+    public function testtPostEditRequestFormat(): void
     {
         Storage::fake('post_images');
         $upload_file = UploadedFile::fake()->image('test.gif')->size(2049);
@@ -313,7 +301,7 @@ class PostEditTest extends TestCase
     }
 
     //バリデーションの通過テスト
-    public function testPostEditRequestNomal()
+    public function testPostEditRequestNomal(): void
     {
         $data = [
             'content' => str_repeat('ああああああtest', 15),
@@ -334,7 +322,7 @@ class PostEditTest extends TestCase
     //管理ユーザーでログイン
     //管理ユーザーで投稿削除可能かテスト
     //成功フラッシュメッセージが表示されているか確認
-    public function testAdminDeletePost()
+    public function testAdminDeletePost(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',

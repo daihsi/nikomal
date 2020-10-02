@@ -28,10 +28,11 @@ class PostTest extends DuskTestCase
     }
 
     //新規投稿テスト
-    public function testNewPostCreate()
+    public function testNewPostCreate(): void
     {
         $image = factory(PostImage::class)->make();
-        $animals = factory(Animal::class, 3)->make();
+        $array_animals = array_column(factory(Animal::class, 3)->make()->toArray(), 'name');
+        $animals = array_unique($array_animals);
 
         //フォームに値を入れてそれらが入っているか確認
         $this->browse(function ($browser) use ($image, $animals) {
@@ -40,9 +41,9 @@ class PostTest extends DuskTestCase
                     ->type('content', $this->content->content)
                     ->click('#post_image_preview')
                     ->attach('image', $image->image);
-            foreach ($animals as $animal) {
-                $browser->select('animals_name[]', $animal->name)
-                        ->assertSelected('animals_name[]', $animal->name);
+            foreach ($animals as $index => $name) {
+                $browser->select('animals_name[]', $name)
+                        ->assertSelected('animals_name[]', $name);
             }
             $browser->assertInputValue('content', $this->content->content)
                     ->assertSourceHas('image/')
@@ -51,17 +52,18 @@ class PostTest extends DuskTestCase
     }
 
     //新規投稿バリデーションエラー表示テスト
-    public function testValidationPostCreate()
+    public function testValidationPostCreate(): void
     {
-        $animals = factory(Animal::class, 4)->make();
+        $array_animals = array_column(factory(Animal::class, 10)->make()->toArray(), 'name');
+        $animals = array_unique($array_animals);
 
         $this->browse(function ($browser) use ($animals) {
             $browser->loginAs($this->user)
                     ->visitRoute('posts.create')
                     ->type('content', $this->content->content);
-            foreach ($animals as $animal) {
-                $browser->select('animals_name[]', $animal->name)
-                        ->assertSelected('animals_name[]', $animal->name);
+            foreach ($animals as $index => $name) {
+                $browser->select('animals_name[]', $name)
+                        ->assertSelected('animals_name[]', $name);
             }
 
             //失敗フラッシュメッセージが表示されているか

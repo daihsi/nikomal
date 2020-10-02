@@ -57,7 +57,7 @@ class UserEditTest extends TestCase
 
     //正常に認証ユーザーがユーザー詳細ページにアクセス
     //その後編集ページにアクセスできるか確認
-    public function testEditUserNormalAccess()
+    public function testEditUserNormalAccess(): void
     {
         $factory_user = factory(User::class)->create();
         //認証を行い、認証されたか確認
@@ -80,7 +80,7 @@ class UserEditTest extends TestCase
 
     //認証ユーザーではないユーザーの詳細ページにアクセス
     //編集ページにアクセスできないか確認
-    public function testEditUserAbnormalAccess()
+    public function testEditUserAbnormalAccess(): void
     {
         $factory_userA = factory(User::class)->create();
         $factory_userB = factory(User::class)->create();
@@ -101,7 +101,7 @@ class UserEditTest extends TestCase
 
     //ゲストユーザーが登録ユーザーページにアクセスできるか確認
     //編集ページにアクセスできないか確認
-    public function testGuestUserEditPegeAbnormalAccess()
+    public function testGuestUserEditPegeAbnormalAccess(): void
     {
         $factory_user = factory(User::class)->create();
 
@@ -117,7 +117,7 @@ class UserEditTest extends TestCase
     }
 
     //必須項目である名前欄を空でリクエストした場合のバリデーションテスト
-    public function testUserUpdateRequestNameNull()
+    public function testUserUpdateRequestNameNull(): void
     {
         $factory_user = factory(User::class)->create();
         $this->actingAs($factory_user);
@@ -152,7 +152,7 @@ class UserEditTest extends TestCase
     }
 
     //名前と自己紹介欄の桁あふれでリクエストした場合のバリデーションテスト
-    public function testUserUpdateRequestOverflow()
+    public function testUserUpdateRequestOverflow(): void
     {
         $factory_user = factory(User::class)->create();
         $this->actingAs($factory_user);
@@ -188,7 +188,7 @@ class UserEditTest extends TestCase
     }
 
     //画像フォーマット、サイズの期待値外でのリクエストのバリデーションテスト
-    public function testUserUpdateRequestFormat()
+    public function testUserUpdateRequestFormat(): void
     {
         $factory_user = factory(User::class)->create();
         $this->actingAs($factory_user);
@@ -233,7 +233,7 @@ class UserEditTest extends TestCase
     }
 
     //バリデーションを通過したかテスト
-    public function testUserUpdateRequestNomal()
+    public function testUserUpdateRequestNomal(): void
     {
         $factory_user = factory(User::class)->create();
         $this->actingAs($factory_user);
@@ -261,7 +261,7 @@ class UserEditTest extends TestCase
     }
 
     //詳細ページにリダイレクトした際に、情報が更新されて表示されているかテスト
-    public function testInformationChanged()
+    public function testInformationChanged(): void
     {
         $factory_user = factory(User::class)->create();
         $this->actingAs($factory_user);
@@ -271,7 +271,8 @@ class UserEditTest extends TestCase
         $this->get($url)
             ->assertStatus(200)
             ->assertViewIs('users.show')
-            ->assertSee($factory_user->name, $factory_user->self_introduction);
+            ->assertSee($factory_user->name)
+            ->assertSee($factory_user->self_introduction);
 
         $name = 'テストテストtest';
         $self_introduction = str_repeat('ああああああtest', 15);
@@ -289,11 +290,12 @@ class UserEditTest extends TestCase
         $this->get($url)
             ->assertStatus(200)
             ->assertViewIs('users.show')
-            ->assertSee($name, $self_introduction);
+            ->assertSee($name)
+            ->assertSee($self_introduction);
     }
 
     //管理ユーザー以外がユーザー削除リクエストで削除できていないかテスト
-    public function testCannotUserDeleteRequest()
+    public function testCannotUserDeleteRequest(): void
     {
         //usersテーブル確認用データ
         $u_data = [
@@ -328,7 +330,7 @@ class UserEditTest extends TestCase
     }
 
     //管理ユーザーでユーザー削除テスト
-    public function testAdminDeleteUser()
+    public function testAdminDeleteUser(): void
     {
         //削除後のテーブル確認用データ(一意のidで確認)
         $data = [

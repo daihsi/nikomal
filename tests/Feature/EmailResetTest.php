@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\ResetEmailRequest;
+use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 use Illuminate\Support\Str;
 use App\User;
@@ -26,8 +27,14 @@ class EmailResetTest extends TestCase
         $this->user = factory(User::class)->create();
     }
 
+    public function tearDown(): void
+    {
+        Artisan::call('migrate:refresh');
+        parent::tearDown();
+    }
+
     //メールアドレス再設定リクエストテスト
-    public function testEmailResetRequest()
+    public function testEmailResetRequest(): void
     {
         $user = factory(User::class)->make();
         $email = $user->email;
@@ -59,7 +66,7 @@ class EmailResetTest extends TestCase
     }
 
     //簡単ログイン用のメールアドレス再設定エラーテスト
-    public function testFailureEmaiResetRequest()
+    public function testFailureEmaiResetRequest(): void
     {
         $url = route('email.request');
 
@@ -84,7 +91,7 @@ class EmailResetTest extends TestCase
     }
 
     //メールアドレス変更テスト
-    public function testEmailReset()
+    public function testEmailReset(): void
     {
         $user = factory(User::class)->make();
         $email = $user->email;
@@ -122,7 +129,7 @@ class EmailResetTest extends TestCase
     }
 
     //メールアドレス変更テスト
-    public function testFailureEmailReset()
+    public function testFailureEmailReset(): void
     {
         $user = factory(User::class)->make();
         $email = $user->email;
@@ -157,7 +164,7 @@ class EmailResetTest extends TestCase
     }
 
     //必須項目であるメールアドレスを空でリクエストした場合のバリデーションテスト
-    public function testResetEmailRequestNull()
+    public function testResetEmailRequestNull(): void
     {
         $this->actingAs($this->user);
 
@@ -190,7 +197,7 @@ class EmailResetTest extends TestCase
     }
 
     //メールフォーマットのバリデーションテスト
-    public function testResetEmailRequestFormat()
+    public function testResetEmailRequestFormat(): void
     {
         $this->actingAs($this->user);
 
@@ -223,7 +230,7 @@ class EmailResetTest extends TestCase
     }
 
     //メールアドレスが一意でない場合のバリデーションテスト
-    public function testResetEmailRequestUnque()
+    public function testResetEmailRequestUnque(): void
     {
         $this->actingAs($this->user);
         $user = factory(User::class)->create();
@@ -257,7 +264,7 @@ class EmailResetTest extends TestCase
     }
 
     //メールアドレスの桁あふれのバリデーションテスト
-    public function testResetEmailRequestOverflow()
+    public function testResetEmailRequestOverflow(): void
     {
         $this->actingAs($this->user);
 
@@ -292,7 +299,7 @@ class EmailResetTest extends TestCase
     //管理ユーザーはメールアドレス再設定フォームにアクセスできないかテスト
     //リダイレクトの確認
     //失敗フラッシュメッセージが表示されているか確認
-    public function testAdminInaccessibleEmailResetPage()
+    public function testAdminInaccessibleEmailResetPage(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
