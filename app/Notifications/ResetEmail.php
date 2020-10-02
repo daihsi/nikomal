@@ -11,11 +11,16 @@ use Illuminate\Support\Facades\Lang;
 class ResetEmail extends Notification
 {
     use Queueable;
+
+    /**
+     * @var string
+     */
     public $token;
 
     /**
      * Create a new notification instance.
      *
+     * @param string $token
      * @return void
      */
     public function __construct($token)

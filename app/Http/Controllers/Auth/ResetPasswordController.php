@@ -25,22 +25,27 @@ class ResetPasswordController extends Controller
     use ResetsPasswords;
 
     /**
-     * Where to redirect users after resetting their password.
+     * リクエストに成功リダイレクト処理の際
+     * toastrによる成功フラッシュメッセージを表示する
      *
-     * @var string
+     * @return string
      */
     //protected $redirectTo = RouteServiceProvider::HOME;
 
-    //リクエストに成功リダイレクト処理の際
-    //toastrによる成功フラッシュメッセージを表示する
     protected function redirectTo()
     {
         session()->flash('msg_success', 'パスワードを変更しました');
         return '/';
     }
 
-    //パスワード再設定リクエスト失敗時の処理をオーバーライドし、toastrによる
-    //失敗フラッシュメッセージ表示をする
+    /**
+     * パスワード再設定リクエスト失敗時の処理をオーバーライドし、toastrによる
+     * 失敗フラッシュメッセージ表示をする
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param string $response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
     protected function sendResetFailedResponse(Request $request, $response)
     {
         return redirect()->back()
@@ -49,6 +54,10 @@ class ResetPasswordController extends Controller
                     ->with('msg_error', 'リクエストに失敗しました');
     }
 
+    /**
+     * @param \App\Http\Requests\ResetPasswordRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
     public function reset(ResetPasswordRequest $request)
     {
         //元々のバリデーションを消去

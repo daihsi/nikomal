@@ -13,8 +13,11 @@ use App\User;
 
 class ResetEmailController extends Controller
 {
-
-    //メールアドレス変更フォームへ移動
+    /**
+     * メールアドレス変更フォームへ移動
+     * 
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function showLinkRequestForm()
     {
         //管理ユーザーはアクセスできないよう条件追加
@@ -25,7 +28,12 @@ class ResetEmailController extends Controller
         return view('auth.emails.email');
     }
 
-    //トークン生成、データをテーブルへ一時保存
+    /**
+     * トークン生成、データをテーブルへ一時保存
+     * 
+     * @param \App\Http\Requests\ResetEmailRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function sendResetLinkEmail(ResetEmailRequest $request)
     {
         $new_email = $request->new_email;
@@ -49,13 +57,19 @@ class ResetEmailController extends Controller
             $email_reset->sendEmailResetNotification($token);
             return back()->with('msg_success', '確認メールを送信しました');
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
             DB::rollback();
             return back()->with('msg_error', 'メール再設定に失敗しました');
         }
     }
 
-    //メールアドレス変更処理、一時保存レコード削除
+    /**
+     * メールアドレス変更処理、一時保存レコード削除
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param string $token
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function showReset(Request $request, $token)
     {
         //email_resetsテーブルのトークンを取得
@@ -89,11 +103,18 @@ class ResetEmailController extends Controller
         }
     }
 
-    //トークンの有効期限が切れていないか確認
+    /**
+     * トークンの有効期限が切れていないか確認
+     * 
+     * @param string $created_at
+     * @return bool
+     */
     public function tokenExpired($created_at)
     {
         //トークンの有効期限60分
         $expires = 60 * 60;
-        return Carbon::parse($created_at)->addSeconds($expires)->isPast();
+        return Carbon::parse($created_at) //文字列から日付dateへパース
+                ->addSeconds($expires) //1200秒をトークン生成日時にプラスする
+                ->isPast(); //真偽を返す
     }
 }

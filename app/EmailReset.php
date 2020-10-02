@@ -10,6 +10,9 @@ class EmailReset extends Model
 {
     use Notifiable;
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'user_id', 'new_email', 'token',
     ];
@@ -17,8 +20,8 @@ class EmailReset extends Model
     /**
      * メールアドレス確定メールを送信
      *
-     * @param [type] $token
-     * 
+     * @param  string|null  $token
+     * @return void
      */
     public function sendEmailResetNotification($token)
     {

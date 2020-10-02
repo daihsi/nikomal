@@ -23,6 +23,9 @@ class ForgotPasswordController extends Controller
 
     use SendsPasswordResetEmails;
 
+    /**
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function showLinkRequestForm()
     {
         //管理ユーザーはアクセスできないよう条件追加
@@ -33,6 +36,12 @@ class ForgotPasswordController extends Controller
         return view('auth.passwords.email');
     }
 
+
+    /**
+     *
+     * @param  \App\Http\Requests\ForgotPasswordRequest  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
     public function sendResetLinkEmail(ForgotPasswordRequest $request)
     {
         //元々のバリデーションルールを消去
@@ -48,21 +57,38 @@ class ForgotPasswordController extends Controller
                     : $this->sendResetLinkFailedResponse($request, $response);
     }
 
-    //リクエスト情報を取得
+    /**
+     * リクエスト情報を取得
+     *
+     * @param  \App\Http\Requests\ForgotPasswordRequest  $request
+     * @return array
+     */
     protected function credentials(ForgotPasswordRequest $request)
     {
         return $request->only('email');
     }
 
-    //パスワード再設定リクエスト後の処理をオーバーライドし、toastrによる
-    //成功フラッシュメッセージ表示をする
+    /**
+     * パスワード再設定リクエスト後の処理をオーバーライドし、toastrによる
+     * 成功フラッシュメッセージ表示をする
+     * 
+     * @param  \App\Http\Requests\ForgotPasswordRequest  $request
+     * @param  string  $response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
     protected function sendResetLinkResponse(ForgotPasswordRequest $request, $response)
     {
         return back()->with('msg_success', trans($response));
     }
 
-    //パスワード再設定リクエスト失敗時の処理をオーバーライドし、toastrによる
-    //失敗フラッシュメッセージ表示をする
+    /**
+     * パスワード再設定リクエスト失敗時の処理をオーバーライドし、toastrによる
+     * 失敗フラッシュメッセージ表示をする
+     * 
+     * @param  \App\Http\Requests\ForgotPasswordRequest  $request
+     * @param  string  $response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
     protected function sendResetLinkFailedResponse(ForgotPasswordRequest $request, $response)
     {
         return back()

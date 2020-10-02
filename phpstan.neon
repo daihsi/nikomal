@@ -1,0 +1,19 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+parameters:
+
+    level: 6
+
+    paths:
+        - app
+
+    ignoreErrors:
+        - '#Method App\\Http\\Middleware\\Authenticate::redirectTo\(\) should return string\|null but return statement is missing.#'
+        - '#Parameter \#3 \$value of method Illuminate\\Database\\Eloquent\\Builder<App\\Post>::having\(\) expects string\|null, int given#'
+
+    universalObjectCratesClasses:
+        - Illuminate\Database\Eloquent\Collection
+
+    reportUnmatchedIgnoredErrors: false
+
+    checkMissingIterableValueType: false
