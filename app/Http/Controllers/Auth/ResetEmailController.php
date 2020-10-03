@@ -46,19 +46,16 @@ class ResetEmailController extends Controller
             );
 
         //DBにトークン保存
-        DB::beginTransaction();
         try {
             $param = [];
             $param['user_id'] = \Auth::id();
             $param['new_email'] = $new_email;
             $param['token'] = $token;
             $email_reset = EmailReset::create($param);
-            DB::commit();
             $email_reset->sendEmailResetNotification($token);
             return back()->with('msg_success', '確認メールを送信しました');
         }
         catch (\Exception $e) {
-            DB::rollback();
             return back()->with('msg_error', 'メール再設定に失敗しました');
         }
     }
