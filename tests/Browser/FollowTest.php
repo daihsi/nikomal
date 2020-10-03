@@ -24,7 +24,7 @@ class FollowTest extends DuskTestCase
     }
 
     //ユーザー一覧ページのフォローとアンフォローのテスト
-    public function testFollow()
+    public function testFollow(): void
     {
         $follow_button = '.follow';
         $unfollow_button = '.follow_button';
@@ -54,7 +54,7 @@ class FollowTest extends DuskTestCase
     }
 
     //ユーザー詳細ページのフォローのカウントテスト
-    public function testFollowingsCount()
+    public function testFollowingsCount(): void
     {
         $follow_button = '.follow';
         $unfollow_button = '.follow_button';
@@ -83,7 +83,7 @@ class FollowTest extends DuskTestCase
     }
 
     //ユーザー詳細ページのフォロワーのカウントテスト
-    public function testFollowersCount()
+    public function testFollowersCount(): void
     {
         $follow_button = '.follow';
         $unfollow_button = '.follow_button';
@@ -112,7 +112,7 @@ class FollowTest extends DuskTestCase
     }
 
     //管理ユーザーでログインしたら、フォローボタンが表示されていないかテスト
-    public function testNotDisplayedFollowButton()
+    public function testNotDisplayedFollowButton(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',

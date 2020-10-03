@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use Tests\TestCase;
@@ -27,9 +28,15 @@ class PasswordResetTest extends TestCase
         $this->token = hash_hmac('sha256', \Str::random(40), $this->user);
     }
 
+    public function tearDown(): void
+    {
+        Artisan::call('migrate:refresh');
+        parent::tearDown();
+    }
+
     //パスワード再設定リクエストのため、
     //メールアドレスに再設定用通知送信テスト
-    public function testUserPasswordRequest()
+    public function testUserPasswordRequest(): void
     {
         $url = route('password.request');
 
@@ -54,7 +61,7 @@ class PasswordResetTest extends TestCase
 
     //パスワード再設定リクエストのため、
     //メールアドレスに再設定用通知送信のバリデーションエラーテスト
-    public function testFailureUserPasswordRequest()
+    public function testFailureUserPasswordRequest(): void
     {
         $url = route('password.request');
         $user = factory(User::class)->make();
@@ -78,7 +85,7 @@ class PasswordResetTest extends TestCase
     }
 
     //パスワード再設定リクエスト
-    public function testUserPasswordReset()
+    public function testUserPasswordReset(): void
     {
         $password = 1234567890;
 
@@ -123,7 +130,7 @@ class PasswordResetTest extends TestCase
     }
 
     //パスワード再設定リクエストバリデーションエラーテスト
-    public function testFailureEmailUserPasswordReset()
+    public function testFailureEmailUserPasswordReset(): void
     {
         $password = 1234567890;
         $user = factory(User::class)->make();
@@ -175,7 +182,7 @@ class PasswordResetTest extends TestCase
     }
 
     //パスワード再設定リクエストバリデーションエラーテスト
-    public function testFailurePasswordUserPasswordReset()
+    public function testFailurePasswordUserPasswordReset(): void
     {
         $password = 1234567;
 
@@ -227,7 +234,7 @@ class PasswordResetTest extends TestCase
 
     //必須項目すべての値を空でリクエストした場合のバリデーションテスト
     //(パスワード再設定フォーム)
-    public function testResetPasswordResetNull()
+    public function testResetPasswordResetNull(): void
     {
         $password = 12345678;
 
@@ -260,7 +267,7 @@ class PasswordResetTest extends TestCase
 
     //メールフォーマットのバリデーションテスト
     //(パスワード再設定フォーム)
-    public function testResetPasswordResetFormat()
+    public function testResetPasswordResetFormat(): void
     {
         $password = 12345678;
 
@@ -291,7 +298,7 @@ class PasswordResetTest extends TestCase
 
     //メールアドレスの桁あふれとパスワードの桁足らずのバリデーションテスト
     //(パスワード再設定フォーム)
-    public function testResetPasswordResetOverflow()
+    public function testResetPasswordResetOverflow(): void
     {
         $password = 1234567;
 
@@ -323,7 +330,7 @@ class PasswordResetTest extends TestCase
 
     //必須項目であるメールアドレスを空でリクエストした場合のバリデーションテスト
     //(メールアドレスに再設定通知を送るフォーム)
-    public function testResetPasswordRequestNull()
+    public function testResetPasswordRequestNull(): void
     {
         //メールアドレスを空で更新リクエストしたと仮定
         $data = [
@@ -350,7 +357,7 @@ class PasswordResetTest extends TestCase
 
     //メールフォーマットのバリデーションテスト
     //(メールアドレスに再設定通知を送るフォーム)
-    public function testResetPasswordRequestFormat()
+    public function testResetPasswordRequestFormat(): void
     {
         //不正メールフォーマットでリクエストしたと仮定
         $data = [
@@ -377,7 +384,7 @@ class PasswordResetTest extends TestCase
 
     //メールアドレスの桁あふれのバリデーションテスト
     //(メールアドレスに再設定通知を送るフォーム)
-    public function testResetPasswordRequestOverflow()
+    public function testResetPasswordRequestOverflow(): void
     {
         //メールアドレスが桁あふれしたと仮定
         $data = [
@@ -404,7 +411,7 @@ class PasswordResetTest extends TestCase
 
     //簡単ログイン用のメールアドレスでリクエストした際のバリデーションテスト
     //(メールアドレスに再設定通知を送るフォーム)
-    public function testResetPasswordRequestGuestLoginEmail()
+    public function testResetPasswordRequestGuestLoginEmail(): void
     {
         $guest_login_email = 'guest@example.com';
 
@@ -434,7 +441,7 @@ class PasswordResetTest extends TestCase
     //管理ユーザーはパスワード再設定フォームにアクセスできないかテスト
     //リダイレクトの確認
     //失敗フラッシュメッセージが表示されているか確認
-    public function testAdminInaccessiblePasswordResetPage()
+    public function testAdminInaccessiblePasswordResetPage(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',

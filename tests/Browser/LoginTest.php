@@ -18,7 +18,7 @@ class LoginTest extends DuskTestCase
      */
 
     //ヘッダーナビゲーションからログインページへ遷移しているかテスト
-    public function testValidationLogin()
+    public function testValidationLogin(): void
     {
         //パスワードを間違えたと仮定
         $password = 12345678;
@@ -36,7 +36,7 @@ class LoginTest extends DuskTestCase
     }
 
     //ログインテスト
-    public function testLogin()
+    public function testLogin(): void
     {
         $password = 123456789;
         $user = factory(User::class)->create([
@@ -54,7 +54,7 @@ class LoginTest extends DuskTestCase
     }
 
     //ヘッダーナビゲーションからログインページへ遷移しているかテスト
-    public function testLoginLink()
+    public function testLoginLink(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
@@ -64,7 +64,7 @@ class LoginTest extends DuskTestCase
     }
 
     //ログアウトテスト(確認ダイヤログもテスト)
-    public function testLogout()
+    public function testLogout(): void
     {
         $user = factory(User::class)->create();
         $this->browse(function ($browser) use ($user) {

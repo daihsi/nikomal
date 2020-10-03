@@ -48417,7 +48417,7 @@ $(function () {
       var user_follower_path = user + '/follower';
       var user_like_path = user + '/likes'; //フォロー成功時
 
-      if (data['follow'] === true) {
+      if (data['follow'] === 'follow') {
         toastr.success('フォローしました'); //ボタン変更
 
         $this.attr('class', 'follow btn btn-primary btn-sm rounded-pill follow_button');
@@ -48440,7 +48440,7 @@ $(function () {
             }
           }
       } //アンフォロー成功時
-      else if (data['follow'] === false) {
+      else if (data['follow'] === 'unfollow') {
           toastr.success('フォローを外しました'); //ボタン変更
 
           $this.attr('class', 'follow btn btn-outline-primary btn-sm rounded-pill');

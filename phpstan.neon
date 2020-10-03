@@ -1,0 +1,46 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+parameters:
+
+    level: 6
+
+    paths:
+        - app
+        - tests
+
+    ignoreErrors:
+        - '#Method App\\Http\\Middleware\\Authenticate::redirectTo\(\) should return string\|null but return statement is missing.#'
+        - '#Parameter \#3 \$value of method Illuminate\\Database\\Eloquent\\Builder<App\\Post>::having\(\) expects string\|null, int given#'
+        - '#Function factory invoked with [a-zA-Z0-9\\_] parameter, [a-zA-Z0-9\\_] required.#'
+        - '#Function factory invoked with [a-zA-Z0-9\\_] parameters, [a-zA-Z0-9\\_] required.#'
+        - '#Parameter \#1 \$value of static method Illuminate\\Hashing\\HashManager::check\(\) expects string, int given.#'
+        - '#Parameter \#1 \$value of function bcrypt expects string, int given#'
+
+    universalObjectCratesClasses:
+        - Illuminate\Database\Eloquent\Collection
+        - Tests\Feature\CommentTest
+        - Tests\Feature\EmailResetTest
+        - Tests\Feature\PasswordResetTest
+        - Tests\Feature\PostCreateTest
+        - Tests\Feature\PostEditTest
+        - Tests\Feature\PostLikeTest
+        - Tests\Feature\PostSearchTest
+        - Tests\Feature\UserEditTest
+        - Tests\Feature\UserFollowTest
+        - Tests\Browser\CommentTest
+        - Tests\Browser\EmailResetTest
+        - Tests\Browser\FollowTest
+        - Tests\Browser\LikeTest
+        - Tests\Browser\PasswordResetTest
+        - Tests\Browser\PostEditTest
+        - Tests\Browser\PostSearchTest
+        - Tests\Browser\PostTest
+        - Tests\Browser\PreviewUploadTest
+        - Tests\Browser\ScrollTest
+        - Tests\Browser\SelectTest
+        - Tests\Browser\SmoothScrollTest
+        - Tests\Browser\UserEditTest
+
+    reportUnmatchedIgnoredErrors: false
+
+    checkMissingIterableValueType: false

@@ -44,7 +44,7 @@ class LikeTest extends DuskTestCase
     }
 
     //トップページでいいねテスト
-    public function testLike()
+    public function testLike(): void
     {
         $like_button = '.like_button';
         $like_icon = '.like_icon';
@@ -80,7 +80,7 @@ class LikeTest extends DuskTestCase
     }
 
     //投稿詳細ページでいいねテスト
-    public function testPostShowPageLike()
+    public function testPostShowPageLike(): void
     {
         $like_button = '.like_button';
         $like_icon = '.like_icon';
@@ -121,7 +121,7 @@ class LikeTest extends DuskTestCase
     }
 
     //投稿詳細ページでいいねテスト
-    public function testUserPageLikeCount()
+    public function testUserPageLikeCount(): void
     {
         $like_button = '.like_button';
         $like_icon = '.like_icon';
@@ -194,7 +194,7 @@ class LikeTest extends DuskTestCase
 
     //管理ユーザーはいいねボタンがいいねできないようになっているかテスト
     //カウントは増えていないか
-    public function testCannotAdminPostLike()
+    public function testCannotAdminPostLike(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',

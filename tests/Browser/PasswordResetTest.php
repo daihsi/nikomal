@@ -25,7 +25,7 @@ class PasswordResetTest extends DuskTestCase
     }
 
     //ログインページ内のリンクで正常にアクセスできるかテスト
-    public function testUserPasswordRequestLoginPageLink()
+    public function testUserPasswordRequestLoginPageLink(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
@@ -37,7 +37,7 @@ class PasswordResetTest extends DuskTestCase
     }
 
     //ログイン後、ナビゲーションバーのリンクで正常にアクセスできるかテスト
-    public function testUserPasswordRequestNavbarLink()
+    public function testUserPasswordRequestNavbarLink(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user)
@@ -51,7 +51,7 @@ class PasswordResetTest extends DuskTestCase
 
     //パスワード再設定リクエストのテスト
     //メールアドレス通知～リセット成功までの一連のテスト
-    public function testUserPasswordReset()
+    public function testUserPasswordReset(): void
     {
         $password = 1234567890;
 
@@ -59,6 +59,7 @@ class PasswordResetTest extends DuskTestCase
             $browser->visitRoute('password.request')
                     ->type('email', $this->user->email)
                     ->assertInputValue('email', $this->user->email)
+                    ->screenshot('password_reset')
                     ->press('再設定URLを送信')
                     ->assertSee('パスワードリセット用URLを送信しました')
                     ->screenshot('password_reset');
@@ -88,16 +89,13 @@ class PasswordResetTest extends DuskTestCase
     }
 
     //パスワード再設定リクエストのリセット失敗テスト
-    public function testFailureUserPasswordReset()
+    public function testFailureUserPasswordReset(): void
     {
         $password = 1234567890;
         $user = factory(User::class)->make();
         $email = $user->email;
 
-        //簡単ログイン用メールアドレス
-        $guest_login_email = 'guest@example.com';
-
-        $this->browse(function ($browser) use ($password, $email, $guest_login_email) {
+        $this->browse(function ($browser) use ($password, $email) {
             $browser->visitRoute('password.request')
                     ->type('email', $this->user->email)
                     ->assertInputValue('email', $this->user->email)
@@ -131,7 +129,7 @@ class PasswordResetTest extends DuskTestCase
 
     //簡単ログイン用のメールアドレスで再設定できないかテスト
     //失敗フラッシュメッセージが表示されているか確認
-    public function testGuestUserLoginEmailResetPasswordRequest()
+    public function testGuestUserLoginEmailResetPasswordRequest(): void
     {
         //簡単ログイン用メールアドレス
         $guest_login_email = 'guest@example.com';
@@ -149,7 +147,7 @@ class PasswordResetTest extends DuskTestCase
 
     //メールアドレスの桁あふれリクエストエラーテスト
     //失敗フラッシュメッセージが表示されているか確認
-    public function testFailureEmailResetPasswordRequest()
+    public function testFailureEmailResetPasswordRequest(): void
     {
         $email = str_repeat('a', 244). '@example.com';
 
@@ -167,7 +165,7 @@ class PasswordResetTest extends DuskTestCase
     //管理ユーザーは、パスワード再設定フォームにアクセスできないかテスト
     //リダイレクトの確認
     //失敗フラッシュメッセージが表示されているか確認
-    public function testAdminInaccessiblePasswordResetPage()
+    public function testAdminInaccessiblePasswordResetPage(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
@@ -183,7 +181,7 @@ class PasswordResetTest extends DuskTestCase
     }
 
     //ナビゲーションバーにパスワード再設定フォームのリンクが表示されていないかテスト
-    public function testNavbarPasswordResetLinkNotDisplayed()
+    public function testNavbarPasswordResetLinkNotDisplayed(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',

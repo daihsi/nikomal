@@ -33,7 +33,7 @@ class CommentTest extends DuskTestCase
     }
 
     //コメント投稿テスト
-    public function testCreateComment()
+    public function testCreateComment(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->factory_user)
@@ -43,7 +43,7 @@ class CommentTest extends DuskTestCase
             foreach ($this->comments as $comment) {
                 $browser->type('comment', $comment->comment)
                         ->press('コメントする')
-                        ->waitForText($comment->comment)
+                        ->pause(1000)
 
                         //コメントがコンテンツに存在するか確認
                         ->assertSee($comment->comment)
@@ -56,7 +56,7 @@ class CommentTest extends DuskTestCase
     }
 
     //コメント未入力での挙動テスト
-    public function testNoComment()
+    public function testNoComment(): void
     {
         $this->browse(function (Browser $browser) {
 
@@ -75,7 +75,7 @@ class CommentTest extends DuskTestCase
     }
 
     //コメント削除テスト
-    public function testCommentDelete()
+    public function testCommentDelete(): void
     {
         $comment = factory(Comment::class)->create([
                             'user_id' => $this->factory_user->id,
@@ -104,7 +104,7 @@ class CommentTest extends DuskTestCase
     }
 
     //ナビゲーションタブのコメントカウントテスト
-    public function testCommentCount()
+    public function testCommentCount(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->factory_user)
@@ -128,7 +128,7 @@ class CommentTest extends DuskTestCase
     }
 
     //認証ユーザーか認証ユーザー以外のコメントスタイル表示テスト
-    public function testCommentStyle()
+    public function testCommentStyle(): void
     {
         $user = factory(User::class)->create();
         $comment = factory(Comment::class)->make([
@@ -170,7 +170,7 @@ class CommentTest extends DuskTestCase
 
     //管理ユーザーでログイン
     //コメント投稿、他ユーザーコメントの削除ができるかテスト
-    public function testAdminComment()
+    public function testAdminComment(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',

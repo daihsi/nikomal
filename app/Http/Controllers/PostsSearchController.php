@@ -9,7 +9,12 @@ use App\Animal;
 
 class PostsSearchController extends Controller
 {
-    //キーワード検索、動物カテゴリー選択検索
+    /**
+     * キーワード検索、動物カテゴリー選択検索
+     * 
+     * @param \App\Http\Requests\PostSearchRequest $request
+     * @return \Illuminate\View\View
+     */
     public function index(PostSearchRequest $request) {
         $query = Post::query();
         $animals = $request->animals_name;
@@ -50,7 +55,12 @@ class PostsSearchController extends Controller
             ]);
     }
 
-    //カテゴリーリンク
+    /**
+     * カテゴリーリンク
+     * 
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
     public function categorys($id) {
         $query = Post::query();
 

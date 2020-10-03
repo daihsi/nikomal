@@ -11,6 +11,11 @@ use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
+    /**
+     * ユーザー一覧ページへ
+     * 
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $users = User::orderBy('id', 'desc')->simplePaginate(12);
@@ -19,7 +24,13 @@ class UsersController extends Controller
             'users' => $users,
         ]);
     }
-    
+
+    /**
+     * ユーザー詳細ページへ
+     * 
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
     public function show($id)
     {
         $user = User::findOrFail($id);
@@ -31,7 +42,13 @@ class UsersController extends Controller
             'posts' => $posts,
         ]);
     }
-    
+
+    /**
+     * ユーザー編集フォームへ
+     * 
+     * @param int $id
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function edit($id)
     {
         $user = User::findOrFail($id);
@@ -43,18 +60,25 @@ class UsersController extends Controller
             return back()->with('msg_error', '編集ページにアクセスできません');
         }
     }
-    
+
+    /**
+     * ユーザー情報更新リクエスト
+     * 
+     * @param \App\Http\Requests\UserUpdateRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(UserUpdateRequest $request, $id)
     {
 
         $user = User::findOrFail($id);
 
-        if (!empty($request->file('avatar'))) {
+        if (!empty($request->avatar)) {
             //既存ファイルを消去
             if(!empty($user->avatar)) {
                 Storage::disk('s3')->delete('users_avatar/'.basename($user->avatar));
             }
-            $file = $request->file('avatar');
+            $file = $request->avatar;
             //アップロードされたファイル名取得
             $name = $file->getClientOriginalName();
     
@@ -83,6 +107,12 @@ class UsersController extends Controller
             ->with('msg_success', '変更を保存しました');
     }
 
+    /**
+     * ユーザーアカウント削除リクエスト
+     * 
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy($id)
     {
         $user = User::findorFail($id);
@@ -93,11 +123,10 @@ class UsersController extends Controller
         //オブジェクトが空でないかを判定する条件式
         if (!$posts->isEmpty()) {
             foreach ($posts as $post) {
-                foreach ($post->postImages as $post_image) {
-                    if(!empty($post_image->image)) {
-                        Storage::disk('s3')
-                            ->delete('post_images/'.basename($post_image->image));
-                    }
+                $image = array_column($post->postImages->toArray(), 'image');
+                if(!empty($image[0])) {
+                    Storage::disk('s3')
+                        ->delete('post_images/'.basename($image[0]));
                 }
             }
         }
@@ -124,6 +153,12 @@ class UsersController extends Controller
         }
     }
 
+    /**
+     * 指定ユーザーのフォロー一覧ページへ
+     * 
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
     public function followings($id)
     {
         $user = User::findOrFail($id);
@@ -136,6 +171,12 @@ class UsersController extends Controller
         ]);
     }
 
+    /**
+     * 指定ユーザーのフォロワー一覧ページへ
+     * 
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
     public function followers($id)
     {
         $user = User::findOrFail($id);
@@ -148,6 +189,12 @@ class UsersController extends Controller
         ]);
     }
 
+    /**
+     * 指定ユーザーのいいねした投稿一覧ページへ
+     * 
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
     public function likes($id)
     {
         $user = User::findOrFail($id);

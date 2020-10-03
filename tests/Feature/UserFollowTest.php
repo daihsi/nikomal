@@ -30,7 +30,7 @@ class UserFollowTest extends TestCase
     }
 
     //フォロー・アンフォローの動作、データベースに正常に保存してあるかテスト
-    public function testUserFollowAction()
+    public function testUserFollowAction(): void
     {
         $this->response->post(route('user.follow', $this->facker_user2->id));
 
@@ -49,7 +49,7 @@ class UserFollowTest extends TestCase
     }
 
     //フォローの重複が起こっていないかテスト
-    public function testUserFollowNoDuplication()
+    public function testUserFollowNoDuplication(): void
     {
         $this->response->post(route('user.follow', $this->facker_user2->id));
 
@@ -70,7 +70,7 @@ class UserFollowTest extends TestCase
     }
 
     //ゲストユーザーがフォローリクエストしてもデータが保存されていないかテスト
-    public function testGuestUserNoFollow()
+    public function testGuestUserNoFollow(): void
     {
         $this->post(route('logout'));
         $this->assertGuest();
@@ -82,7 +82,7 @@ class UserFollowTest extends TestCase
     }
 
     //認証ユーザー自身にフォローボタンが表示されていないかテスト
-    public function testUserHimselfNoFollowButton()
+    public function testUserHimselfNoFollowButton(): void
     {
         $this->get(route('users.show', $this->facker_user1->id))
             ->assertDontSee('<button type="submit" class="btn btn-outline-primary btn-sm rounded-pill action_follow">フォロー</button>')
@@ -90,7 +90,7 @@ class UserFollowTest extends TestCase
     }
 
     //ゲストユーザーが各ページにアクセスしてもフォローボタンが表示されないかテスト
-    public function testGuestUserNoFollowButton()
+    public function testGuestUserNoFollowButton(): void
     {
         //ログアウトリクエスト
         $this->post(route('logout'));
@@ -108,7 +108,7 @@ class UserFollowTest extends TestCase
     }
 
     //フォロー一覧ページにユーザーが表示されているかテスト
-    public function testFollowingUser()
+    public function testFollowingUser(): void
     {
         $this->response->post(route('user.follow', $this->facker_user2->id));
         $this->response->post(route('user.follow', $this->facker_user3->id));
@@ -120,7 +120,7 @@ class UserFollowTest extends TestCase
     }
 
     //フォロワー一覧ページにユーザーが表示されているかテスト
-    public function testFollowerUser()
+    public function testFollowerUser(): void
     {
         $this->post(route('logout'));
         $response = $this->actingAs($this->facker_user2);
@@ -136,7 +136,7 @@ class UserFollowTest extends TestCase
 
     //管理ユーザーがフォローしようとして失敗するかテスト
     //レスポンスに失敗メッセージが含まれているか確認
-    public function testCannotAdminUserFollow()
+    public function testCannotAdminUserFollow(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',

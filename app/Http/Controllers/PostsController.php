@@ -16,9 +16,9 @@ use Intervention\Image\Facades\Image;
 class PostsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * トップページ投稿一覧
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -29,9 +29,9 @@ class PostsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 新規投稿用フォームへ
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function create()
     {
@@ -44,10 +44,9 @@ class PostsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 新規投稿リクエスト
      *
-     * @param  \Illuminate\Http\PostRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(PostRequest $request)
     {
@@ -63,13 +62,13 @@ class PostsController extends Controller
                 $animal = Animal::firstOrCreate([
                     'name' => $animal_name
                 ]);
-                $animal_id[] = $animal->id;
+                $animal_id = $animal->id;
+                $post->belongsToCategory($animal_id);
             }
         }
-        $post->belongsToCategory($animal_id);
 
         //画像データの保存
-        $file = $request->file('image');
+        $file = $request->image;
         $name = $file->getClientOriginalName();
         $image = Image::make($file)
             ->resize(400, null, function ($constraint) {
@@ -85,10 +84,10 @@ class PostsController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * 投稿詳細ページへ
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function show($id)
     {
@@ -107,10 +106,10 @@ class PostsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 投稿編集フォームへ
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function edit($id)
     {
@@ -119,10 +118,11 @@ class PostsController extends Controller
         if (\Auth::id() === $post->user_id) {
             
             $post_images = $post->postImages;
-            $post_categorys = $post->postCategorys;
-            foreach ($post_categorys as $post_category) {
-                $animals_name[] = $post_category->name;
-            }
+
+            //モデルを配列に変換し、nameのみ取得
+            //nameの配列を生成し、viewに渡す
+            $post_categorys = $post->postCategorys->toArray();
+            $animals_name = array_column($post_categorys, 'name');
 
             return view('posts.edit', [
                 'post' => $post,
@@ -136,11 +136,10 @@ class PostsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * 投稿更新リクエスト
      *
-     * @param  \Illuminate\Http\PostRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(PostEditRequest $request, $id)
     {
@@ -153,13 +152,13 @@ class PostsController extends Controller
                     'name' => $animal_name,
                 ]);
                 $animal_id[] = $animal->id;
+                $post->postCategorys()->sync($animal_id);
             }
         }
-        $test = $post->postCategorys()->sync($animal_id);
-        
+
         //投稿画像の更新及びs3ストレージ内にある古いファイルの削除
         foreach ($post->postImages as $post_image) {
-            if (!empty($request->file('image'))) {
+            if (!empty($request->image)) {
                 if (!empty($post_image->image)) {
                     Storage::disk('s3')->delete('post_images/'.basename($post_image->image));
                 }
@@ -186,10 +185,10 @@ class PostsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 投稿削除リクエスト
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
@@ -212,6 +211,12 @@ class PostsController extends Controller
         }
     }
 
+    /**
+     * 指定投稿にいいねしたユーザー一覧ページへ
+     *
+     * @param  int  $id
+     * @return \Illuminate\View\View
+     */
     public function likes($id)
     {
         $post = Post::findOrFail($id);

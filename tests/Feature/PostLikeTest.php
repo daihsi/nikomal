@@ -58,7 +58,7 @@ class PostLikeTest extends TestCase
     }
 
     //ゲストユーザーがいいねできないようになっているかテスト
-    public function testGuestUserNoPostLike()
+    public function testGuestUserNoPostLike(): void
     {
         //ゲストユーザー用のいいねアイコンの表示になっているか確認
         $this->get('/')
@@ -76,7 +76,7 @@ class PostLikeTest extends TestCase
     }
 
     //いいね登録が正常に行われているか、データベースに保存してあるかテスト
-    public function testPostLikeNomal()
+    public function testPostLikeNomal(): void
     {
         $this->actingAs($this->factory_user);
 
@@ -92,7 +92,7 @@ class PostLikeTest extends TestCase
     }
 
     //いいね削除が正常に行われているか、データベースのテスト
-    public function testDeletePostLike()
+    public function testDeletePostLike(): void
     {
         $this->actingAs($this->factory_user);
 
@@ -117,7 +117,7 @@ class PostLikeTest extends TestCase
     }
 
     //いいねが重複してデータベースに保存されていないかテスト
-    public function testDuplicationPostLike()
+    public function testDuplicationPostLike(): void
     {
         $this->actingAs($this->factory_user);
 
@@ -143,7 +143,7 @@ class PostLikeTest extends TestCase
     }
 
     //ユーザーいいね一覧ページに、投稿が表示されているかテスト
-    public function testLikePostList()
+    public function testLikePostList(): void
     {
         $user = $this->factory_user;
         $this->actingAs($user);
@@ -165,7 +165,7 @@ class PostLikeTest extends TestCase
     }
 
     //いいねを解除して、その投稿はいいね一覧ページに表示されていないかテスト
-    public function testLikePostDontShowList()
+    public function testLikePostDontShowList(): void
     {
         $user = $this->factory_user;
         $this->actingAs($user);
@@ -185,7 +185,7 @@ class PostLikeTest extends TestCase
 
     //いいねランキングページにゲストユーザーが
     //アクセスできないようになっているかテスト
-    public function testGuestUserPostsPopularPage()
+    public function testGuestUserPostsPopularPage(): void
     {
         //いいねランキングページにアクセスしたが失敗し
         //ログインページにリダイレクトしたか確認
@@ -196,7 +196,7 @@ class PostLikeTest extends TestCase
 
     //ゲストユーザーがアクセス時に
     //トップページに切り替えボタンが表示されていないかテスト
-    public function testNotSortButton()
+    public function testNotSortButton(): void
     {
         $this->get('/')
             ->assertDontSee('人気投稿')
@@ -204,7 +204,7 @@ class PostLikeTest extends TestCase
     }
 
     //いいねが多い順で投稿が表示されているかテスト
-    public function testPostsPopularPage()
+    public function testPostsPopularPage(): void
     {
         factory(User::class, 5)->create();
         $users = User::all();
@@ -253,12 +253,12 @@ class PostLikeTest extends TestCase
 
         //投稿がいいねが多い順で表示されているか取得
         $this->get(route('posts.popular'))
-            ->assertSeeInOrder($data);
+            ->assertSeeInOrder($data ?? null);
     }
 
     //管理ユーザーがいいねしようとして失敗するかテスト
     //レスポンスに失敗メッセージが含まれているか確認
-    public function testFailureLikePostAdmin()
+    public function testFailureLikePostAdmin(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',

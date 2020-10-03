@@ -49,7 +49,7 @@ class CommentTest extends TestCase
     }
 
     //コメントリクエストが通り、データベースに保存されているかテスト
-    public function testNewPostComment()
+    public function testNewPostComment(): void
     {
         $this->actingAs($this->factory_user);
         $post_id = $this->post->id;
@@ -71,7 +71,7 @@ class CommentTest extends TestCase
     }
 
     //コメント削除、データベースのデータが削除されているかテスト
-    public function testDeletePostComment()
+    public function testDeletePostComment(): void
     {
         $this->actingAs($this->factory_user);
 
@@ -96,7 +96,7 @@ class CommentTest extends TestCase
     }
 
     //コメントリクエストが、ゲストユーザーができないようになっているかテスト
-    public function testGuestUserPostComment()
+    public function testGuestUserPostComment() :void
     {
         $post_id = $this->post->id;
         $comment = factory(Comment::class)->make()->comment;
@@ -115,7 +115,7 @@ class CommentTest extends TestCase
     }
 
     //コメント所有者以外が、コメントを削除できないかテスト
-    public function testNoDeletePostComment()
+    public function testNoDeletePostComment(): void
     {
         $post_id = $this->post->id;
 
@@ -135,7 +135,7 @@ class CommentTest extends TestCase
     }
 
     //必須項目が空でリクエストされた場合のバリデーションテスト
-    public function testCommentRequestNull()
+    public function testCommentRequestNull(): void
     {
         //空でリクエストされたと仮定
         $data = [
@@ -161,7 +161,7 @@ class CommentTest extends TestCase
     }
 
     //コメントが桁あふれでリクエストされた場合のバリデーションテスト
-    public function testCommentRequestOverFlow()
+    public function testCommentRequestOverFlow(): void
     {
         //コメントが一文字多いと仮定
         $data = [
@@ -186,7 +186,7 @@ class CommentTest extends TestCase
     }
 
     //投稿IDがデータベースに存在しない場合のバリデーションテスト
-    public function testCommentRequestPostIdNotColumn()
+    public function testCommentRequestPostIdNotColumn(): void
     {
         //存在しない投稿IDでリクエストしたと仮定
         $data = [
@@ -211,7 +211,7 @@ class CommentTest extends TestCase
     }
 
     //コメントが文字列でない場合のバリデーションテスト
-    public function testCommentRequestNotString()
+    public function testCommentRequestNotString(): void
     {
         //コメントを文字列以外でリクエストしたと仮定
         $data = [
@@ -236,7 +236,7 @@ class CommentTest extends TestCase
     }
 
     //バリデーションの通過テスト
-    public function testCommentRequestNomal()
+    public function testCommentRequestNomal(): void
     {
         $data = [
             'post_id' => 1,
@@ -254,7 +254,7 @@ class CommentTest extends TestCase
     }
 
     //コメントが投稿詳細ページに表示されているかテスト
-    public function testCommentUersPostShow()
+    public function testCommentUersPostShow(): void
     {
         $response = $this->get(route('posts.show', $this->post->id));
 
@@ -265,14 +265,14 @@ class CommentTest extends TestCase
     }
 
     //ゲストユーザーにはコメント入力エリアが表示されていないかテスト
-    public function testCommentTextArea()
+    public function testCommentTextArea(): void
     {
         $this->get(route('posts.show', $this->post->id))
             ->assertDontSee('<textarea></textarea>');
     }
 
     //管理ユーザーが他ユーザーのコメントを削除できるかテスト
-    public function testAdminDeleteComment()
+    public function testAdminDeleteComment(): void
     {
         //管理ユーザーでログイン
         $admin = factory(User::class)->create([

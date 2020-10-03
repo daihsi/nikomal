@@ -12,8 +12,6 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
      * @var array
      */
     protected $fillable = [
@@ -21,8 +19,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
      * @var array
      */
     protected $hidden = [
@@ -30,67 +26,113 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
      * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-    //パスワードリセットメール日本語化
+    /**
+     * パスワードリセットメール日本語化
+     * 
+     * @param string $token
+     * @return void
+     */
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotificationJP($token));
     }
 
-    //Postモデルとのリレーション
+    /**
+    * Postモデルとのリレーション
+    *
+    * @return object
+    */
     public function posts()
     {
         return $this->hasMany(Post::class);
     }
 
-    //投稿数、フォロー数、フォロワー数、いいね数のカウント
+    /**
+    * 投稿数、フォロー数、フォロワー数、いいね数のカウント
+    *
+    * @return void
+    */
     public function loadRelationshipCounts() {
         $this->loadCount(['posts', 'followings', 'followers', 'likes']);
     }
 
-    //Userモデルとのリレーション
+    /**
+    * Userモデルとのリレーション
+    *
+    * @return object
+    */
     public function followings() {
         return $this->belongsToMany(User::class, 'user_follow', 'user_id', 'follow_id')->withTimestamps();
     }
 
-    //Userモデルとのリレーション
+    /**
+    * Userモデルとのリレーション
+    *
+    * @return object
+    */
     public function followers() {
         return $this->belongsToMany(User::class, 'user_follow', 'follow_id', 'user_id')->withTimestamps();
     }
 
-    //フォロー・アンフォロー処理
+    /**
+    * フォロー・アンフォロー処理
+    *
+    * @param  int  $user_id
+    * @return array|bool
+    */
     public function follow($user_id) {
         $exist = $this->isFollowing($user_id);
         $its_me = $this->id === $user_id;
 
-        if($exist && !$its_me) {
+        if(!$exist && !$its_me) {
+            $this->followings()->attach($user_id);
+            return [
+                'follow' => 'follow',
+                ];
+        }
+        elseif($exist && !$its_me) {
             $this->followings()->detach($user_id);
+            return [
+                'unfollow' => 'unfollow',
+                ];
+        }
+        else {
             return false;
         }
-        elseif(!$exist && !$its_me) {
-            $this->followings()->attach($user_id);
-            return true;
-        }
+        
     }
 
-    //フォロー中であるか調べる処理
+    /**
+    * フォロー中であるか調べる処理
+    *
+    * @param  int  $user_id
+    * @return boolean
+    */
     public function isFollowing($user_id) {
         return $this->followings()->where('follow_id', $user_id)->exists();
     }
 
-    //Postモデルとのリレーション
+    /**
+    * Postモデルとのリレーション
+    *
+    * @return object
+    */
     public function likes() {
         return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id')->withTimestamps();
     }
 
-    //投稿にいいねする処理、投稿のいいねを外す処理
+    /**
+    * 投稿にいいねする処理、投稿のいいねを外す処理
+    *
+    * @param  int  $post_id
+    * @return boolean
+    */
     public function like($post_id) {
         $exist = $this->isLike($post_id);
 
@@ -104,13 +146,22 @@ class User extends Authenticatable
         }
     }
 
-    //いいねしているか調べる処理
+    /**
+    * いいねしているか調べる処理
+    *
+    * @param  int  $post_id
+    * @return boolean
+    */
     public function isLike($post_id) {
         //いいねリクエストされた投稿のidが、すでにuser_idと結び中間テーブルに存在するか
         return $this->likes()->where('post_id', $post_id)->exists();
     }
 
-    //Commentモデルとのリレーション
+    /**
+    * Commentモデルとのリレーション
+    *
+    * @return object
+    */
     public function userComments()
     {
         return $this->hasMany(Comment::class);

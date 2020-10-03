@@ -41,7 +41,7 @@ class PostSearchTest extends DuskTestCase
     }
 
     //投稿検索テスト
-    public function testPostSearch()
+    public function testPostSearch(): void
     {
         $post10 = $this->posts[11];
         $post9 = $this->posts[10];
@@ -98,15 +98,17 @@ class PostSearchTest extends DuskTestCase
     }
 
     //投稿検索バリデーションエラー表示テスト
-    public function testValidationPostSearch()
+    public function testValidationPostSearch(): void
     {
-        $animals = factory(Animal::class, 15)->make();
+        $array_animals = array_column(factory(Animal::class, 25)->make()->toArray(), 'name');
+        $animals = array_unique($array_animals);
+        
         $this->browse(function (Browser $browser) use ($animals) {
             $browser->visitRoute('posts.search');
 
             //セレクトボックスは10個まで選択可能だが、それ以上選択したと仮定
-            foreach ($animals as $animal) {
-                $browser->select('animals_name[]', $animal->name);
+            foreach ($animals as $index => $name) {
+                $browser->select('animals_name[]', $name);
             }
 
             //バリデーションエラーメッセージと失敗フラッシュメッセージが表示されているか確認
@@ -119,7 +121,7 @@ class PostSearchTest extends DuskTestCase
     }
 
     //検索データが該当ない時の表示テスト
-    public function testNoPostSearch()
+    public function testNoPostSearch(): void
     {
         $keyword = '該当無し';
         $this->browse(function (Browser $browser) use ($keyword) {

@@ -52,7 +52,7 @@ class PreviewUploadTest extends DuskTestCase
     }
 
     //新規ユーザー登録・ユーザー編集の選択画像がプレビュー表示されているかテスト
-    public function testUserImagePreview()
+    public function testUserImagePreview(): void
     {
         $this->browse(function ($frist, $second) {
 
@@ -74,7 +74,7 @@ class PreviewUploadTest extends DuskTestCase
     }
 
     //新規投稿・投稿編集の選択画像がプレビュー表示されているかテスト
-    public function testPostImagePreview()
+    public function testPostImagePreview(): void
     {
         $post = Post::find(1);
         $this->browse(function ($frist, $second) use ($post){
