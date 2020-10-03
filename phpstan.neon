@@ -7,6 +7,13 @@ parameters:
     paths:
         - app
         - tests
+        - bootstrap
+        - config
+        - database
+        - public
+        - resources
+        - routes
+        - server.php
 
     ignoreErrors:
         - '#Method App\\Http\\Middleware\\Authenticate::redirectTo\(\) should return string\|null but return statement is missing.#'
@@ -15,6 +22,9 @@ parameters:
         - '#Function factory invoked with [a-zA-Z0-9\\_] parameters, [a-zA-Z0-9\\_] required.#'
         - '#Parameter \#1 \$value of static method Illuminate\\Hashing\\HashManager::check\(\) expects string, int given.#'
         - '#Parameter \#1 \$value of function bcrypt expects string, int given#'
+        - '#Variable \$factory might not be defined#'
+        - '#Call to an undefined method Illuminate\\Support\\Fluent::references\(\)#'
+        - '#Undefined variable: \$this#'
 
     universalObjectCratesClasses:
         - Illuminate\Database\Eloquent\Collection
