@@ -45,7 +45,7 @@ class ScrollTest extends DuskTestCase
     }
 
     //トップページの無限スクロールテスト
-    public function testToppageScroll()
+    public function testToppageScroll(): void
     {
         $post1 = $this->posts[0]->content;
         $post12 = $this->posts[11]->content;
@@ -62,58 +62,20 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(0, 500);');
 
             //スクロールしてページの一番下位にある投稿を確認
-            $browser->waitForText($post12)
+            $browser->pause(6500)
                     ->assertSee($post12)
                     ->press('もっと見る')
-                    ->waitForText($post14)
+                    ->pause(6500)
                     ->driver
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //もっと見るボタン押下げ後、二ページ目の投稿を確認
-            $browser->assertSee($post14)
-                    ->screenshot('post');
-        });
-    }
-
-    //人気投稿ページの無限スクロールテスト
-    public function testPopularpageScroll()
-    {
-        $user = $this->users[0];
-        $post1 = $this->posts[0]->content;
-        $post12 = $this->posts[11]->content;
-        $post14 = $this->posts[13]->content;
-
-        //投稿のいいねデータを繰り返して保存
-        foreach ($this->posts as $post) {
-            $user->like($post->id);
-        }
-
-        $this->browse(function ($browser) use ($user, $post1, $post12, $post14) {
-
-            //ページの一番上位にある投稿を確認
-            $browser->loginAs($user)
-                    ->visitRoute('posts.popular')
-                    ->pause(6000)
-                    ->assertSee($post1)
-                    ->driver
-                    ->executeScript('window.scrollTo(0, 500);');
-
-            //スクロールしてページの一番下位にある投稿を確認
-            $browser->waitForText($post12)
-                    ->assertSee($post12)
-                    ->press('もっと見る')
-                    ->driver
-                    ->executeScript('window.scrollTo(1000, 2000);');
-
-            //もっと見るボタン押下げ後、二ページ目の投稿を確認
-            $browser->waitForText($post14)
-                    ->assertSee($post14)
-                    ->screenshot('post');
+            $browser->assertSee($post14);
         });
     }
 
     //検索ページの無限スクロールテスト
-    public function testSearchpageScroll()
+    public function testSearchpageScroll(): void
     {
         $post1 = $this->posts[0]->content;
         $post12 = $this->posts[11]->content;
@@ -123,27 +85,26 @@ class ScrollTest extends DuskTestCase
 
             //ページの一番上位にある投稿を確認
             $browser->visitRoute('posts.search')
-                    ->pause(6000)
+                    ->pause(6500)
                     ->assertSee($post1)
                     ->driver
                     ->executeScript('window.scrollTo(0, 500);');
 
             //スクロールしてページの一番下位にある投稿を確認
-            $browser->waitForText($post12)
+            $browser->pause(6500)
                     ->assertSee($post12)
                     ->press('もっと見る')
-                    ->waitForText($post14)
+                    ->pause(6500)
                     ->driver
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //もっと見るボタン押下げ後、二ページ目の投稿を確認
-            $browser->assertSee($post14)
-                    ->screenshot('post');
+            $browser->assertSee($post14);
         });
     }
 
     //ユーザー一覧の無限スクロールテスト
-    public function testUsersScroll()
+    public function testUsersScroll(): void
     {
         $user1 = $this->users[0]->name;
         $user3 = $this->users[2]->name;
@@ -160,18 +121,17 @@ class ScrollTest extends DuskTestCase
             //スクロールしてページの一番下位にあるユーザーを確認
             $browser->assertSee($user3)
                     ->press('もっと見る')
-                    ->waitForText($user1)
+                    ->pause(6500)
                     ->driver
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //もっと見るボタン押下げ後、二ページ目のユーザーを確認
-            $browser->assertSee($user1)
-                    ->screenshot('users');
+            $browser->assertSee($user1);
         });
     }
 
     //投稿詳細ページ(コメント)の無限スクロールテスト
-    public function testCommentScroll()
+    public function testCommentScroll(): void
     {
         $comments = factory(Comment::class, 14)->create([
                             'user_id' => $this->users[0]->id,
@@ -191,26 +151,25 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(0, 500);');
 
             //スクロールしてコメントを確認
-            $browser->waitForText($comment6)
+            $browser->pause(6500)
                     ->assertSee($comment6)
                     ->driver
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //スクロールしてページの一番下位にあるコメントを確認
-            $browser->waitForText($comment12)
+            $browser->pause(6500)
                     ->assertSee($comment12)
                     ->driver
                     ->executeScript('window.scrollTo(2500, 3500);');
 
             //もっと見るボタン押下げ後、二ページ目のコメントを確認
-            $browser->waitForText($comment14)
-                    ->assertSee($comment14)
-                    ->screenshot('comment');
+            $browser->pause(6500)
+                    ->assertSee($comment14);
         });
     }
 
     //投稿詳細ページ(いいね)の無限スクロールテスト
-    public function testLikeUsersScroll()
+    public function testLikeUsersScroll(): void
     {
         $post = $this->posts[0];
         $user1 = $this->users[0]->name;
@@ -233,14 +192,13 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(0, 500);');
 
             //一ページ目の一番下位にあるいいねユーザーを確認
-            $browser->screenshot('post_likes')
-                    ->waitForText($user12)
+            $browser->pause(6500)
                     ->assertSee($user12);
         });
     }
 
     //ユーザー詳細ページ(ユーザー投稿)の無限スクロールテスト
-    public function testUserShowPostScroll()
+    public function testUserShowPostScroll(): void
     {
         $post1 = $this->posts[0]->content;
         $post7 = $this->posts[6]->content;
@@ -251,28 +209,27 @@ class ScrollTest extends DuskTestCase
             //ユーザー詳細ページの投稿コンテンツ
             //一番上位にある投稿を確認
             $browser->visitRoute('users.show', $this->users[0]->id)
-                    ->pause(6000)
+                    ->pause(6500)
                     ->assertSee($post1)
                     ->press('もっと見る')
-                    ->waitForText($post7)
+                    ->pause(6500)
                     ->driver
                     ->executeScript('window.scrollTo(0, 500);');
 
             //もっと見るボタン押下げ後、二ページ目の投稿を確認
             $browser->assertSee($post7)
                     ->press('もっと見る')
-                    ->waitForText($post13)
+                    ->pause(6500)
                     ->driver
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //もっと見るボタン押下げ後、三ページ目の投稿を確認
-            $browser->assertSee($post13)
-                    ->screenshot('user.posts');
+            $browser->assertSee($post13);
         });
     }
 
     //ユーザー詳細ページ(フォロー)の無限スクロールテスト
-    public function testFollowingsScroll()
+    public function testFollowingsScroll(): void
     {
         $user1 = $this->users[0];
         $user2 = $this->users[1]->name;
@@ -295,21 +252,20 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(0, 500);');
 
             //スクロールしてページの一番下位にあるフォローユーザーを確認
-            $browser->waitForText($user13)
+            $browser->pause(6500)
                     ->assertSee($user13)
                     ->press('もっと見る')
                     ->driver
                     ->executeScript('window.scrollTo(500, 1500);');
 
             //もっと見るボタン押下げ後、二ページ目のフォローユーザーを確認
-            $browser->waitForText($user14)
-                    ->assertSee($user14)
-                    ->screenshot('followings');
+            $browser->pause(6500)
+                    ->assertSee($user14);
         });
     }
 
     //ユーザー詳細ページ(フォロワー)の無限スクロールテスト
-    public function testFollowersScroll()
+    public function testFollowersScroll(): void
     {
         $user1 = $this->users[0];
         $user2 = $this->users[1]->name;
@@ -333,31 +289,30 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(0, 500);');
 
             //スクロールしてページの一番下位にあるフォロワーユーザーを確認
-            $browser->waitForText($user13)
+            $browser->pause(6500)
                     ->assertSee($user13)
                     ->press('もっと見る')
                     ->driver
                     ->executeScript('window.scrollTo(500, 1500);');
 
             //もっと見るボタン押下げ後、二ページ目のフォロワーユーザーを確認
-            $browser->waitForText($user14)
-                    ->assertSee($user14)
-                    ->screenshot('followers');
+            $browser->pause(6500)
+                    ->assertSee($user14);
         });
     }
 
     //ユーザー詳細ページ(いいね)の無限スクロールテスト
-    public function testLikePostsScroll()
+    public function testLikePostsScroll(): void
     {
         $user = $this->users[0];
         $post1 = $this->posts[0]->content;
-        $post12 = $this->posts[11]->content;
+        $post10 = $this->posts[9]->content;
 
         //投稿のいいねデータを繰り返して保存
         foreach ($this->posts as $post) {
             $user->like($post->id);
         }
-        $this->browse(function ($browser) use ($user, $post1, $post12) {
+        $this->browse(function ($browser) use ($user, $post1, $post10) {
 
             //ユーザー詳細ページのいいね投稿コンテンツ
             //一番上位にあるいいね投稿を確認
@@ -369,9 +324,8 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(0, 1000);');
 
             //もっと見るボタン押下げ後、二ページ目のいいね投稿を確認
-            $browser->waitForText($post12)
-                    ->assertSee($post12)
-                    ->screenshot('user_likes');
+            $browser->pause(6500)
+                    ->assertSee($post10);
         });
     }
 }

@@ -41,9 +41,13 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
-    
 
-    //RegisterRequest使用のため
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \App\Http\Requests\RegisterRequest $request
+     * @return \Illuminate\Http\Response
+     */
     public function register(RegisterRequest $request)
     {
         

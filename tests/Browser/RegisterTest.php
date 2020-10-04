@@ -17,7 +17,7 @@ class RegisterTest extends DuskTestCase
      */
 
     //ユーザー登録テスト
-    public function testRegister()
+    public function testRegister(): void
     {
         $password = '123456789';
         $user = factory(User::class)->make();
@@ -29,13 +29,12 @@ class RegisterTest extends DuskTestCase
                     ->type('password_confirmation', $password)
                     ->press('登録する')
                     ->assertPathIs('/')
-                    ->assertSee('ユーザー登録完了しました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('register');
+                    ->assertSee('ユーザー登録完了しました'); //toastrのフラッシュメッセージが表示されているか確認
         });
     }
 
     //バリデーションで登録ページにリダイレクトしたかテスト
-    public function testValidationRegister()
+    public function testValidationRegister(): void
     {
         //名前欄の入力が、一文字多い
         $name = str_repeat('あ', 16);
@@ -49,13 +48,12 @@ class RegisterTest extends DuskTestCase
                     ->type('password_confirmation', $password)
                     ->press('登録する')
                     ->assertPathIs('/register')
-                    ->assertSee('ユーザー登録に失敗しました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('register');
+                    ->assertSee('ユーザー登録に失敗しました'); //toastrのフラッシュメッセージが表示されているか確認
         });
     }
 
     //ヘッダーナビゲーションから登録ページへ遷移しているかテスト
-    public function testLinkRegister()
+    public function testLinkRegister(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')

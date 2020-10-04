@@ -18,7 +18,7 @@ class LoginTest extends DuskTestCase
      */
 
     //ヘッダーナビゲーションからログインページへ遷移しているかテスト
-    public function testValidationLogin()
+    public function testValidationLogin(): void
     {
         //パスワードを間違えたと仮定
         $password = 12345678;
@@ -30,13 +30,12 @@ class LoginTest extends DuskTestCase
                     ->type('password', $password)
                     ->press('ログイン')
                     ->assertPathIs('/login')
-                    ->assertSee('ログイン') //ログインページのテキスト表示されているか確認
-                    ->screenshot('login');
+                    ->assertSee('ログイン'); //ログインページのテキスト表示されているか確認
         });
     }
 
     //ログインテスト
-    public function testLogin()
+    public function testLogin(): void
     {
         $password = 123456789;
         $user = factory(User::class)->create([
@@ -48,13 +47,12 @@ class LoginTest extends DuskTestCase
                     ->type('password', $password)
                     ->press('ログイン')
                     ->assertPathIs('/')
-                    ->assertSee('ログインしました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('login');
+                    ->assertSee('ログインしました'); //toastrのフラッシュメッセージが表示されているか確認
         });
     }
 
     //ヘッダーナビゲーションからログインページへ遷移しているかテスト
-    public function testLoginLink()
+    public function testLoginLink(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
@@ -64,7 +62,7 @@ class LoginTest extends DuskTestCase
     }
 
     //ログアウトテスト(確認ダイヤログもテスト)
-    public function testLogout()
+    public function testLogout(): void
     {
         $user = factory(User::class)->create();
         $this->browse(function ($browser) use ($user) {
@@ -73,8 +71,7 @@ class LoginTest extends DuskTestCase
                     ->click('#navbarDropdown')
                     ->click('.logout_alert')
                     ->assertDialogOpened('ログアウトしてよろしいですか？')
-                    ->acceptDialog() //ダイアログのokボタンを押す
-                    ->screenshot('logout');
+                    ->acceptDialog(); //ダイアログのokボタンを押す
         });
     }
 }

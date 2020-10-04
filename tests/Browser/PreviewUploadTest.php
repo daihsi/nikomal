@@ -52,7 +52,7 @@ class PreviewUploadTest extends DuskTestCase
     }
 
     //新規ユーザー登録・ユーザー編集の選択画像がプレビュー表示されているかテスト
-    public function testUserImagePreview()
+    public function testUserImagePreview(): void
     {
         $this->browse(function ($frist, $second) {
 
@@ -60,7 +60,6 @@ class PreviewUploadTest extends DuskTestCase
             $frist->visit('/register')
                     ->click('#avatarUploadButton')
                     ->attach('#avatarUpload', 'storage/framework/testing/disks/images/'.$this->file_name)
-                    ->screenshot('users_avatar') //画像が切り替わっているか確認
                     ->assertSourceHas('image/'); //プレビュー用のソースコードに切り替わっているか確認
 
             //ユーザー編集ページ
@@ -68,13 +67,12 @@ class PreviewUploadTest extends DuskTestCase
                     ->visitRoute('users.edit', $this->user->id)
                     ->click('#avatarUploadButton')
                     ->attach('#avatarUpload', 'storage/framework/testing/disks/images/'.$this->file_name)
-                    ->screenshot('users_avatar') //画像が切り替わっているか確認
                     ->assertSourceHas('image/'); //プレビュー用のソースコードに切り替わっているか確認
         });
     }
 
     //新規投稿・投稿編集の選択画像がプレビュー表示されているかテスト
-    public function testPostImagePreview()
+    public function testPostImagePreview(): void
     {
         $post = Post::find(1);
         $this->browse(function ($frist, $second) use ($post){
@@ -84,7 +82,6 @@ class PreviewUploadTest extends DuskTestCase
                     ->visitRoute('posts.create')
                     ->click('#post_image_preview')
                     ->attach('#post_upload', 'storage/framework/testing/disks/images/'.$this->file_name)
-                    ->screenshot('post_image') //画像が切り替わっているか確認
                     ->assertSourceHas('image/'); //プレビュー用のソースコードに切り替わっているか確認
         
             //投稿編集ページ
@@ -92,7 +89,6 @@ class PreviewUploadTest extends DuskTestCase
                     ->visitRoute('posts.edit', $post->id)
                     ->click('#edit_post_image_preview')
                     ->attach('#post_upload', 'storage/framework/testing/disks/images/'.$this->file_name)
-                    ->screenshot('post_image') //画像が切り替わっているか確認
                     ->assertSourceHas('image/'); //プレビュー用のソースコードに切り替わっているか確認
         });
     }

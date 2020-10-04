@@ -25,33 +25,31 @@ class PasswordResetTest extends DuskTestCase
     }
 
     //ログインページ内のリンクで正常にアクセスできるかテスト
-    public function testUserPasswordRequestLoginPageLink()
+    public function testUserPasswordRequestLoginPageLink(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
                     ->click('.login_icon')
                     ->click('.btn-link')
-                    ->assertRouteIs('password.request')
-                    ->screenshot('password_reset');
+                    ->assertRouteIs('password.request');
         });
     }
 
     //ログイン後、ナビゲーションバーのリンクで正常にアクセスできるかテスト
-    public function testUserPasswordRequestNavbarLink()
+    public function testUserPasswordRequestNavbarLink(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user)
                     ->visit('/')
                     ->click('#navbarDropdown')
                     ->click('.password_reset_icon')
-                    ->assertRouteIs('password.request')
-                    ->screenshot('password_reset');
+                    ->assertRouteIs('password.request');
         });
     }
 
     //パスワード再設定リクエストのテスト
     //メールアドレス通知～リセット成功までの一連のテスト
-    public function testUserPasswordReset()
+    public function testUserPasswordReset(): void
     {
         $password = 1234567890;
 
@@ -60,8 +58,7 @@ class PasswordResetTest extends DuskTestCase
                     ->type('email', $this->user->email)
                     ->assertInputValue('email', $this->user->email)
                     ->press('再設定URLを送信')
-                    ->assertSee('パスワードリセット用URLを送信しました')
-                    ->screenshot('password_reset');
+                    ->assertSee('パスワードリセット用URLを送信しました');
 
             //テーブルのトークンを更新
             \DB::table('password_resets')
@@ -82,28 +79,23 @@ class PasswordResetTest extends DuskTestCase
                     ->assertInputValue('password_confirmation', $password)
                     ->press('パスワード再設定')
                     ->assertPathIs('/')
-                    ->assertSee('パスワードを変更しました')
-                    ->screenshot('password_reset');
+                    ->assertSee('パスワードを変更しました');
         });
     }
 
     //パスワード再設定リクエストのリセット失敗テスト
-    public function testFailureUserPasswordReset()
+    public function testFailureUserPasswordReset(): void
     {
         $password = 1234567890;
         $user = factory(User::class)->make();
         $email = $user->email;
 
-        //簡単ログイン用メールアドレス
-        $guest_login_email = 'guest@example.com';
-
-        $this->browse(function ($browser) use ($password, $email, $guest_login_email) {
+        $this->browse(function ($browser) use ($password, $email) {
             $browser->visitRoute('password.request')
                     ->type('email', $this->user->email)
                     ->assertInputValue('email', $this->user->email)
                     ->press('再設定URLを送信')
-                    ->assertSee('パスワードリセット用URLを送信しました')
-                    ->screenshot('password_reset');
+                    ->assertSee('パスワードリセット用URLを送信しました');
 
             //テーブルのトークンを更新
             \DB::table('password_resets')
@@ -124,14 +116,13 @@ class PasswordResetTest extends DuskTestCase
                     ->assertInputValue('password_confirmation', $password)
                     ->press('パスワード再設定')
                     ->assertSee('リクエストに失敗しました')
-                    ->assertSee('メールアドレスに一致するユーザーが見つかりません。')
-                    ->screenshot('password_reset');
+                    ->assertSee('メールアドレスに一致するユーザーが見つかりません。');
         });
     }
 
     //簡単ログイン用のメールアドレスで再設定できないかテスト
     //失敗フラッシュメッセージが表示されているか確認
-    public function testGuestUserLoginEmailResetPasswordRequest()
+    public function testGuestUserLoginEmailResetPasswordRequest(): void
     {
         //簡単ログイン用メールアドレス
         $guest_login_email = 'guest@example.com';
@@ -142,14 +133,13 @@ class PasswordResetTest extends DuskTestCase
                     ->assertInputValue('email', $guest_login_email)
                     ->press('再設定URLを送信')
                     ->assertSee('リクエストに失敗しました')
-                    ->assertSee('簡単ログイン用のパスワードは変更できません')
-                    ->screenshot('password_reset');
+                    ->assertSee('簡単ログイン用のパスワードは変更できません');
         });
     }
 
     //メールアドレスの桁あふれリクエストエラーテスト
     //失敗フラッシュメッセージが表示されているか確認
-    public function testFailureEmailResetPasswordRequest()
+    public function testFailureEmailResetPasswordRequest(): void
     {
         $email = str_repeat('a', 244). '@example.com';
 
@@ -159,15 +149,14 @@ class PasswordResetTest extends DuskTestCase
                     ->assertInputValue('email', $email)
                     ->press('再設定URLを送信')
                     ->assertSee('リクエストに失敗しました')
-                    ->assertSee('メールアドレスは255字以下で入力してください。')
-                    ->screenshot('password_reset');
+                    ->assertSee('メールアドレスは255字以下で入力してください。');
         });
     }
 
     //管理ユーザーは、パスワード再設定フォームにアクセスできないかテスト
     //リダイレクトの確認
     //失敗フラッシュメッセージが表示されているか確認
-    public function testAdminInaccessiblePasswordResetPage()
+    public function testAdminInaccessiblePasswordResetPage(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
@@ -177,13 +166,12 @@ class PasswordResetTest extends DuskTestCase
                     ->visit('/')
                     ->visitRoute('password.request')
                     ->assertPathIs('/')
-                    ->assertSee('管理ユーザーはパスワード再設定ができません')
-                    ->screenshot('password_reset');
+                    ->assertSee('管理ユーザーはパスワード再設定ができません');
         });
     }
 
     //ナビゲーションバーにパスワード再設定フォームのリンクが表示されていないかテスト
-    public function testNavbarPasswordResetLinkNotDisplayed()
+    public function testNavbarPasswordResetLinkNotDisplayed(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
@@ -192,8 +180,7 @@ class PasswordResetTest extends DuskTestCase
             $browser->loginAs($admin)
                     ->visit('/')
                     ->click('#navbarDropdown')
-                    ->assertMissing('.password_reset_icon')
-                    ->screenshot('password_reset');
+                    ->assertMissing('.password_reset_icon');
         });
     }
 }

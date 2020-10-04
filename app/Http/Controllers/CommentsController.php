@@ -9,7 +9,12 @@ use App\Comment;
 
 class CommentsController extends Controller
 {
-    //認証ユーザーからの、投稿コメントリクエスト
+    /**
+     * 認証ユーザーからの、投稿コメントリクエスト
+     * 
+     * @param \App\Http\Requests\CommentRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(CommentRequest $request)
     {
         $user = auth()->user();
@@ -42,7 +47,12 @@ class CommentsController extends Controller
                     ]);
     }
 
-    //コメント所有ユーザーからの、コメント削除リクエスト
+    /**
+     * コメント所有ユーザーからの、コメント削除リクエスト
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Request $request)
     {
         //管理ユーザーとしてログインしているか

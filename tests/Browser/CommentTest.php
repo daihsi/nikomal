@@ -33,7 +33,7 @@ class CommentTest extends DuskTestCase
     }
 
     //コメント投稿テスト
-    public function testCreateComment()
+    public function testCreateComment(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->factory_user)
@@ -43,7 +43,7 @@ class CommentTest extends DuskTestCase
             foreach ($this->comments as $comment) {
                 $browser->type('comment', $comment->comment)
                         ->press('コメントする')
-                        ->waitForText($comment->comment)
+                        ->pause(1000)
 
                         //コメントがコンテンツに存在するか確認
                         ->assertSee($comment->comment)
@@ -51,12 +51,11 @@ class CommentTest extends DuskTestCase
                         //toastrのフラッシュメッセージが表示されているか確認
                         ->assertSee('コメント投稿しました'); 
             }
-            $browser->screenshot('comment');
         });
     }
 
     //コメント未入力での挙動テスト
-    public function testNoComment()
+    public function testNoComment(): void
     {
         $this->browse(function (Browser $browser) {
 
@@ -69,13 +68,12 @@ class CommentTest extends DuskTestCase
                     ->press('コメントする')
 
                     //toastrのフラッシュメッセージが表示されているか確認
-                    ->assertSee('コメントが未入力です')
-                    ->screenshot('comment');
+                    ->assertSee('コメントが未入力です');
         });
     }
 
     //コメント削除テスト
-    public function testCommentDelete()
+    public function testCommentDelete(): void
     {
         $comment = factory(Comment::class)->create([
                             'user_id' => $this->factory_user->id,
@@ -98,13 +96,12 @@ class CommentTest extends DuskTestCase
                     ->assertSee('コメントを削除しました')
 
                      //コメント0状態の表示になっているか確認
-                    ->assertSee('まだコメントがありません')
-                    ->screenshot('comment');
+                    ->assertSee('まだコメントがありません');
         });
     }
 
     //ナビゲーションタブのコメントカウントテスト
-    public function testCommentCount()
+    public function testCommentCount(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->factory_user)
@@ -128,7 +125,7 @@ class CommentTest extends DuskTestCase
     }
 
     //認証ユーザーか認証ユーザー以外のコメントスタイル表示テスト
-    public function testCommentStyle()
+    public function testCommentStyle(): void
     {
         $user = factory(User::class)->create();
         $comment = factory(Comment::class)->make([
@@ -163,14 +160,13 @@ class CommentTest extends DuskTestCase
                 ->pause(1000)
 
                 //コメント投稿して、認証ユーザー用のコメントスタイルで表示されているか確認
-                ->assertPresent('.authenticated_user_comment')
-                ->screenshot('comment');
+                ->assertPresent('.authenticated_user_comment');
         });
     }
 
     //管理ユーザーでログイン
     //コメント投稿、他ユーザーコメントの削除ができるかテスト
-    public function testAdminComment()
+    public function testAdminComment(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
@@ -187,18 +183,16 @@ class CommentTest extends DuskTestCase
                     ->visitRoute('posts.show', $this->post)
                     ->type('comment', $comment->comment)
                     ->press('コメントする')
-                    ->pause(500)
+                    ->pause(700)
                     ->assertSee($comment->comment)
-                    ->assertSee('コメント投稿しました')
-                    ->screenshot('comment');
+                    ->assertSee('コメント投稿しました');
 
             //管理ユーザーの投稿したコメント削除
             $browser->click('.comment_delete')
                     ->acceptDialog()
-                    ->pause(500)
+                    ->pause(700)
                     ->assertDontSee($comment->comment)
-                    ->assertSee('コメントを削除しました')
-                    ->screenshot('comment');
+                    ->assertSee('コメントを削除しました');
 
             //管理ユーザーのコメントがなくなったいま
             //他ユーザーのコメントを削除するためのボタンが存在するか確認
@@ -206,10 +200,9 @@ class CommentTest extends DuskTestCase
             $browser->assertPresent('.comment_delete')
                     ->click('.comment_delete')
                     ->acceptDialog()
-                    ->pause(500)
+                    ->pause(700)
                     ->assertDontSee($this->comments[0]->comment)
-                    ->assertSee('コメントを削除しました')
-                    ->screenshot('comment');
+                    ->assertSee('コメントを削除しました');
         });
     }
 }

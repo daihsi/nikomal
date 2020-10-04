@@ -43,7 +43,7 @@ $(function() {
             var user_like_path = user + '/likes';
 
             //フォロー成功時
-            if (data['follow'] === true) {
+            if (data['follow'] === 'follow') {
                 toastr.success('フォローしました');
 
                 //ボタン変更
@@ -76,7 +76,7 @@ $(function() {
             }
 
             //アンフォロー成功時
-            else if (data['follow'] === false) {
+            else if (data['follow'] === 'unfollow') {
                 toastr.success('フォローを外しました');
 
                 //ボタン変更

@@ -16,7 +16,7 @@ class ValueResetTest extends DuskTestCase
      */
 
     //検索フォーム内の非同期リセットボタンが機能するかテスト
-    public function testValueReset()
+    public function testValueReset(): void
     {
         $keyword = str_repeat('あ', 150);
         $animals_name = ['イヌ', 'ネコ', 'ウシ'];

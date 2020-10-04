@@ -9,7 +9,6 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
-        "barryvdh/laravel-debugbar": "^3.3",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "intervention/image": "^2.5",
@@ -19,12 +18,14 @@
         "league/flysystem-aws-s3-v3": "^1.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.5",
         "facade/ignition": "^1.4",
         "fzaninotto/faker": "^1.9.1",
         "laravel/dusk": "^6.4",
         "laravel/ui": "^1.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
+        "nunomaduro/larastan": "^0.6.4",
         "php-webdriver/webdriver": "^1.8",
         "phpunit/phpunit": "^8.0"
     },

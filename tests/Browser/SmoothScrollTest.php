@@ -44,7 +44,7 @@ class SmoothScrollTest extends DuskTestCase
     }
 
     //トップページのページトップへ戻るボタンテスト
-    public function testSmoothScrollToppage()
+    public function testSmoothScrollToppage(): void
     {
         $this->browse(function (Browser $browser) {
 
@@ -75,13 +75,12 @@ class SmoothScrollTest extends DuskTestCase
             $browser->pause(1000)
                     ->assertVisible('#page_top_button')
                     ->click('#page_top_button')
-                    ->pause(1000)
-                    ->screenshot('smootyscroll');
+                    ->pause(1000);
         });
     }
 
     //ユーザー一覧ページのトップページへ戻るボタンテスト
-    public function testSmoothScrollUsers()
+    public function testSmoothScrollUsers(): void
     {
         $this->browse(function (Browser $browser) {
 
@@ -107,8 +106,7 @@ class SmoothScrollTest extends DuskTestCase
             $browser->pause(1000)
                     ->assertVisible('#page_top_button')
                     ->click('#page_top_button')
-                    ->pause(1000)
-                    ->screenshot('smootyscroll');
+                    ->pause(1000);
         });
     }
 }

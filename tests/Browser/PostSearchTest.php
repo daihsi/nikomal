@@ -41,7 +41,7 @@ class PostSearchTest extends DuskTestCase
     }
 
     //投稿検索テスト
-    public function testPostSearch()
+    public function testPostSearch(): void
     {
         $post10 = $this->posts[11];
         $post9 = $this->posts[10];
@@ -60,14 +60,14 @@ class PostSearchTest extends DuskTestCase
                     //投稿本文と投稿ユーザー名と検索ヒットフラッシュメッセージが表示されているか確認
                     ->assertSee($post10->content)
                     ->assertSee($this->user->name)
-                    ->assertSee('ヒットしました')
-                    ->screenshot('search');
+                    ->assertSee('ヒットしました');
 
             //セレクトボックスのみ値を入れて検索
             $second->visitRoute('posts.search');
             foreach ($post9->postCategorys as $postCategory) {
                 $second->select('animals_name[]', $postCategory->name)
                         ->assertSelected('animals_name[]', $postCategory->name);
+                break;
             }
             $second->press('検索する')
                     ->pause(1000)
@@ -75,8 +75,7 @@ class PostSearchTest extends DuskTestCase
                     //投稿本文と投稿ユーザー名と検索ヒットフラッシュメッセージが表示されているか確認
                     ->assertSee($post9->content)
                     ->assertSee($this->user->name)
-                    ->assertSee('ヒットしました')
-                    ->screenshot('search');
+                    ->assertSee('ヒットしました');
 
             //キーワードとセレクトボックス両方値を入れて検索
             $third->visitRoute('posts.search')
@@ -85,6 +84,7 @@ class PostSearchTest extends DuskTestCase
             foreach ($post8->postCategorys as $postCategory) {
                 $third->select('animals_name[]', $postCategory->name)
                     ->assertSelected('animals_name[]', $postCategory->name);
+                break;
             }
             $third->press('検索する')
                     ->pause(1000)
@@ -92,34 +92,34 @@ class PostSearchTest extends DuskTestCase
                     //投稿本文と投稿ユーザー名と検索ヒットフラッシュメッセージが表示されているか確認
                     ->assertSee($post8->content)
                     ->assertSee($this->user->name)
-                    ->assertSee('ヒットしました')
-                    ->screenshot('search');
+                    ->assertSee('ヒットしました');
         });
     }
 
     //投稿検索バリデーションエラー表示テスト
-    public function testValidationPostSearch()
+    public function testValidationPostSearch(): void
     {
-        $animals = factory(Animal::class, 15)->make();
+        $array_animals = array_column(factory(Animal::class, 25)->make()->toArray(), 'name');
+        $animals = array_unique($array_animals);
+        
         $this->browse(function (Browser $browser) use ($animals) {
             $browser->visitRoute('posts.search');
 
             //セレクトボックスは10個まで選択可能だが、それ以上選択したと仮定
-            foreach ($animals as $animal) {
-                $browser->select('animals_name[]', $animal->name);
+            foreach ($animals as $index => $name) {
+                $browser->select('animals_name[]', $name);
             }
 
             //バリデーションエラーメッセージと失敗フラッシュメッセージが表示されているか確認
             $browser->press('検索する')
                     ->assertSee('検索に失敗しました')
                     ->assertPresent('.is-invalid')
-                    ->assertPresent('.invalid-feedback')
-                    ->screenshot('search');
-        });
+                    ->assertPresent('.invalid-feedback');
+            });
     }
 
     //検索データが該当ない時の表示テスト
-    public function testNoPostSearch()
+    public function testNoPostSearch(): void
     {
         $keyword = '該当無し';
         $this->browse(function (Browser $browser) use ($keyword) {
@@ -130,8 +130,7 @@ class PostSearchTest extends DuskTestCase
                     //該当無しのフラッシュメッセージが表示されているか確認
                     //投稿がないことも確認
                     ->assertSee('該当する投稿がありません')
-                    ->assertMissing('.post_item')
-                    ->screenshot('search');
+                    ->assertMissing('.post_item');
         });
     }
 }

@@ -7,11 +7,18 @@ use App\Post;
 
 class LikesController extends Controller
 {
+    /**
+     * いいね登録・解除処理
+     * ajaxでいいね投稿idが渡される
+     * 
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store($id)
     {
         if (!\Gate::allows('admin')) {
             $user = \Auth::user();
-            $auth_id = $user->id;
+            $auth_id = \Auth::id();
             $like = $user->like($id);
             $post = Post::findOrFail($id);
     

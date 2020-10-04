@@ -34,7 +34,7 @@ class PostEditTest extends DuskTestCase
                         //動物カテゴリーデータの生成
                         $post->postCategorys()
                             ->createMany(
-                                factory(Animal::class, 3)->make()
+                                factory(Animal::class, 1)->make()
                                 ->toArray()
                             );
                     });
@@ -43,10 +43,11 @@ class PostEditTest extends DuskTestCase
     }
 
     //投稿編集テスト
-    public function testPostEdit()
+    public function testPostEdit(): void
     {
         $post = $this->post[0];
-        $edit_animals = factory(Animal::class, 3)->make();
+        $array_animals = array_column(factory(Animal::class, 3)->make()->toArray(), 'name');
+        $edit_animals = array_unique($array_animals);
 
         //投稿編集ページで既存のデータ値がフォームに入っているか確認
         $this->browse(function ($browser) use ($post, $edit_animals) {
@@ -61,43 +62,38 @@ class PostEditTest extends DuskTestCase
             }
 
             //セレクトボックスのクリアボタンを選択分クリックしクリア
-            for ($i = 1; $i <= 3; $i++) {
-                $browser->click('.select2-selection__choice__remove');
-            }
+            $browser->click('.select2-selection__choice__remove');
 
             //編集データをフォームに入れ確認
             $browser->type('content', $post->content)
                     ->click('#edit_post_image_preview')
                     ->attach('image', $this->edit_image->image);
-            foreach ($edit_animals as $edit_animal) {
-                $browser->select('animals_name[]', $edit_animal->name)
-                        ->assertSelected('animals_name[]', $edit_animal->name);
+            foreach ($edit_animals as $index => $name) {
+                $browser->select('animals_name[]', $name)
+                        ->assertSelected('animals_name[]', $name);
             }
-
             $browser->assertInputValue('content', $post->content)
-                    ->assertSourceHas('image/')
-                    ->screenshot('post');
+                    ->assertSourceHas('image/');
         });
     }
 
     //投稿編集バリデーションエラー表示テスト
-    public function testValidationPostEdit()
+    public function testValidationPostEdit(): void
     {
         $post = $this->post[0];
-        $edit_animals = factory(Animal::class, 4)->make();
+        $array_animals = array_column(factory(Animal::class, 10)->make()->toArray(), 'name');
+        $edit_animals = array_unique($array_animals);
 
         $this->browse(function ($browser) use ($post, $edit_animals) {
             $browser->loginAs($this->user)
                     ->visitRoute('posts.edit', $post->id);
 
             //セレクトボックスのクリアボタンを選択分クリックしクリア
-            for ($i = 1; $i <= 3; $i++) {
-                $browser->click('.select2-selection__choice__remove');
-            }
+            $browser->click('.select2-selection__choice__remove');
 
-            foreach ($edit_animals as $edit_animal) {
-                $browser->select('animals_name[]', $edit_animal->name)
-                        ->assertSelected('animals_name[]', $edit_animal->name);
+            foreach ($edit_animals as $index => $name) {
+                $browser->select('animals_name[]', $name)
+                        ->assertSelected('animals_name[]', $name);
             }
 
             //失敗フラッシュメッセージが表示されているか
@@ -106,13 +102,12 @@ class PostEditTest extends DuskTestCase
                     ->press('変更内容を保存する')
                     ->assertSee('投稿編集に失敗しました')
                     ->assertPresent('.is-invalid')
-                    ->assertPresent('.invalid-feedback')
-                    ->screenshot('post');
+                    ->assertPresent('.invalid-feedback');
         });
     }
 
     //投稿削除テスト
-    public function testPostDelete()
+    public function testPostDelete(): void
     {
         $post = factory(Post::class)->create([
                     'user_id' => $this->user->id,
@@ -128,13 +123,12 @@ class PostEditTest extends DuskTestCase
                     ->acceptDialog()
                     ->pause(500)
                     ->assertPathIs('/')
-                    ->assertSee('投稿削除しました')
-                    ->screenshot('post');
+                    ->assertSee('投稿削除しました');
         });
     }
 
     //管理ユーザーでの他ユーザーの投稿削除テスト
-    public function testAdminDeletePost()
+    public function testAdminDeletePost(): void
     {
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
@@ -156,8 +150,7 @@ class PostEditTest extends DuskTestCase
                     ->acceptDialog()
                     ->pause(500)
                     ->assertPathIs('/')
-                    ->assertSee('投稿削除しました')
-                    ->screenshot('post');
+                    ->assertSee('投稿削除しました');
         });
 
         //データベースに削除した投稿が残っていないか確認
