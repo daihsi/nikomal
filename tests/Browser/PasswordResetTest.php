@@ -31,8 +31,7 @@ class PasswordResetTest extends DuskTestCase
             $browser->visit('/')
                     ->click('.login_icon')
                     ->click('.btn-link')
-                    ->assertRouteIs('password.request')
-                    ->screenshot('password_reset');
+                    ->assertRouteIs('password.request');
         });
     }
 
@@ -44,8 +43,7 @@ class PasswordResetTest extends DuskTestCase
                     ->visit('/')
                     ->click('#navbarDropdown')
                     ->click('.password_reset_icon')
-                    ->assertRouteIs('password.request')
-                    ->screenshot('password_reset');
+                    ->assertRouteIs('password.request');
         });
     }
 
@@ -59,10 +57,8 @@ class PasswordResetTest extends DuskTestCase
             $browser->visitRoute('password.request')
                     ->type('email', $this->user->email)
                     ->assertInputValue('email', $this->user->email)
-                    ->screenshot('password_reset')
                     ->press('再設定URLを送信')
-                    ->assertSee('パスワードリセット用URLを送信しました')
-                    ->screenshot('password_reset');
+                    ->assertSee('パスワードリセット用URLを送信しました');
 
             //テーブルのトークンを更新
             \DB::table('password_resets')
@@ -83,8 +79,7 @@ class PasswordResetTest extends DuskTestCase
                     ->assertInputValue('password_confirmation', $password)
                     ->press('パスワード再設定')
                     ->assertPathIs('/')
-                    ->assertSee('パスワードを変更しました')
-                    ->screenshot('password_reset');
+                    ->assertSee('パスワードを変更しました');
         });
     }
 
@@ -100,8 +95,7 @@ class PasswordResetTest extends DuskTestCase
                     ->type('email', $this->user->email)
                     ->assertInputValue('email', $this->user->email)
                     ->press('再設定URLを送信')
-                    ->assertSee('パスワードリセット用URLを送信しました')
-                    ->screenshot('password_reset');
+                    ->assertSee('パスワードリセット用URLを送信しました');
 
             //テーブルのトークンを更新
             \DB::table('password_resets')
@@ -122,8 +116,7 @@ class PasswordResetTest extends DuskTestCase
                     ->assertInputValue('password_confirmation', $password)
                     ->press('パスワード再設定')
                     ->assertSee('リクエストに失敗しました')
-                    ->assertSee('メールアドレスに一致するユーザーが見つかりません。')
-                    ->screenshot('password_reset');
+                    ->assertSee('メールアドレスに一致するユーザーが見つかりません。');
         });
     }
 
@@ -140,8 +133,7 @@ class PasswordResetTest extends DuskTestCase
                     ->assertInputValue('email', $guest_login_email)
                     ->press('再設定URLを送信')
                     ->assertSee('リクエストに失敗しました')
-                    ->assertSee('簡単ログイン用のパスワードは変更できません')
-                    ->screenshot('password_reset');
+                    ->assertSee('簡単ログイン用のパスワードは変更できません');
         });
     }
 
@@ -157,8 +149,7 @@ class PasswordResetTest extends DuskTestCase
                     ->assertInputValue('email', $email)
                     ->press('再設定URLを送信')
                     ->assertSee('リクエストに失敗しました')
-                    ->assertSee('メールアドレスは255字以下で入力してください。')
-                    ->screenshot('password_reset');
+                    ->assertSee('メールアドレスは255字以下で入力してください。');
         });
     }
 
@@ -175,8 +166,7 @@ class PasswordResetTest extends DuskTestCase
                     ->visit('/')
                     ->visitRoute('password.request')
                     ->assertPathIs('/')
-                    ->assertSee('管理ユーザーはパスワード再設定ができません')
-                    ->screenshot('password_reset');
+                    ->assertSee('管理ユーザーはパスワード再設定ができません');
         });
     }
 
@@ -190,8 +180,7 @@ class PasswordResetTest extends DuskTestCase
             $browser->loginAs($admin)
                     ->visit('/')
                     ->click('#navbarDropdown')
-                    ->assertMissing('.password_reset_icon')
-                    ->screenshot('password_reset');
+                    ->assertMissing('.password_reset_icon');
         });
     }
 }

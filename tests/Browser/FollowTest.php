@@ -38,8 +38,7 @@ class FollowTest extends DuskTestCase
                     ->click($follow_button)
                     ->waitFor($unfollow_button)
                     ->waitForText('フォロー中')
-                    ->assertSee('フォローしました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('follow');
+                    ->assertSee('フォローしました'); //toastrのフラッシュメッセージが表示されているか確認
 
             //フォロー解除をして、ボタンが切り替わっているか確認
             //フラッシュメッセージも確認
@@ -48,8 +47,7 @@ class FollowTest extends DuskTestCase
                     ->click($follow_button)
                     ->waitUntilMissing($unfollow_button)
                     ->waitForText('フォロー')
-                    ->assertSee('フォローを外しました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('follow');
+                    ->assertSee('フォローを外しました'); //toastrのフラッシュメッセージが表示されているか確認
         });
     }
 
@@ -77,8 +75,7 @@ class FollowTest extends DuskTestCase
                     ->waitFor($unfollow_button)
 
                     //フォローがカウント1になっていることを確認
-                    ->assertSourceHas('<span class="badge badge-white badge-pill follow_count_badge">1</span>')
-                    ->screenshot('follow');
+                    ->assertSourceHas('<span class="badge badge-white badge-pill follow_count_badge">1</span>');
         });
     }
 
@@ -106,8 +103,7 @@ class FollowTest extends DuskTestCase
                     ->pause(1000)
 
                     //フォロワーがカウント1になっていることを確認
-                    ->assertSourceHas('<span class="badge badge-white badge-pill follower_count_badge">1</span>')
-                    ->screenshot('follow');
+                    ->assertSourceHas('<span class="badge badge-white badge-pill follower_count_badge">1</span>');
         });
     }
 

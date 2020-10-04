@@ -70,8 +70,7 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //もっと見るボタン押下げ後、二ページ目の投稿を確認
-            $browser->assertSee($post14)
-                    ->screenshot('post');
+            $browser->assertSee($post14);
         });
     }
 
@@ -100,8 +99,7 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //もっと見るボタン押下げ後、二ページ目の投稿を確認
-            $browser->assertSee($post14)
-                    ->screenshot('post');
+            $browser->assertSee($post14);
         });
     }
 
@@ -128,8 +126,7 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //もっと見るボタン押下げ後、二ページ目のユーザーを確認
-            $browser->assertSee($user1)
-                    ->screenshot('users');
+            $browser->assertSee($user1);
         });
     }
 
@@ -167,8 +164,7 @@ class ScrollTest extends DuskTestCase
 
             //もっと見るボタン押下げ後、二ページ目のコメントを確認
             $browser->pause(6500)
-                    ->assertSee($comment14)
-                    ->screenshot('comment');
+                    ->assertSee($comment14);
         });
     }
 
@@ -196,8 +192,7 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(0, 500);');
 
             //一ページ目の一番下位にあるいいねユーザーを確認
-            $browser->screenshot('post_likes')
-                    ->pause(6500)
+            $browser->pause(6500)
                     ->assertSee($user12);
         });
     }
@@ -217,7 +212,7 @@ class ScrollTest extends DuskTestCase
                     ->pause(6500)
                     ->assertSee($post1)
                     ->press('もっと見る')
-                    ->waitForText($post7)
+                    ->pause(6500)
                     ->driver
                     ->executeScript('window.scrollTo(0, 500);');
 
@@ -229,8 +224,7 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //もっと見るボタン押下げ後、三ページ目の投稿を確認
-            $browser->assertSee($post13)
-                    ->screenshot('user.posts');
+            $browser->assertSee($post13);
         });
     }
 
@@ -266,8 +260,7 @@ class ScrollTest extends DuskTestCase
 
             //もっと見るボタン押下げ後、二ページ目のフォローユーザーを確認
             $browser->pause(6500)
-                    ->assertSee($user14)
-                    ->screenshot('followings');
+                    ->assertSee($user14);
         });
     }
 
@@ -304,8 +297,7 @@ class ScrollTest extends DuskTestCase
 
             //もっと見るボタン押下げ後、二ページ目のフォロワーユーザーを確認
             $browser->pause(6500)
-                    ->assertSee($user14)
-                    ->screenshot('followers');
+                    ->assertSee($user14);
         });
     }
 
@@ -314,13 +306,13 @@ class ScrollTest extends DuskTestCase
     {
         $user = $this->users[0];
         $post1 = $this->posts[0]->content;
-        $post12 = $this->posts[11]->content;
+        $post10 = $this->posts[9]->content;
 
         //投稿のいいねデータを繰り返して保存
         foreach ($this->posts as $post) {
             $user->like($post->id);
         }
-        $this->browse(function ($browser) use ($user, $post1, $post12) {
+        $this->browse(function ($browser) use ($user, $post1, $post10) {
 
             //ユーザー詳細ページのいいね投稿コンテンツ
             //一番上位にあるいいね投稿を確認
@@ -333,8 +325,7 @@ class ScrollTest extends DuskTestCase
 
             //もっと見るボタン押下げ後、二ページ目のいいね投稿を確認
             $browser->pause(6500)
-                    ->assertSee($post12)
-                    ->screenshot('user_likes');
+                    ->assertSee($post10);
         });
     }
 }

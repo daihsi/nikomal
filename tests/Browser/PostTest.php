@@ -46,8 +46,7 @@ class PostTest extends DuskTestCase
                         ->assertSelected('animals_name[]', $name);
             }
             $browser->assertInputValue('content', $this->content->content)
-                    ->assertSourceHas('image/')
-                    ->screenshot('post');
+                    ->assertSourceHas('image/');
         });
     }
 
@@ -71,8 +70,7 @@ class PostTest extends DuskTestCase
             $browser->press('投稿する')
                     ->assertSee('投稿に失敗しました')
                     ->assertPresent('.is-invalid')
-                    ->assertPresent('.invalid-feedback')
-                    ->screenshot('post');
+                    ->assertPresent('.invalid-feedback');
         });
     }
 }

@@ -74,8 +74,7 @@ class LikeTest extends DuskTestCase
 
                     //アイコン横のカウントが0になっていることを確認
                     ->assertSourceHas('<span class="align-self-end post_count">0</span>')
-                    ->assertSee('投稿のいいねを外しました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('like');
+                    ->assertSee('投稿のいいねを外しました'); //toastrのフラッシュメッセージが表示されているか確認
         });
     }
 
@@ -143,8 +142,7 @@ class LikeTest extends DuskTestCase
                     ->assertSourceHas('<span class="align-self-end post_count">1</span>')
 
                     //ナビゲーションタブのいいねカウントが1になっていることを確認
-                    ->assertSourceHas('<span class="badge badge-white badge-pill u_count_badge">1</span>')
-                    ->screenshot('like');
+                    ->assertSourceHas('<span class="badge badge-white badge-pill u_count_badge">1</span>');
 
             //いいねアイコン横のいいねカウント確認
             //ナビゲーションタブのカウント確認
@@ -157,7 +155,6 @@ class LikeTest extends DuskTestCase
 
                     //ナビゲーションタブのいいねカウントが0になっていることを確認
                     ->assertSourceHas('<span class="badge badge-white badge-pill u_count_badge">0</span>')
-                    ->screenshot('like')
                     ->click($like_button);
 
             //secondは、ユーザーいいね投稿ページ
@@ -174,8 +171,7 @@ class LikeTest extends DuskTestCase
                     ->assertSourceHas('<span class="align-self-end post_count">0</span>')
 
                     //ナビゲーションタブのいいねカウントが0になっていることを確認
-                    ->assertSourceHas('<span class="badge badge-white badge-pill u_count_badge">0</span>')
-                    ->screenshot('like');
+                    ->assertSourceHas('<span class="badge badge-white badge-pill u_count_badge">0</span>');
 
             //いいねアイコン横のいいねカウント確認
             //ナビゲーションタブのカウント確認
@@ -187,8 +183,7 @@ class LikeTest extends DuskTestCase
                     ->assertSourceHas('<span class="align-self-end post_count">1</span>')
 
                     //ナビゲーションタブのいいねカウントが1になっていることを確認
-                    ->assertSourceHas('<span class="badge badge-white badge-pill u_count_badge">1</span>')
-                    ->screenshot('like');
+                    ->assertSourceHas('<span class="badge badge-white badge-pill u_count_badge">1</span>');
         });
     }
 

@@ -34,7 +34,7 @@ class PostEditTest extends DuskTestCase
                         //動物カテゴリーデータの生成
                         $post->postCategorys()
                             ->createMany(
-                                factory(Animal::class, 3)->make()
+                                factory(Animal::class, 1)->make()
                                 ->toArray()
                             );
                     });
@@ -62,9 +62,7 @@ class PostEditTest extends DuskTestCase
             }
 
             //セレクトボックスのクリアボタンを選択分クリックしクリア
-            for ($i = 1; $i <= 3; $i++) {
-                $browser->click('.select2-selection__choice__remove');
-            }
+            $browser->click('.select2-selection__choice__remove');
 
             //編集データをフォームに入れ確認
             $browser->type('content', $post->content)
@@ -75,8 +73,7 @@ class PostEditTest extends DuskTestCase
                         ->assertSelected('animals_name[]', $name);
             }
             $browser->assertInputValue('content', $post->content)
-                    ->assertSourceHas('image/')
-                    ->screenshot('post');
+                    ->assertSourceHas('image/');
         });
     }
 
@@ -92,9 +89,7 @@ class PostEditTest extends DuskTestCase
                     ->visitRoute('posts.edit', $post->id);
 
             //セレクトボックスのクリアボタンを選択分クリックしクリア
-            for ($i = 1; $i <= 3; $i++) {
-                $browser->click('.select2-selection__choice__remove');
-            }
+            $browser->click('.select2-selection__choice__remove');
 
             foreach ($edit_animals as $index => $name) {
                 $browser->select('animals_name[]', $name)
@@ -107,8 +102,7 @@ class PostEditTest extends DuskTestCase
                     ->press('変更内容を保存する')
                     ->assertSee('投稿編集に失敗しました')
                     ->assertPresent('.is-invalid')
-                    ->assertPresent('.invalid-feedback')
-                    ->screenshot('post');
+                    ->assertPresent('.invalid-feedback');
         });
     }
 
@@ -129,8 +123,7 @@ class PostEditTest extends DuskTestCase
                     ->acceptDialog()
                     ->pause(500)
                     ->assertPathIs('/')
-                    ->assertSee('投稿削除しました')
-                    ->screenshot('post');
+                    ->assertSee('投稿削除しました');
         });
     }
 
@@ -157,8 +150,7 @@ class PostEditTest extends DuskTestCase
                     ->acceptDialog()
                     ->pause(500)
                     ->assertPathIs('/')
-                    ->assertSee('投稿削除しました')
-                    ->screenshot('post');
+                    ->assertSee('投稿削除しました');
         });
 
         //データベースに削除した投稿が残っていないか確認

@@ -75,8 +75,7 @@ class SmoothScrollTest extends DuskTestCase
             $browser->pause(1000)
                     ->assertVisible('#page_top_button')
                     ->click('#page_top_button')
-                    ->pause(1000)
-                    ->screenshot('smootyscroll');
+                    ->pause(1000);
         });
     }
 
@@ -107,8 +106,7 @@ class SmoothScrollTest extends DuskTestCase
             $browser->pause(1000)
                     ->assertVisible('#page_top_button')
                     ->click('#page_top_button')
-                    ->pause(1000)
-                    ->screenshot('smootyscroll');
+                    ->pause(1000);
         });
     }
 }

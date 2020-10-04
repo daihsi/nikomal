@@ -36,8 +36,7 @@ class EmailResetTest extends DuskTestCase
                     ->type('new_email', $email)
                     ->assertInputValue('new_email', $email)
                     ->press('再設定URLを送信')
-                    ->assertSee('確認メールを送信しました')
-                    ->screenshot('email_reset');
+                    ->assertSee('確認メールを送信しました');
 
             //email_resetsテーブルのトークンを取得
             $email_resets = EmailReset::first();
@@ -46,8 +45,7 @@ class EmailResetTest extends DuskTestCase
             //URLへアクセスしメールアドレスを変更する
             $browser->visitRoute('email.reset', $token)
                     ->assertPathIs('/')
-                    ->assertSee('メールアドレスを変更しました')
-                    ->screenshot('email_reset');
+                    ->assertSee('メールアドレスを変更しました');
         });
     }
 
@@ -68,8 +66,7 @@ class EmailResetTest extends DuskTestCase
                     //バリデーションエラーメッセージが表示しているか確認
                     //失敗フラッシュメッセージ表示してあるか確認
                     ->assertSee('リクエストに失敗しました')
-                    ->assertSee('簡単ログイン用のメールアドレスは変更できません')
-                    ->screenshot('email_reset');
+                    ->assertSee('簡単ログイン用のメールアドレスは変更できません');
         });
     }
 
@@ -91,8 +88,7 @@ class EmailResetTest extends DuskTestCase
                     //バリデーションエラーメッセージが表示しているか確認
                     //失敗フラッシュメッセージ表示してあるか確認
                     ->assertSee('リクエストに失敗しました')
-                    ->assertSee('メールアドレスは既に取得されているため、違うものを入力してください。')
-                    ->screenshot('email_reset');
+                    ->assertSee('メールアドレスは既に取得されているため、違うものを入力してください。');
         });
     }
 
@@ -121,8 +117,7 @@ class EmailResetTest extends DuskTestCase
                     ->visit('/')
                     ->visitRoute('email.request')
                     ->assertPathIs('/')
-                    ->assertSee('管理ユーザーはメールアドレス再設定ができません')
-                    ->screenshot('email_reset');
+                    ->assertSee('管理ユーザーはメールアドレス再設定ができません');
         });
     }
 
@@ -136,8 +131,7 @@ class EmailResetTest extends DuskTestCase
             $browser->loginAs($admin)
                     ->visit('/')
                     ->click('#navbarDropdown')
-                    ->assertMissing('.email_reset_icon')
-                    ->screenshot('email_reset');
+                    ->assertMissing('.email_reset_icon');
         });
     }
 }

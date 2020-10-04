@@ -60,14 +60,14 @@ class PostSearchTest extends DuskTestCase
                     //投稿本文と投稿ユーザー名と検索ヒットフラッシュメッセージが表示されているか確認
                     ->assertSee($post10->content)
                     ->assertSee($this->user->name)
-                    ->assertSee('ヒットしました')
-                    ->screenshot('search');
+                    ->assertSee('ヒットしました');
 
             //セレクトボックスのみ値を入れて検索
             $second->visitRoute('posts.search');
             foreach ($post9->postCategorys as $postCategory) {
                 $second->select('animals_name[]', $postCategory->name)
                         ->assertSelected('animals_name[]', $postCategory->name);
+                break;
             }
             $second->press('検索する')
                     ->pause(1000)
@@ -75,8 +75,7 @@ class PostSearchTest extends DuskTestCase
                     //投稿本文と投稿ユーザー名と検索ヒットフラッシュメッセージが表示されているか確認
                     ->assertSee($post9->content)
                     ->assertSee($this->user->name)
-                    ->assertSee('ヒットしました')
-                    ->screenshot('search');
+                    ->assertSee('ヒットしました');
 
             //キーワードとセレクトボックス両方値を入れて検索
             $third->visitRoute('posts.search')
@@ -85,6 +84,7 @@ class PostSearchTest extends DuskTestCase
             foreach ($post8->postCategorys as $postCategory) {
                 $third->select('animals_name[]', $postCategory->name)
                     ->assertSelected('animals_name[]', $postCategory->name);
+                break;
             }
             $third->press('検索する')
                     ->pause(1000)
@@ -92,8 +92,7 @@ class PostSearchTest extends DuskTestCase
                     //投稿本文と投稿ユーザー名と検索ヒットフラッシュメッセージが表示されているか確認
                     ->assertSee($post8->content)
                     ->assertSee($this->user->name)
-                    ->assertSee('ヒットしました')
-                    ->screenshot('search');
+                    ->assertSee('ヒットしました');
         });
     }
 
@@ -115,9 +114,8 @@ class PostSearchTest extends DuskTestCase
             $browser->press('検索する')
                     ->assertSee('検索に失敗しました')
                     ->assertPresent('.is-invalid')
-                    ->assertPresent('.invalid-feedback')
-                    ->screenshot('search');
-        });
+                    ->assertPresent('.invalid-feedback');
+            });
     }
 
     //検索データが該当ない時の表示テスト
@@ -132,8 +130,7 @@ class PostSearchTest extends DuskTestCase
                     //該当無しのフラッシュメッセージが表示されているか確認
                     //投稿がないことも確認
                     ->assertSee('該当する投稿がありません')
-                    ->assertMissing('.post_item')
-                    ->screenshot('search');
+                    ->assertMissing('.post_item');
         });
     }
 }

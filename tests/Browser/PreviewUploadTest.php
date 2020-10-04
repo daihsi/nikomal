@@ -60,7 +60,6 @@ class PreviewUploadTest extends DuskTestCase
             $frist->visit('/register')
                     ->click('#avatarUploadButton')
                     ->attach('#avatarUpload', 'storage/framework/testing/disks/images/'.$this->file_name)
-                    ->screenshot('users_avatar') //画像が切り替わっているか確認
                     ->assertSourceHas('image/'); //プレビュー用のソースコードに切り替わっているか確認
 
             //ユーザー編集ページ
@@ -68,7 +67,6 @@ class PreviewUploadTest extends DuskTestCase
                     ->visitRoute('users.edit', $this->user->id)
                     ->click('#avatarUploadButton')
                     ->attach('#avatarUpload', 'storage/framework/testing/disks/images/'.$this->file_name)
-                    ->screenshot('users_avatar') //画像が切り替わっているか確認
                     ->assertSourceHas('image/'); //プレビュー用のソースコードに切り替わっているか確認
         });
     }
@@ -84,7 +82,6 @@ class PreviewUploadTest extends DuskTestCase
                     ->visitRoute('posts.create')
                     ->click('#post_image_preview')
                     ->attach('#post_upload', 'storage/framework/testing/disks/images/'.$this->file_name)
-                    ->screenshot('post_image') //画像が切り替わっているか確認
                     ->assertSourceHas('image/'); //プレビュー用のソースコードに切り替わっているか確認
         
             //投稿編集ページ
@@ -92,7 +89,6 @@ class PreviewUploadTest extends DuskTestCase
                     ->visitRoute('posts.edit', $post->id)
                     ->click('#edit_post_image_preview')
                     ->attach('#post_upload', 'storage/framework/testing/disks/images/'.$this->file_name)
-                    ->screenshot('post_image') //画像が切り替わっているか確認
                     ->assertSourceHas('image/'); //プレビュー用のソースコードに切り替わっているか確認
         });
     }

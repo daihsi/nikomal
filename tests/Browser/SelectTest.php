@@ -60,9 +60,6 @@ class SelectTest extends DuskTestCase
                 $browser->select('animals_name[]', $animals_name[$index])
                         ->assertSelected('animals_name[]', $animals_name[$index]);
             }
-
-            //10個選択され表示されているかブラウザで確認
-            $browser->screenshot('select');
         });
     }
 
@@ -87,17 +84,11 @@ class SelectTest extends DuskTestCase
                         ->assertSelected('animals_name[]', $animals_name[$index]);
             }
 
-            //3個選択され表示されているかブラウザで確認
-            $browser->screenshot('select');
-
             //投稿編集ページで、現在の投稿のカテゴリーが選択済みで表示されているか確認
             $browser->visitRoute('posts.edit', $post->id);
             foreach ($selected as $index => $name) {
                 $browser->assertSelected('animals_name[]', $selected[$index]);
             }
-
-            //3個選択され表示されているかブラウザで確認
-            $browser->screenshot('select');
         });
     }
 
@@ -158,8 +149,7 @@ class SelectTest extends DuskTestCase
                     ->pause(1000)
                     ->assertRouteIs('posts.create')
                     ->assertSee('投稿に失敗しました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->assertSee('動物カテゴリーは3個以下で選択してください')
-                    ->screenshot('select');
+                    ->assertSee('動物カテゴリーは3個以下で選択してください');
 
             //セレクトボックスに値が保持されているか確認
             foreach ($animals_name as $index => $name) {
@@ -184,8 +174,7 @@ class SelectTest extends DuskTestCase
 
             $browser->press('検索する')
                     ->pause('1000')
-                    ->assertSee('ヒットしました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('select');
+                    ->assertSee('ヒットしました'); //toastrのフラッシュメッセージが表示されているか確認
 
             //セレクトボックスに値が保持されているか確認
             foreach ($animals_name as $index => $name) {

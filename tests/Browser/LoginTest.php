@@ -30,8 +30,7 @@ class LoginTest extends DuskTestCase
                     ->type('password', $password)
                     ->press('ログイン')
                     ->assertPathIs('/login')
-                    ->assertSee('ログイン') //ログインページのテキスト表示されているか確認
-                    ->screenshot('login');
+                    ->assertSee('ログイン'); //ログインページのテキスト表示されているか確認
         });
     }
 
@@ -48,8 +47,7 @@ class LoginTest extends DuskTestCase
                     ->type('password', $password)
                     ->press('ログイン')
                     ->assertPathIs('/')
-                    ->assertSee('ログインしました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('login');
+                    ->assertSee('ログインしました'); //toastrのフラッシュメッセージが表示されているか確認
         });
     }
 
@@ -73,8 +71,7 @@ class LoginTest extends DuskTestCase
                     ->click('#navbarDropdown')
                     ->click('.logout_alert')
                     ->assertDialogOpened('ログアウトしてよろしいですか？')
-                    ->acceptDialog() //ダイアログのokボタンを押す
-                    ->screenshot('logout');
+                    ->acceptDialog(); //ダイアログのokボタンを押す
         });
     }
 }

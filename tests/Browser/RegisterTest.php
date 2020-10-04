@@ -29,8 +29,7 @@ class RegisterTest extends DuskTestCase
                     ->type('password_confirmation', $password)
                     ->press('登録する')
                     ->assertPathIs('/')
-                    ->assertSee('ユーザー登録完了しました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('register');
+                    ->assertSee('ユーザー登録完了しました'); //toastrのフラッシュメッセージが表示されているか確認
         });
     }
 
@@ -49,8 +48,7 @@ class RegisterTest extends DuskTestCase
                     ->type('password_confirmation', $password)
                     ->press('登録する')
                     ->assertPathIs('/register')
-                    ->assertSee('ユーザー登録に失敗しました') //toastrのフラッシュメッセージが表示されているか確認
-                    ->screenshot('register');
+                    ->assertSee('ユーザー登録に失敗しました'); //toastrのフラッシュメッセージが表示されているか確認
         });
     }
 
