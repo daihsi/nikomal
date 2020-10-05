@@ -181,17 +181,36 @@ class PostEditTest extends TestCase
         $user = $this->factory_user;
         $this->actingAs($user);
 
+        //このテストは個別に生成した投稿を削除対象にしないと
+        //エラーを吐くので、setUP()の投稿を使わずに個別に生成
+        $post = factory(Post::class, 1)->create([
+                    'user_id' => $user->id,
+                    ])
+                    ->each(function ($post) {
+                        //画像データの生成
+                        $post->postImages()
+                            ->save(
+                                factory(PostImage::class)->make()
+                            );
+                        //動物カテゴリーデータの生成
+                        $post->postCategorys()
+                            ->createMany(
+                                factory(Animal::class, 3)->make()
+                                ->toArray()
+                            );
+                    });
+
         //リレーションデータ取得
-        $animals = $this->posts[0]->postCategorys;
+        $animals = $post[0]->postCategorys;
         $data = [
-                'content' => $this->posts[0]->content,
+                'content' => $post[0]->content,
                 'user_id' => $user->id,
-                'post_id' => $this->posts[0]->id,
-                'image' => $this->posts[0]->postImages,
+                'post_id' => $post[0]->id,
+                'image' => $post[0]->postImages,
             ];
 
         //削除リクエスト後、リダイレクト先の確認
-        $this->delete(route('posts.destroy', $this->posts[0]->id))
+        $this->delete(route('posts.destroy', $post[0]->id))
             ->assertStatus(302)
             ->assertRedirect('/');
 
@@ -324,15 +343,18 @@ class PostEditTest extends TestCase
     //成功フラッシュメッセージが表示されているか確認
     public function testAdminDeletePost(): void
     {
+        //このテストは個別に生成した投稿を削除対象にしないと
+        //エラーを吐くので、setUP()の投稿を使わずに個別に生成
+        $post = factory(Post::class)->create();
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
                 ]);
-        $url = route('posts.show', $this->posts[0]);
+        $url = route('posts.show', $post->id);
 
         //管理ユーザーでログイン
-        $this->actingAs($admin)
+        $response = $this->actingAs($admin)
             ->from($url)
-            ->delete(route('posts.destroy', $this->posts[0]))
+            ->delete(route('posts.destroy', $post->id))
             ->assertStatus(302)
             ->assertRedirect('/')
             ->assertSessionHas('msg_success', '投稿削除しました');
