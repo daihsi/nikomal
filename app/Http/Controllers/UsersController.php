@@ -116,12 +116,12 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $user = User::findorFail($id);
-        $posts = $user->posts()->with('postImages')->get();
 
-        //投稿が空ではない場合この処理に入る
+        //投稿の画像が空ではない場合この処理に入る
         //s3に保存してあるファイルを削除するため
-        //オブジェクトが空でないかを判定する条件式
-        if (!$posts->isEmpty()) {
+        //投稿画像collectionが空でないかを判定する条件式
+        if (!$user->posts()->with('postImages')->get()->isEmpty()) {
+            $posts = $user->posts()->with('postImages')->get();
             foreach ($posts as $post) {
                 $image = array_column($post->postImages->toArray(), 'image');
                 if(!empty($image[0])) {

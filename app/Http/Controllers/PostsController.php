@@ -195,9 +195,11 @@ class PostsController extends Controller
         $post = Post::findOrFail($id);
 
         //投稿所有者と管理ユーザーは投稿削除可能
+        //投稿画像collectionが空でない場合は
+        //s3内のファイルも削除
         if (\Auth::id() === $post->user_id || \Gate::allows('admin')) {
-            foreach ($post->postImages as $post_image) {
-                if (!empty($post_image->image)) {
+            if (!$post->postImages()->get()->isEmpty()) {
+                foreach ($post->postImages as $post_image) {
 
                     //s3内の既存ファイルの削除
                     Storage::disk('s3')->delete('post_images/'.basename($post_image->image));
