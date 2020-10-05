@@ -332,7 +332,9 @@ class UserEditTest extends TestCase
     //管理ユーザーでユーザー削除テスト
     public function testIndexPageAdminDeleteUser(): void
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->create([
+                    'avatar' => null,
+                ]);
 
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
