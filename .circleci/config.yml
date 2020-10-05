@@ -1,0 +1,49 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.3-node-browsers
+      - image: circleci/mysql:5.7-ram
+    environment:
+      - DB_CONNECTION: circle_testing
+      - DB_DATABASE circle_test
+      - MYSQL_ALLOW_EMPTY_PASSWORD: true
+
+    steps:
+      - checkout
+
+      - run: sudo apt update 
+      - run: sudo docker-php-ext-install zip pdo_mysql gd
+
+      #composerキャッシュ検索
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "composer.json" }}
+            - v1-dependencies-
+
+      #composerライブラリインストール
+      - run: composer install -n --prefer-dist
+
+      #composerキャッシュ生成
+      - save_cache:
+          key: v1-dependencies-{{ checksum "composer.json" }}
+          paths:
+            - ./vendor
+
+      #npmキャッシュ検索
+      - restore_cache:
+          keys:
+            - node-v1-{{ checksum "package.json" }}
+            - node-v1-
+
+      #npmライブラリインストール
+      - run: npm install
+
+      #npmキャッシュ生成
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+
+      #PHPUnit実行
+      - run: ./vendor/bin/phpunit
