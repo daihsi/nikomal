@@ -329,40 +329,11 @@ class UserEditTest extends TestCase
             ->assertDatabaseHas('comments', $c_data);
     }
 
-    //管理ユーザーでユーザー削除テスト(ユーザー一覧ページで行う)
+    //管理ユーザーでユーザー削除テスト
     public function testIndexPageAdminDeleteUser(): void
     {
         $user = factory(User::class)->create();
 
-        //このテストは個別に生成した投稿を削除対象にしないと
-        //エラーを吐くので、setUP()の投稿を使わずに個別に生成
-        $post = factory(Post::class, 1)->create([
-                    'user_id' => $user->id,
-                    ])
-                    ->each(function ($post) {
-                        //画像データの生成
-                        $post->postImages()
-                            ->save(
-                                factory(PostImage::class)->make()
-                            );
-                        //動物カテゴリーデータの生成
-                        $post->postCategorys()
-                            ->createMany(
-                                factory(Animal::class, 3)->make()
-                                ->toArray()
-                            );
-                    });
-
-        //削除用のコメントを生成
-        $comment = factory(Comment::class, 1)->create([
-                            'user_id' => $user->id,
-                            'post_id' => $post[0]->id,
-                        ]);
-
-        //削除後のテーブル確認用データ(一意のidで確認)
-        $data = [
-                    'id' => $user->id,
-                ];
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
                 ]);
@@ -372,75 +343,14 @@ class UserEditTest extends TestCase
         //ユーザー一覧でユーザー削除リクエスト
         //リダイレクト先の確認
         //成功フラッシュメッセージが表示されているか確認
-        $this->actingAs($admin)
+        $response = $this->actingAs($admin)
             ->from($index)
             ->delete(route('users.destroy', $user->id))
             ->assertStatus(302)
             ->assertRedirect($index)
             ->assertSessionHas('msg_success', '「'.$user->name.'」のアカウントを削除しました');
 
-        //各テーブルにデータが残っていないか確認
-        //削除ユーザーが生成した投稿やコメントも削除されたか確認
-        $this->assertDatabaseMissing('users', $data)
-            ->assertDatabaseMissing('posts', $data)
-            ->assertDatabaseMissing('post_images', $data)
-            ->assertDatabaseMissing('post_category', $data)
-            ->assertDatabaseMissing('comments', $data);
-    }
-
-    //管理ユーザーでユーザー削除テスト(ユーザー詳細ページで行う)
-    public function testShowPageAdminDeleteUser(): void
-    {
-        $user = factory(User::class)->create();
-
-        //このテストは個別に生成した投稿を削除対象にしないと
-        //エラーを吐くので、setUP()の投稿を使わずに個別に生成
-        $post = factory(Post::class, 1)->create([
-                    'user_id' => $user->id,
-                    ])
-                    ->each(function ($post) {
-                        //画像データの生成
-                        $post->postImages()
-                            ->save(
-                                factory(PostImage::class)->make()
-                            );
-                        //動物カテゴリーデータの生成
-                        $post->postCategorys()
-                            ->createMany(
-                                factory(Animal::class, 3)->make()
-                                ->toArray()
-                            );
-                    });
-
-        //削除用のコメントを生成
-        $comment = factory(Comment::class, 1)->create([
-                            'user_id' => $user->id,
-                            'post_id' => $post[0]->id,
-                        ]);
-        $data = [
-                    'id' => $user->id,
-                ];
-        $admin = factory(User::class)->create([
-                    'email' => 'admin@example.com',
-                ]);
-        $show = route('users.show', $user->id);
-
-        //ユーザー詳細でユーザー削除リクエスト
-        //リダイレクト先の確認
-        //成功フラッシュメッセージが表示されているか確認
-        $this->actingAs($admin)
-            ->from($show)
-            ->delete(route('users.destroy', $user->id))
-            ->assertStatus(302)
-            ->assertRedirect('/')
-            ->assertSessionHas('msg_success', '「'.$user->name.'」のアカウントを削除しました');
-
-        //各テーブルにデータが残っていないか確認
-        //削除ユーザーが生成した投稿やコメントも削除されたか確認
-        $this->assertDatabaseMissing('users', $data)
-            ->assertDatabaseMissing('posts', $data)
-            ->assertDatabaseMissing('post_images', $data)
-            ->assertDatabaseMissing('post_category', $data)
-            ->assertDatabaseMissing('comments', $data);
+        //テーブルにデータが残っていないか確認
+        $this->assertDeleted($user);
     }
 }
