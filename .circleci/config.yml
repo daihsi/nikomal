@@ -6,7 +6,8 @@ jobs:
       - image: circleci/mysql:5.7-ram
     environment:
       - DB_CONNECTION: circle_testing
-      - DB_DATABASE circle_test
+      - DB_DATABASE: circle_test
+      - APP_KEY: vKAi6NbIjQyG/ttIsqT7T/N83GUTtREYCorqU9co448=
       - MYSQL_ALLOW_EMPTY_PASSWORD: true
 
     steps:
@@ -51,4 +52,4 @@ jobs:
             - ./node_modules
 
       #PHPUnit実行
-      - run: ./vendor/bin/phpunit
+      - run: ./vendor/bin/phpunit ./tests/Feature
