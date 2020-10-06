@@ -10,6 +10,7 @@ jobs:
       - APP_DEBUG: true
       - APP_ENV: testing
       - APP_KEY: base64:vKAi6NbIjQyG/ttIsqT7T/N83GUTtREYCorqU9co448=
+      - APP_URL: http://127.0.0.1:8080
       - MYSQL_ALLOW_EMPTY_PASSWORD: true
 
     steps:
@@ -55,5 +56,32 @@ jobs:
       #PHPUnit実行
       - run: ./vendor/bin/phpunit ./tests/Feature
 
-      #Larastan実行
-      - run: ./vendor/bin/phpstan analyse -c phpstan.neon
+      #chromeをインストール
+      - run:
+          name: Install Chrome Driver
+          command: |
+              npm run production
+              cp .env.testing .env
+              google-chrome --version
+              php artisan dusk:chrome-driver 85
+
+      #chromeを起動
+      - run:
+          name: Start Chrome Driver
+          command: ./vendor/laravel/dusk/bin/chromedriver-linux
+          background: true
+
+      #サーバー立ち上げ
+      - run:
+          name: Run Laravel Server
+          command: php artisan serve
+          background: true
+
+      #duskを実行
+      - run:
+          name: Run Laravel Dusk Tests
+          command: php artisan dusk
+
+      #duskのスクリーンショット
+      - store_artifacts:
+          path: tests/Browser/screenshots
