@@ -40,8 +40,8 @@
     </h4>
 </div>
 <div class="text-center">
-    <a class="btn btn-outline-success mr-2" href="{{ route('register') }}">はじめる</a>
-    <a class="btn btn-outline-info" href="#">nikomalについて</a>
+    <a class="btn btn-outline-success mr-2" href="{{ route('register') }}">{{ __('Register') }}</a>
+    <a class="btn btn-outline-success" href="{{ route('login') }}">{{ __('Login') }}</a>
 </div>
 
 <!-- ゲストユーザーログイン -->
@@ -53,6 +53,12 @@
         かんたんログイン
     </button>
 </form>
+<div class="text-center mt-2">
+    <small style="color: rgba(0, 0, 0, 0.5); font-size: 11px;">
+        ※ かんたんログインはお試しユーザーログイン用です。<br>
+          メールアドレス等入力せず、機能をお試しいただけます。
+    </small>
+</div>
 
 <!-- ボーダー -->
 <div class="container">
