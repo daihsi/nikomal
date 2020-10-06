@@ -53,8 +53,8 @@ jobs:
           paths:
             - ./node_modules
 
-      #Larastan実行
-      - run: ./vendor/bin/phpstan analyse -c phpstan.neon
-
       #PHPUnit実行
       - run: ./vendor/bin/phpunit ./tests/Feature
+
+      #Larastan実行
+      - run: ./vendor/bin/phpstan analyse --level 6
