@@ -15,12 +15,13 @@ class PostsSearchController extends Controller
      * @param \App\Http\Requests\PostSearchRequest $request
      * @return \Illuminate\View\View
      */
-    public function index(PostSearchRequest $request) {
+    public function index(PostSearchRequest $request)
+    {
         $query = Post::query();
-        $animals = $request->animals_name;
-        $keyword = $request->keyword;
 
-        if (filled($animals) || filled($keyword)) {
+        if (filled($request->animals_name) || filled($request->keyword)) {
+            $animals = $request->animals_name;
+            $keyword = $request->keyword;
 
             //どちらにも値が入っている場合の検索
             if (filled($animals) && filled($keyword)) {
@@ -49,8 +50,8 @@ class PostsSearchController extends Controller
                     ->appends($request->query());
         return view('posts.search',[
                 'posts' => $posts,
-                'keyword' => $keyword,
-                'animals_name' => $animals,
+                'keyword' => $keyword ?? null,
+                'animals_name' => $animals ?? null,
                 'count' => $count ?? null,
             ]);
     }
