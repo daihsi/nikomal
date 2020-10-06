@@ -36,6 +36,7 @@ class EmailResetTest extends DuskTestCase
                     ->type('new_email', $email)
                     ->assertInputValue('new_email', $email)
                     ->press('再設定URLを送信')
+                    ->waitForText('確認メールを送信しました')
                     ->assertSee('確認メールを送信しました');
 
             //email_resetsテーブルのトークンを取得

@@ -58,6 +58,7 @@ class PasswordResetTest extends DuskTestCase
                     ->type('email', $this->user->email)
                     ->assertInputValue('email', $this->user->email)
                     ->press('再設定URLを送信')
+                    ->waitForText('パスワードリセット用URLを送信しました')
                     ->assertSee('パスワードリセット用URLを送信しました');
 
             //テーブルのトークンを更新
@@ -95,6 +96,7 @@ class PasswordResetTest extends DuskTestCase
                     ->type('email', $this->user->email)
                     ->assertInputValue('email', $this->user->email)
                     ->press('再設定URLを送信')
+                    ->waitForText('パスワードリセット用URLを送信しました')
                     ->assertSee('パスワードリセット用URLを送信しました');
 
             //テーブルのトークンを更新

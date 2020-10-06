@@ -88,8 +88,8 @@ class FollowTest extends DuskTestCase
         $this->browse(function ($browser) use ($follow_button, $unfollow_button) {
             $browser->loginAs($this->auth_user)
                     ->visitRoute('users.index')
-                    ->click($follow_button)
-                    ->waitFor($unfollow_button);
+                    ->press('フォロー')
+                    ->pause(3000);
             $browser->visitRoute('users.followers', $this->users[1]->id)
 
                     //フォロワーがカウント1になっていることを確認
@@ -100,7 +100,7 @@ class FollowTest extends DuskTestCase
                     //フォロワーがカウント0になっていることを確認
                     ->assertSourceHas('<span class="badge badge-white badge-pill follower_count_badge">0</span>')
                     ->press('フォロー')
-                    ->pause(1000)
+                    ->pause(3000)
 
                     //フォロワーがカウント1になっていることを確認
                     ->assertSourceHas('<span class="badge badge-white badge-pill follower_count_badge">1</span>');
