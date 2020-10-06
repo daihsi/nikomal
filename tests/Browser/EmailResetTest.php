@@ -22,33 +22,6 @@ class EmailResetTest extends DuskTestCase
         $this->user = factory(User::class)->create();
     }
 
-    //メールアドレス変更リクエスト
-    public function testEmailResetRequest(): void
-    {
-        $user = factory(User::class)->make();
-        $email = $user->email;
-
-        //新しいメールアドレスを入力しリクエスト
-        $this->browse(function ($browser) use ($email) {
-            $browser->loginAs($this->user)
-                    ->visitRoute('email.request')
-                    ->assertRouteIs('email.request')
-                    ->type('new_email', $email)
-                    ->assertInputValue('new_email', $email)
-                    ->press('再設定URLを送信')
-                    ->assertSee('確認メールを送信しました');
-
-            //email_resetsテーブルのトークンを取得
-            $email_resets = EmailReset::first();
-            $token = $email_resets->token;
-
-            //URLへアクセスしメールアドレスを変更する
-            $browser->visitRoute('email.reset', $token)
-                    ->assertPathIs('/')
-                    ->assertSee('メールアドレスを変更しました');
-        });
-    }
-
     //簡単ログイン用メールアドレスは変更できないようになっているかテスト
     public function testGuestUserLoginEmailReset(): void
     {

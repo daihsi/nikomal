@@ -10,6 +10,7 @@ jobs:
       - APP_DEBUG: true
       - APP_ENV: testing
       - APP_KEY: base64:vKAi6NbIjQyG/ttIsqT7T/N83GUTtREYCorqU9co448=
+      - APP_URL: http://127.0.0.1:8000
       - MYSQL_ALLOW_EMPTY_PASSWORD: true
 
     steps:
@@ -21,12 +22,11 @@ jobs:
               sudo apt update && sudo apt install -y mariadb-client libpng-dev libjpeg-dev zlib1g-dev
               sudo docker-php-ext-configure gd --with-png-dir=/usr/include --with-jpeg-dir=/usr/include
               sudo docker-php-ext-install zip pdo_mysql gd
-              sudo composer self-update
 
       #composerキャッシュ検索
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "composer.lock" }}
+            - v1-dependencies-{{ checksum "composer.json" }}
             - v1-dependencies-
 
       #composerライブラリインストール
@@ -34,14 +34,14 @@ jobs:
 
       #composerキャッシュ生成
       - save_cache:
-          key: v1-dependencies-{{ checksum "composer.lock" }}
+          key: v1-dependencies-{{ checksum "composer.json" }}
           paths:
             - ./vendor
 
       #npmキャッシュ検索
       - restore_cache:
           keys:
-            - node-v1-{{ checksum "package-lock.json" }}
+            - node-v1-{{ checksum "package.json" }}
             - node-v1-
 
       #npmライブラリインストール
@@ -49,9 +49,39 @@ jobs:
 
       #npmキャッシュ生成
       - save_cache:
-          key: node-v1-{{ checksum "package-lock.json" }}
+          key: node-v1-{{ checksum "package.json" }}
           paths:
             - ./node_modules
 
       #PHPUnit実行
       - run: ./vendor/bin/phpunit ./tests/Feature
+
+      #chromeをインストール
+      - run:
+          name: Install Chrome Driver
+          command: |
+              npm run production
+              cp .env.dusk.local .env
+              google-chrome --version
+              php artisan dusk:chrome-driver 85
+
+      #chromeを起動
+      - run:
+          name: Start Chrome Driver
+          command: ./vendor/laravel/dusk/bin/chromedriver-linux
+          background: true
+
+      #サーバー立ち上げ
+      - run:
+          name: Run Laravel Server
+          command: php artisan serve --env=dusk.local
+          background: true
+
+      #duskを実行
+      - run:
+          name: Run Laravel Dusk Tests
+          command: php artisan dusk --env=dusk.local
+
+      #duskのスクリーンショット
+      - store_artifacts:
+          path: tests/Browser/screenshots
