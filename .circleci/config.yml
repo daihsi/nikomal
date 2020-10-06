@@ -10,7 +10,7 @@ jobs:
       - APP_DEBUG: true
       - APP_ENV: testing
       - APP_KEY: base64:vKAi6NbIjQyG/ttIsqT7T/N83GUTtREYCorqU9co448=
-      - APP_URL: http://127.0.0.1:8080
+      - APP_URL: http://127.0.0.1:8000
       - MYSQL_ALLOW_EMPTY_PASSWORD: true
 
     steps:
@@ -61,6 +61,7 @@ jobs:
           name: Install Chrome Driver
           command: |
               npm run production
+              cp .env.dusk.local .env
               google-chrome --version
               php artisan dusk:chrome-driver 85
 
@@ -73,7 +74,7 @@ jobs:
       #サーバー立ち上げ
       - run:
           name: Run Laravel Server
-          command: php artisan serve --host=$IP --port=$PORT --env=dusk.local
+          command: php artisan serve --env=dusk.local
           background: true
 
       #duskを実行
