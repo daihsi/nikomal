@@ -61,7 +61,7 @@ jobs:
           name: Install Chrome Driver
           command: |
               npm run production
-              cp .env.testing .env
+              cp .env.dusk.local .env
               google-chrome --version
               php artisan dusk:chrome-driver 85
 
@@ -74,13 +74,13 @@ jobs:
       #サーバー立ち上げ
       - run:
           name: Run Laravel Server
-          command: php artisan serve
+          command: php artisan serve --env=dusk.local
           background: true
 
       #duskを実行
       - run:
           name: Run Laravel Dusk Tests
-          command: php artisan dusk
+          command: php artisan dusk --env=dusk.local
 
       #duskのスクリーンショット
       - store_artifacts:
