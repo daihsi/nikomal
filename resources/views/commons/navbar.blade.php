@@ -21,10 +21,6 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav navbar-right">
-                    {{-- アプリ紹介ページへのリンク --}}
-                    <li class="nav-item pt-2">
-                        <a class="nav-link" href="#"><i class="fas fa-book-open fa-lg instruction_icon"></i>はじめに</a>
-                    </li>
 
                     {{-- ユーザー一覧へのリンク --}}
                     <li class="nav-item pt-2">
