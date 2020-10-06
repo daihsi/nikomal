@@ -10,7 +10,7 @@ jobs:
       - APP_DEBUG: true
       - APP_ENV: testing
       - APP_KEY: base64:vKAi6NbIjQyG/ttIsqT7T/N83GUTtREYCorqU9co448=
-      - APP_URL: http://127.0.0.1:8000
+      - APP_URL: http://127.0.0.1:8080
       - MYSQL_ALLOW_EMPTY_PASSWORD: true
 
     steps:
@@ -73,13 +73,13 @@ jobs:
       #サーバー立ち上げ
       - run:
           name: Run Laravel Server
-          command: php artisan serve
+          command: php artisan serve --host=$IP --port=$PORT --env=dusk.local
           background: true
 
       #duskを実行
       - run:
           name: Run Laravel Dusk Tests
-          command: php artisan dusk
+          command: php artisan dusk --env=dusk.local
 
       #duskのスクリーンショット
       - store_artifacts:
