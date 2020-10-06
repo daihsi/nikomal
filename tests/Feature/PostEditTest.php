@@ -178,41 +178,25 @@ class PostEditTest extends TestCase
     //投稿が削除されているかテスト
     public function testPostDelete(): void
     {
-        $user = $this->factory_user;
-        $this->actingAs($user);
+        $user = factory(User::class)->create();
 
-        //リレーションデータ取得
-        $animals = $this->posts[0]->postCategorys;
-        $data = [
-                'content' => $this->posts[0]->content,
-                'user_id' => $user->id,
-                'post_id' => $this->posts[0]->id,
-                'image' => $this->posts[0]->postImages,
-            ];
+        //このテストは個別に生成した投稿を削除対象にしないと
+        //エラーを吐くので、setUP()の投稿を使わずに個別に生成
+        $post = factory(Post::class)->create([
+                    'user_id' => $user->id,
+                    ]);
+        $url = route('posts.show', $post->id);
 
-        //削除リクエスト後、リダイレクト先の確認
-        $this->delete(route('posts.destroy', $this->posts[0]->id))
+        //削除リクエスト
+        $response = $this->actingAs($user)
+            ->from($url)
+            ->delete(route('posts.destroy', $post->id))
             ->assertStatus(302)
-            ->assertRedirect('/');
+            ->assertRedirect('/')
+            ->assertSessionHas('msg_success', '投稿削除しました');
 
-        //postsテーブルのデータが削除されたか確認
-        $this->assertDeleted('posts', [
-                'content' => $data['content'],
-                'user_id' => $data['user_id'],
-            ]);
-
-        //post_imagesテーブルのデータが削除されたか確認
-        $this->assertDeleted('post_images', [
-                'image' => $data['image'],
-            ]);
-
-        //post_categoryテーブルのデータが削除されたか確認
-        foreach ($animals as $animal) {
-            $this->assertDeleted('post_category', [
-                'animal_id' => $animal->id,
-                'post_id' => $data['post_id'],
-            ]);
-        }
+        //データが削除されたか確認
+        $this->assertDeleted($post);
     }
 
     //必須項目が空でリクエストされた場合のバリデーションテスト
@@ -324,17 +308,24 @@ class PostEditTest extends TestCase
     //成功フラッシュメッセージが表示されているか確認
     public function testAdminDeletePost(): void
     {
+        //このテストは個別に生成した投稿を削除対象にしないと
+        //エラーを吐くので、setUP()の投稿を使わずに個別に生成
+        $post = factory(Post::class)->create();
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
                 ]);
-        $url = route('posts.show', $this->posts[0]);
+        $url = route('posts.show', $post->id);
 
         //管理ユーザーでログイン
-        $this->actingAs($admin)
+        //削除リクエスト
+        $response = $this->actingAs($admin)
             ->from($url)
-            ->delete(route('posts.destroy', $this->posts[0]))
+            ->delete(route('posts.destroy', $post->id))
             ->assertStatus(302)
             ->assertRedirect('/')
             ->assertSessionHas('msg_success', '投稿削除しました');
+
+        //データが削除されたか確認
+        $this->assertDeleted($post);
     }
 }

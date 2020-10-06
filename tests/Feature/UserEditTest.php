@@ -330,49 +330,29 @@ class UserEditTest extends TestCase
     }
 
     //管理ユーザーでユーザー削除テスト
-    public function testAdminDeleteUser(): void
+    public function testIndexPageAdminDeleteUser(): void
     {
-        //削除後のテーブル確認用データ(一意のidで確認)
-        $data = [
-                    'id' => $this->users[0]->id,
-                ];
+        $user = factory(User::class)->create([
+                    'avatar' => null,
+                ]);
+
         $admin = factory(User::class)->create([
                     'email' => 'admin@example.com',
                 ]);
 
         $index = route('users.index');
-        $show = route('users.show', $this->users[1]->id);
 
         //ユーザー一覧でユーザー削除リクエスト
         //リダイレクト先の確認
         //成功フラッシュメッセージが表示されているか確認
-        $this->actingAs($admin)
+        $response = $this->actingAs($admin)
             ->from($index)
-            ->delete(route('users.destroy', $this->users[0]->id))
+            ->delete(route('users.destroy', $user->id))
             ->assertStatus(302)
             ->assertRedirect($index)
-            ->assertSessionHas('msg_success', '「'.$this->users[0]->name.'」のアカウントを削除しました');
+            ->assertSessionHas('msg_success', '「'.$user->name.'」のアカウントを削除しました');
 
-        //各テーブルにデータが残っていないか確認
-        $this->assertDatabaseMissing('users', $data)
-            ->assertDatabaseMissing('post_images', $data)
-            ->assertDatabaseMissing('posts', $data)
-            ->assertDatabaseMissing('comments', $data);
-
-        //ユーザー詳細でユーザー削除リクエスト
-        //リダイレクト先の確認
-        //成功フラッシュメッセージが表示されているか確認
-        $this->from($show)
-            ->delete(route('users.destroy', $this->users[1]->id))
-            ->assertStatus(302)
-            ->assertRedirect('/')
-            ->assertSessionHas('msg_success', '「'.$this->users[1]->name.'」のアカウントを削除しました');
-
-        //各テーブルにデータが残っていないか確認
-        str_replace($this->users[0]->id, $this->users[1]->id, $data);
-        $this->assertDatabaseMissing('users', $data)
-            ->assertDatabaseMissing('post_images', $data)
-            ->assertDatabaseMissing('posts', $data)
-            ->assertDatabaseMissing('comments', $data);
+        //テーブルにデータが残っていないか確認
+        $this->assertDeleted($user);
     }
 }
