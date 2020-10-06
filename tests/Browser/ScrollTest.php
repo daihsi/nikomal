@@ -209,8 +209,6 @@ class ScrollTest extends DuskTestCase
             //ユーザー詳細ページの投稿コンテンツ
             //一番上位にある投稿を確認
             $browser->visitRoute('users.show', $this->users[0]->id)
-                    ->pause(6500)
-                    ->assertSee($post1)
                     ->press('もっと見る')
                     ->pause(6500)
                     ->driver
