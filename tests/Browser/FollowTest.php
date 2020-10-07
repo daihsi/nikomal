@@ -82,10 +82,9 @@ class FollowTest extends DuskTestCase
     //ユーザー詳細ページのフォロワーのカウントテスト
     public function testFollowersCount(): void
     {
-        $follow_button = '.follow';
         $unfollow_button = '.follow_button';
 
-        $this->browse(function ($browser) use ($follow_button, $unfollow_button) {
+        $this->browse(function ($browser) use ($unfollow_button) {
             $browser->loginAs($this->auth_user)
                     ->visitRoute('users.followers', $this->users[1]->id)
 
