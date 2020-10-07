@@ -15,37 +15,34 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- 右側 -->
                 <ul class="navbar-nav mr-auto">
-                    {{-- アプリ紹介ページへのリンク --}}
+
+                    {{-- 投稿検索ページへのリンク --}}
                     <li class="nav-item pt-1 d-none d-lg-inline">
-                        <a class="nav-link" href="{{ route('posts.search') }}"><i class="fas fa-search fa-lg"></i>検索</a>
+                        <a class="nav-link {{ Request::routeIs('posts.search') ? 'active' : '' }}" href="{{ route('posts.search') }}"><i class="fas fa-search fa-lg"></i>検索</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav navbar-right">
-                    {{-- アプリ紹介ページへのリンク --}}
-                    <li class="nav-item pt-2">
-                        <a class="nav-link" href="#"><i class="fas fa-book-open fa-lg instruction_icon"></i>はじめに</a>
-                    </li>
 
                     {{-- ユーザー一覧へのリンク --}}
                     <li class="nav-item pt-2">
-                        <a class="nav-link" href="{{ route('users.index') }}"><i class="fas fa-users fa-lg users_icon"></i>ユーザー一覧</a>
+                        <a class="nav-link {{ Request::routeIs('users.index') ? 'active' : '' }}" href="{{ route('users.index') }}"><i class="fas fa-users fa-lg users_icon"></i>ユーザー一覧</a>
                     </li>
 
                         <!-- Authentication Links -->
                     @guest
                         <li class="nav-item pt-2">
-                            <a class="nav-link" href="{{ route('login') }}"><i class="fas fa-sign-in-alt fa-lg login_icon"></i>{{ __('Login') }}</a>
+                            <a class="nav-link {{ Request::routeIs('login') ? 'active' : '' }}" href="{{ route('login') }}"><i class="fas fa-sign-in-alt fa-lg login_icon"></i>{{ __('Login') }}</a>
                         </li>
                     @if (Route::has('register'))
                         <li class="nav-item pt-2">
-                            <a class="nav-link" href="{{ route('register') }}"><i class="fas fa-user-plus fa-lg register_icon"></i>{{ __('Register') }}</a>
+                            <a class="nav-link {{ Request::routeIs('register') ? 'active' : '' }}" href="{{ route('register') }}"><i class="fas fa-user-plus fa-lg register_icon"></i>{{ __('Register') }}</a>
                         </li>
                     @endif
                     @else
 
                         {{-- 新規投稿ページへのリンク --}}
                         <li class="nav-item pt-2">
-                            <a class="nav-link" href="{{ route('posts.create') }}"><i class="fas fa-pen-square fa-lg new_post"></i>新規投稿</a>
+                            <a class="nav-link {{ Request::routeIs('posts.create') ? 'active' : '' }}" href="{{ route('posts.create') }}"><i class="fas fa-pen-square fa-lg new_post"></i>新規投稿</a>
                         </li>
 
                         <li class="nav-item dropdown">

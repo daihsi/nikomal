@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '投稿検索')
+
 @section('content')
 
     {{-- 検索フォーム --}}

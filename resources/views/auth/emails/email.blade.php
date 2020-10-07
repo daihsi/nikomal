@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'メールアドレス再設定')
+
 @section('content')
 <div class="container">
     <h4 class="text-center font-weight-bold mt-5 mb-5">{{ __('Reset Email') }}</h4>

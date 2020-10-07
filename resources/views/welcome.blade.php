@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@guest
+    @section('title', 'トップページ')
+@else
+    @section('title', '新規投稿一覧')
+@endguest
+
 @section('content')
 @guest
     @include('commons.guest_toppage')
