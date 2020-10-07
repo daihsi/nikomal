@@ -17943,3 +17943,7 @@ textarea {
 
 /* ページトップへ戻るボタン関係　終り  */
 
+.dropdown-item {
+  color: rgba(0, 0, 0, 0.5);
+}
+
