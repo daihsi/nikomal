@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'いいねが多い順投稿一覧')
+
 @section('content')
 
     @if(Auth::check())

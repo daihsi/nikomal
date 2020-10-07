@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'ログイン')
+
 @section('content')
 <div class="container">
     <h2 class="text-center font-weight-bold mt-5 mb-5">{{ __('Login') }}</h2>

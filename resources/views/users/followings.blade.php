@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'フォロー一覧')
+
 @section('content')
 
 {{-- ユーザー情報 --}}

@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'パスワード再設定')
+
 @section('content')
 <div class="container">
     <h3 class="text-center font-weight-bold mt-5 mb-5">{{ __('Reset Password') }}</h3>
