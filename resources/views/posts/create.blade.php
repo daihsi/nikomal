@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '新規投稿')
+
 @section('content')
 <div class="container">
     <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data" accept-charset="UTF-8">

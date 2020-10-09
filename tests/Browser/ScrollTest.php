@@ -320,7 +320,7 @@ class ScrollTest extends DuskTestCase
             //ユーザー詳細ページのいいね投稿コンテンツ
             //一番上位にあるいいね投稿を確認
             $browser->visitRoute('users.likes', $user->id)
-                    ->waitForText($post1)
+                    ->pause(6000)
                     ->assertSee($post1)
                     ->press('もっと見る')
                     ->driver
