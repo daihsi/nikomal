@@ -107,16 +107,22 @@ class ScrollTest extends DuskTestCase
     //ユーザー一覧の無限スクロールテスト
     public function testUsersScroll(): void
     {
+        //管理ユーザーの生成
+        $admin = factory(User::class)->create([
+                        'email' => 'admin@example.com',
+                    ]);
         $user1 = $this->users[0]->name;
         $user3 = $this->users[2]->name;
         $user14 = $this->users[13]->name;
 
-        $this->browse(function ($browser) use ($user1, $user3, $user14) {
+        $this->browse(function ($browser) use ($admin, $user1, $user3, $user14) {
 
             //ページの一番上位にあるユーザーを確認
+            //管理ユーザーが一覧に表示されていないか確認
             $browser->visitRoute('users.index')
                     ->waitForText($user14)
                     ->assertSee($user14)
+                    ->assertDontSee($admin->name)
                     ->driver
                     ->executeScript('window.scrollTo(0, 500);');
 
@@ -128,7 +134,9 @@ class ScrollTest extends DuskTestCase
                     ->executeScript('window.scrollTo(1000, 2000);');
 
             //もっと見るボタン押下げ後、二ページ目のユーザーを確認
+            //管理ユーザーが一覧に表示されていないか確認
             $browser->waitForText($user1)
+                    ->assertDontSee($admin->name)
                     ->assertSee($user1);
         });
     }
