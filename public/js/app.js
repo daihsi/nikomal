@@ -48582,25 +48582,29 @@ var InfiniteScroll = __webpack_require__(/*! infinite-scroll */ "./node_modules/
 jQueryBridget('infiniteScroll', InfiniteScroll, $); //ユーザー一覧、フォロー一覧、フォロワー一覧
 
 $(function () {
-  $('#user_list').infiniteScroll({
-    path: '.pagination_next',
-    append: '.user_card',
-    history: false,
-    button: '.view_more_button',
-    scrollThreshold: false,
-    hideNav: '.pagination',
-    status: '.page_load_status'
-  });
+  if ($('.pagination_next').length) {
+    $('#user_list').infiniteScroll({
+      path: '.pagination_next',
+      append: '.user_card',
+      history: false,
+      button: '.view_more_button',
+      scrollThreshold: false,
+      hideNav: '.pagination',
+      status: '.page_load_status'
+    });
+  }
 }); //コメント一覧
 
 $(function () {
-  $('#comment_area').infiniteScroll({
-    path: '.comment_next',
-    append: '.balloon',
-    history: false,
-    hideNav: '.pagination',
-    status: '.page_load_status'
-  });
+  if ($('.comment_next').length) {
+    $('#comment_area').infiniteScroll({
+      path: '.comment_next',
+      append: '.balloon',
+      history: false,
+      hideNav: '.pagination',
+      status: '.page_load_status'
+    });
+  }
 });
 
 /***/ }),
@@ -48735,7 +48739,6 @@ imagesLoaded.makeJQueryPlugin($); //トップページ、個別ユーザー投�
 $(function () {
   var $post_card_container = $('#post_card_container').masonry({
     itemSelector: 'none',
-    // select none at first
     columnWidth: '.post_sizer',
     percentPosition: true,
     stagger: 30,
@@ -48757,16 +48760,19 @@ $(function () {
     $post_card_container.masonry('appended', $items);
   });
   InfiniteScroll.imagesLoaded = imagesLoaded;
-  $post_card_container.infiniteScroll({
-    path: '.pagination_next',
-    append: '.post_item',
-    outlayer: msnry,
-    button: '.view_more_button',
-    history: false,
-    scrollThreshold: false,
-    hideNav: '.pagination',
-    status: '.page_load_status'
-  });
+
+  if ($('.pagination_next').length) {
+    $post_card_container.infiniteScroll({
+      path: '.pagination_next',
+      append: '.post_item',
+      outlayer: msnry,
+      button: '.view_more_button',
+      history: false,
+      scrollThreshold: false,
+      hideNav: '.pagination',
+      status: '.page_load_status'
+    });
+  }
 });
 
 /***/ }),
