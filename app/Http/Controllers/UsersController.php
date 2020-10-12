@@ -18,8 +18,12 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::orderBy('id', 'desc')->simplePaginate(12);
-        
+        //管理ユーザーのデータを取得しない(一意であるメールアドレスで判定)
+        //管理ユーザーはユーザー一覧に表示しない
+        $users = User::whereNotIn('email', ['admin@example.com'])
+                    ->orderBy('id', 'desc')
+                    ->simplePaginate(12);
+
         return view('users.index', [
             'users' => $users,
         ]);

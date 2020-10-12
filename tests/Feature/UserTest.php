@@ -228,4 +228,19 @@ class UserTest extends TestCase
             ->assertViewIs('welcome')
             ->assertSee('さぁ、動物たちの笑っている表情を');
     }
+
+    //ユーザー一覧にアクセスする際に
+    //管理ユーザーのデータをコントローラーで取得していないかテスト
+    public function testAdminUserNotUserList(): void
+    {
+        $users = factory(User::class, 10)->create();
+        $admin = factory(User::class)->create([
+                    'email' => 'admin@example.com',
+                ]);
+
+        //レスポンスデータに管理ユーザーのデータがないか確認
+        $this->get(route('users.index'))
+            ->assertViewIs('users.index')
+            ->assertDontSee($admin->name);
+    }
 }

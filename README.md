@@ -1,4 +1,4 @@
-<p align="center"><img src="{{ asset('storage/images/logo.png') }}" width="400"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/65531136/95590284-d6287780-0a80-11eb-9fd0-a46974a14466.png" max-width="400" max-height="100"></p>
 
 ## アプリ概要
 

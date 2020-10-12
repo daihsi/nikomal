@@ -11,7 +11,7 @@ imagesLoaded.makeJQueryPlugin( $ );
 //いいねランキングページ、検索一覧ページ
 $(function() {
   var $post_card_container = $('#post_card_container').masonry({
-    itemSelector: 'none', // select none at first
+    itemSelector: 'none',
     columnWidth: '.post_sizer',
     percentPosition: true,
     stagger: 30,
@@ -29,14 +29,16 @@ $(function() {
 
   InfiniteScroll.imagesLoaded = imagesLoaded;
 
-  $post_card_container.infiniteScroll({
-      path: '.pagination_next',
-      append: '.post_item',
-      outlayer: msnry,
-      button: '.view_more_button',
-      history: false,
-      scrollThreshold: false,
-      hideNav: '.pagination',
-      status: '.page_load_status',
-  });
+  if ($('.pagination_next').length) {
+    $post_card_container.infiniteScroll({
+        path: '.pagination_next',
+        append: '.post_item',
+        outlayer: msnry,
+        button: '.view_more_button',
+        history: false,
+        scrollThreshold: false,
+        hideNav: '.pagination',
+        status: '.page_load_status',
+    });
+  }
 });
