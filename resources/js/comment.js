@@ -59,7 +59,7 @@ $(function() {
                 let html = '';
 
                 //ユーザーのアバター画像がnullの場合は、こちらの画像を使用
-                let img_src = "/storage/images/default_icon.png";
+                let img_src = "/images/default_icon.png";
 
                 //コメントしたユーザーの情報
                 let user_id = data['comment']['user']['id'];
@@ -236,7 +236,7 @@ $(function() {
                     let auth_id = data['auth_id'];
 
                     //ユーザーのアバター画像がnullの場合は、こちらの画像を使用
-                    let img_src = "/storage/images/default_icon.png";
+                    let img_src = "/images/default_icon.png";
 
                     //管理ユーザーでログインしているか
                     let admin = data['admin'];

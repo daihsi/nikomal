@@ -7,7 +7,7 @@
                     <div class="d-flex flex-column justify-content-center">
                         <a href="{{ route('users.show', ['user' => $user->id]) }}">
                             @empty($user->avatar)
-                                <img src="{{ asset('storage/images/default_icon.png') }}" class="user_avatar_icon rounded-circle" width="155" height="155">
+                                <img src="{{ asset('/images/default_icon.png') }}" class="user_avatar_icon rounded-circle" width="155" height="155">
                             @else
                                 <img src="{{ $user->avatar }}" class="user_avatar_icon rounded-circle" width="155" height="155">
                             @endempty

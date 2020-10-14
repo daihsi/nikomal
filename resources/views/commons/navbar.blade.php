@@ -2,7 +2,7 @@
     <header class="mb-3">
         <nav class="navbar navbar-expand-lg navbar-light bg-white header_navbar">
             <a class="navbar-brand" href="{{ url('/') }}">
-                <img class="logo" alt="nikomalロゴ・トップページリンク" src="{{ asset('storage/images/logo.png') }}">
+                <img class="logo" alt="nikomalロゴ・トップページリンク" src="{{ asset('/images/logo.png') }}">
             </a>
             <a href="{{ route('posts.search') }}" class="mt-1 ml-2 mr-auto d-lg-none search_link">
                 <span class="search_icon d-none d-sm-inline"><i class="fas fa-search fa-lg"></i>検索</span>
@@ -48,7 +48,7 @@
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 @empty(Auth::user()->avatar)
-                                    <img src="{{ asset('storage/images/default_icon.png') }}" class="nav_avatar_iconuser_avatar_icon rounded-circle " width="40" height="40"><span class="ml-1" id="navbar_user_name">{{ Auth::user()->name }}</span>
+                                    <img src="{{ asset('/images/default_icon.png') }}" class="nav_avatar_iconuser_avatar_icon rounded-circle " width="40" height="40"><span class="ml-1" id="navbar_user_name">{{ Auth::user()->name }}</span>
                                 @else
                                     <img src="{{ Auth::user()->avatar }}" class="nav_avatar_iconuser_avatar_icon rounded-circle" width="40" height="40"><span class="ml-1" id="navbar_user_name">{{ Auth::user()->name }}</span>
                                 @endempty

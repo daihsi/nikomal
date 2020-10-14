@@ -11,7 +11,7 @@
                 @if(!empty($file))
                     <img id="post_image_preview" src="data:image/{{ $mimeType }};base64,{{ $file }}">
                 @else
-                    <img id="post_image_preview"  class="img-fluid default_post_image" src="{{ asset('storage/images/default_post_image-69f9f14784d10ec4rer544rf661e2fc1cb46929c56bd8e6.png') }}" alt="投稿画像未選択">
+                    <img id="post_image_preview"  class="img-fluid default_post_image" src="{{ asset('/images/default_post_image-69f9f14784d10ec4rer544rf661e2fc1cb46929c56bd8e6.png') }}" alt="投稿画像未選択">
                 @endif
                     <input type="file" name="image" id="post_upload" class="@error('image') is-invalid @enderror" accept='image/jpeg,image/png,image/jpg' style="display:none;">
                     <p class="post_image_Supplement d-none d-sm-block ml-1 mt-2"><span class="badge badge-danger mr-1">必須</span>※2MBまでの画像をアップロードできます</p>

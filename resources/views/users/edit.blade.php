@@ -16,7 +16,7 @@
                         @elseif ($user->avatar)
                             <img id="avatar_preview" src="{{ $user->avatar }}" class="rounded-circle @error('avatar') is-invalid @enderror text-center" width="230" height="230"></img>
                         @else
-                            <img id="avatar_preview" src="{{ asset('storage/images/default_icon.png') }}" class="rounded-circle" width="230" height="230">
+                            <img id="avatar_preview" src="{{ asset('/images/default_icon.png') }}" class="rounded-circle" width="230" height="230">
                         @endif
                             <input type="file" name="avatar" id="avatarUpload" class="" accept='image/jpeg,image/png,image/jpg' style="display:none;">
                             <button class="btn btn-outline-success ml-3 d-none d-md-inline btn-sm" id="avatarUploadButton">写真を選択</button>

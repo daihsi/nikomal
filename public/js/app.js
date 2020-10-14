@@ -48192,7 +48192,7 @@ $(function () {
 
           var html = ''; //ユーザーのアバター画像がnullの場合は、こちらの画像を使用
 
-          var img_src = "/storage/images/default_icon.png"; //コメントしたユーザーの情報
+          var img_src = "/images/default_icon.png"; //コメントしたユーザーの情報
 
           var user_id = data['comment']['user']['id'];
           var name = data['comment']['user']['name'];
@@ -48313,7 +48313,7 @@ $(function () {
           //認証ユーザーID取得
           var auth_id = data['auth_id']; //ユーザーのアバター画像がnullの場合は、こちらの画像を使用
 
-          var img_src = "/storage/images/default_icon.png"; //管理ユーザーでログインしているか
+          var img_src = "/images/default_icon.png"; //管理ユーザーでログインしているか
 
           var admin = data['admin']; //コメントしたユーザーの情報
 

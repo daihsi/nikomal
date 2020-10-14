@@ -4,19 +4,19 @@
              <div id="carouselExampleFade" class="carousel slide carousel-fade" data-intrebal=4000 data-touch=true data-ride="carousel">
                 <div class="carousel-inner shadow p-2 mb-3 bg-white rounded">
                     <div class="carousel-item active">
-                        <img class="animalsCarousel" src="{{ asset('storage/images/smile4.jpg') }}" alt="イヌの笑顔"> 
+                        <img class="animalsCarousel" src="{{ asset('/images/smile4.jpg') }}" alt="イヌの笑顔"> 
                     </div>
                     <div class="carousel-item">
-                        <img class="animalsCarousel" src="{{ asset('storage/images/smile3.jpg') }}" alt="フクロウの笑顔">
+                        <img class="animalsCarousel" src="{{ asset('/images/smile3.jpg') }}" alt="フクロウの笑顔">
                     </div>
                     <div class="carousel-item">
-                        <img class="animalsCarousel" src="{{ asset('storage/images/smile7.jpg') }}" alt="イヌの笑顔">
+                        <img class="animalsCarousel" src="{{ asset('/images/smile7.jpg') }}" alt="イヌの笑顔">
                     </div>
                     <div class="carousel-item">
-                        <img class="animalsCarousel" src="{{ asset('storage/images/smile8.jpg') }}" alt="ネコの笑顔">
+                        <img class="animalsCarousel" src="{{ asset('/images/smile8.jpg') }}" alt="ネコの笑顔">
                     </div>
                     <div class="carousel-item">
-                        <img class="animalsCarousel" src="{{ asset('storage/images/smile1.jpg') }}" alt="ゾウの笑顔">
+                        <img class="animalsCarousel" src="{{ asset('/images/smile1.jpg') }}" alt="ゾウの笑顔">
                     </div>
                 </div>
                      <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">

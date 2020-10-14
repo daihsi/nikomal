@@ -11,7 +11,7 @@
                     <div class="balloon overflow-hidden my-2 w-100" data-comment-id="{{ $comment->id }}">
                         <div class="balloon_chatting overflow-hidden w-100 text-right">
                             @empty($comment->user->avatar)
-                                <a href="{{ route('users.show', $comment->user_id) }}" class="text-dark mr-auto font-weight-bold"><div class="card-title">{{ $comment->user->name }}<img src="{{ asset('storage/images/default_icon.png') }}" class="rounded-circle ml-1" width="40" height="40" alt="{{ $comment->user->name }}のアバター画像。詳細ぺージへのリンク"></div></a>
+                                <a href="{{ route('users.show', $comment->user_id) }}" class="text-dark mr-auto font-weight-bold"><div class="card-title">{{ $comment->user->name }}<img src="{{ asset('/images/default_icon.png') }}" class="rounded-circle ml-1" width="40" height="40" alt="{{ $comment->user->name }}のアバター画像。詳細ぺージへのリンク"></div></a>
                             @else
                                 <a href="{{ route('users.show', $comment->user_id) }}" class="text-dark mr-auto font-weight-bold"><div class="card-title">{{ $comment->user->name }}<img src="{{ $comment->user->avatar }}" class="rounded-circle ml-1" width="40" height="40" alt="{{ $comment->user->name }}のアバター画像。詳細ぺージへのリンク"></div></a>
                             @endempty
@@ -30,7 +30,7 @@
                     <div class="balloon overflow-hidden my-2 w-100"data-comment-id="{{ $comment->id }}">
                         <div class="balloon_chatting overflow-hidden w-100 text-left">
                             @empty($comment->user->avatar)
-                                <a href="{{ route('users.show', $comment->user_id) }}" class="text-dark mr-auto font-weight-bold"><div class="card-title"><img src="{{ asset('storage/images/default_icon.png') }}" class="rounded-circle mr-1" width="40" height="40" alt="{{ $comment->user->name }}のアバター画像。詳細ぺージへのリンク">{{ $comment->user->name }}</div></a>
+                                <a href="{{ route('users.show', $comment->user_id) }}" class="text-dark mr-auto font-weight-bold"><div class="card-title"><img src="{{ asset('/images/default_icon.png') }}" class="rounded-circle mr-1" width="40" height="40" alt="{{ $comment->user->name }}のアバター画像。詳細ぺージへのリンク">{{ $comment->user->name }}</div></a>
                             @else
                                 <a href="{{ route('users.show', $comment->user_id) }}" class="text-dark mr-auto font-weight-bold"><div class="card-title"><img src="{{ $comment->user->avatar }}" class="rounded-circle mr-1" width="40" height="40" alt="{{ $comment->user->name }}のアバター画像。詳細ぺージへのリンク">{{ $comment->user->name }}</div></a>
                             @endempty
