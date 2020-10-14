@@ -2,7 +2,7 @@
     <div class="row">
         <div class="justify-content-lg-end d-none d-lg-flex col-lg-5">
             @empty($user->avatar)
-                <img src="{{ asset('storage/images/default_icon.png') }}" class="user_show_avatar rounded-circle ml-5" width="230" height="230">
+                <img src="{{ asset('/images/default_icon.png') }}" class="user_show_avatar rounded-circle ml-5" width="230" height="230">
             @else
                 <img src="{{ $user->avatar }}" class="rounded-circle ml-5 user_show_avatar" width="230" height="230">
             @endempty
@@ -10,7 +10,7 @@
 
         <div class="d-flex justify-content-center d-lg-none d-flex col-12">
             @empty($user->avatar)
-                <img src="{{ asset('storage/images/default_icon.png') }}" class="user_show_avatar rounded-circle mr-3" width="230" height="230">
+                <img src="{{ asset('/images/default_icon.png') }}" class="user_show_avatar rounded-circle mr-3" width="230" height="230">
             @else
                 <img src="{{ $user->avatar }}" class="rounded-circle mr-3 user_show_avatar" width="230" height="230">
             @endempty

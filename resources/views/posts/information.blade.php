@@ -1,7 +1,7 @@
 <div class="card shadow p-2 mb-5 bg-white rounded show_post_card">
     <div class="card-header">
         @empty($post->user->avatar)
-            <a href="{{ route('users.show', $post->user->id) }}" class="text-dark font-weight-bold"><img src="{{ asset('storage/images/default_icon.png') }}" class="rounded-circle mr-2" width="40" height="40">{{ $post->user->name }}</a>
+            <a href="{{ route('users.show', $post->user->id) }}" class="text-dark font-weight-bold"><img src="{{ asset('/images/default_icon.png') }}" class="rounded-circle mr-2" width="40" height="40">{{ $post->user->name }}</a>
         @else
             <a href="{{ route('users.show', $post->user->id) }}" class="text-dark font-weight-bold"><img src="{{ $post->user->avatar }}" class="rounded-circle mr-2" width="40" height="40">{{ $post->user->name }}</a>
         @endempty

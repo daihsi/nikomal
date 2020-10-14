@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- title -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('nikomal_favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/nikomal_favicon.ico') }}">
     <title>{{ config('app.name') }} | @yield('title')</title>
 
     <!-- Scripts -->
