@@ -15,6 +15,7 @@ $(function() {
     columnWidth: '.post_sizer',
     percentPosition: true,
     stagger: 30,
+    horizontalOrder: true,
     visibleStyle: { transform: 'translateY(0)', opacity: 1 },
     hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
   });
