@@ -18,8 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
       columnWidth: '.post_sizer',
       percentPosition: true,
       stagger: 30,
-      visibleStyle: { transform: 'translateY(0)', opacity: 1 },
-      hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
+      transitionDuration: '0.7s',
     });
 
     //imagesLaadedで画像を読み込んで、masonryで投稿を並べる
