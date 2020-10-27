@@ -348,6 +348,11 @@
   max-height: 640px;
 }
 
+//masonryで並べるため、最初に取得した投稿を非表示にする
+#post_card_container.post_card_container {
+  opacity: 0;
+}
+
 /*投稿ページローディング関係　始*/
 .page_load_status {
   display: none;

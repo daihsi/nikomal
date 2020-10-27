@@ -1,8 +1,9 @@
 @if (count($posts) > 0)
 <div class="container">
     <div id="post_card_container" class="row post_card_container">
+        <div class="post_sizer col-xl-4 col-lg-6 col-md-8 col-sm-10 col-12 offset-xl-0 offset-lg-0 offset-md-2 offset-sm-1 d-inline-block"></div>
         @foreach ($posts as $post)
-            <div class="post_item post_sizer col-xl-4 col-lg-6 col-md-8 col-sm-10 col-12 offset-xl-0 offset-lg-0 offset-md-2 offset-sm-1 d-inline-block">
+            <div class="post_item col-xl-4 col-lg-6 col-md-8 col-sm-10 col-12 offset-xl-0 offset-lg-0 offset-md-2 offset-sm-1 d-inline-block">
             <div class="card shadow p-2 bg-white rounded mb-4">
                 <div class="card-header">
                     @empty($post->user->avatar)
