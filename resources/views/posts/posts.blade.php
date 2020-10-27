@@ -59,8 +59,5 @@
     <p class="pagination">
         <a href="{{ $posts->nextpageUrl() }}" class="pagination_next" id="pagination_next"></a>
     </p>
-    <p class="text-center mt-3">
-        <button class="view_more_button btn btn-success btn-lg" aria-pressed="true">もっと見る</button>
-    </p>
 @endif
 @endif
