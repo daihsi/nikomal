@@ -33,9 +33,6 @@
     <p class="pagination">
         <a href="{{ $users->nextPageUrl() }}" class="pagination_next"></a>
     </p>
-    <p class="text-center mt-3">
-      <button class="view_more_button btn btn-success btn-lg" aria-pressed="true">もっと見る</button>
-    </p>
 @endif
 @else
     <div class="d-flex justify-content-center align-items-center" style="height:200px; color:rgba(0,0,0,0.4);">
