@@ -11,8 +11,6 @@ $(function() {
             path: '.pagination_next',
             append: '.user_card',
             history: false,
-            button: '.view_more_button',
-            scrollThreshold: false,
             hideNav: '.pagination',
             status: '.page_load_status',
         });

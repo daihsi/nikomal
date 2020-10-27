@@ -57,7 +57,6 @@ class SmoothScrollTest extends DuskTestCase
             //ボタンの存在を確認
             $browser->pause(1000)
                     ->assertVisible('#page_top_button')
-                    ->press('もっと見る')
                     ->pause(1000)
                     ->driver
                     ->executeScript('window.scrollTo(0, 2400);');
@@ -66,42 +65,10 @@ class SmoothScrollTest extends DuskTestCase
             //ボタンの存在を確認
             $browser->pause(1000)
                     ->assertVisible('#page_top_button')
-                    ->press('もっと見る')
                     ->pause(1000)
                     ->driver
                     ->executeScript('window.scrollTo(0, 3600);');
 
-            //ボタンクリックしてページトップへ移動していることを確認
-            $browser->pause(1000)
-                    ->assertVisible('#page_top_button')
-                    ->click('#page_top_button')
-                    ->pause(1000);
-        });
-    }
-
-    //ユーザー一覧ページのトップページへ戻るボタンテスト
-    public function testSmoothScrollUsers(): void
-    {
-        $this->browse(function (Browser $browser) {
-
-            //一ページ目最下位にスクロール移動
-            $browser->visitRoute('users.index')
-                    ->press('もっと見る')
-                    ->pause(1000)
-                    ->driver
-                    ->executeScript('window.scrollTo(0, 1000);');
-
-            //二ページ目最下位にスクロール移動
-            //ボタンの存在を確認
-            $browser->pause(1000)
-                    ->assertVisible('#page_top_button')
-                    ->press('もっと見る')
-                    ->pause(1000)
-                    ->driver
-                    ->executeScript('window.scrollTo(0, 2000);');
-
-            //三ページ目最下位にスクロール移動
-            //ボタンの存在を確認
             //ボタンクリックしてページトップへ移動していることを確認
             $browser->pause(1000)
                     ->assertVisible('#page_top_button')
