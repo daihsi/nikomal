@@ -56,6 +56,7 @@ class LikeTest extends DuskTestCase
             //フラッシュメッセージが表示されているか確認
             $frist->loginAs($this->user)
                     ->visit('/')
+                    ->pause(2000)
                     ->click($like_button)
                     ->waitFor($like_now_icon)
                     ->assertPresent($like_now_icon)
@@ -68,6 +69,7 @@ class LikeTest extends DuskTestCase
             //フラッシュメッセージが表示されているか確認
             $second->loginAs($this->user)
                     ->visit('/')
+                    ->pause(2000)
                     ->click($like_button)
                     ->waitFor($like_icon)
                     ->assertPresent($like_icon)
@@ -91,6 +93,7 @@ class LikeTest extends DuskTestCase
             //フラッシュメッセージが表示されているか確認
             $frist->loginAs($this->user)
                     ->visitRoute('posts.show', $this->post)
+                    ->pause(2000)
                     ->click($like_button)
                     ->waitFor($like_now_icon)
                     ->assertPresent($like_now_icon)
@@ -106,6 +109,7 @@ class LikeTest extends DuskTestCase
             //フラッシュメッセージが表示されているか確認
             $second->loginAs($this->user)
                     ->visitRoute('posts.show', $this->post)
+                    ->pause(2000)
                     ->click($like_button)
                     ->waitFor($like_icon)
                     ->assertPresent($like_icon)
@@ -135,6 +139,7 @@ class LikeTest extends DuskTestCase
                     ->visitRoute('users.show', $this->user->id)
 
                     //いいねする
+                    ->pause(2000)
                     ->click($like_button)
                     ->waitFor($like_now_icon)
 
@@ -164,6 +169,7 @@ class LikeTest extends DuskTestCase
                     ->visitRoute('users.likes', $this->user->id)
 
                     //いいねを外す
+                    ->pause(2000)
                     ->click($like_button)
                     ->waitFor($like_icon)
 
@@ -197,6 +203,7 @@ class LikeTest extends DuskTestCase
         $this->browse(function ($browser) use ($admin) {
             $browser->loginAs($admin)
                     ->visit('/')
+                    ->pause(2000)
                     ->click('.far')
                     ->assertSourceHas('<span class="align-self-end">0</span>');
         });
