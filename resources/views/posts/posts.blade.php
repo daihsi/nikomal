@@ -1,6 +1,6 @@
 @if (count($posts) > 0)
 <div class="container">
-    <div class="row" id="post_card_container">
+    <div id="post_card_container" class="row post_card_container">
         @foreach ($posts as $post)
             <div class="post_item post_sizer col-xl-4 col-lg-6 col-md-8 col-sm-10 col-12 offset-xl-0 offset-lg-0 offset-md-2 offset-sm-1">
             <div class="card shadow p-2 bg-white rounded mb-4">
@@ -57,7 +57,7 @@
 </div>
 @if ($posts->hasMorePages())
     <p class="pagination">
-        <a href="{{ $posts->nextpageUrl() }}" class="pagination_next"></a>
+        <a href="{{ $posts->nextpageUrl() }}" class="pagination_next" id="pagination_next"></a>
     </p>
     <p class="text-center mt-3">
         <button class="view_more_button btn btn-success btn-lg" aria-pressed="true">もっと見る</button>
