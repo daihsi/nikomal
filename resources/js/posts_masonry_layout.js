@@ -1,37 +1,39 @@
-var $ = require('jquery');
-var jQueryBridget = require('jquery-bridget');
 var Masonry = require('masonry-layout');
 var InfiniteScroll = require('infinite-scroll');
 var imagesLoaded = require('imagesloaded');
-jQueryBridget( 'infiniteScroll', InfiniteScroll, $ );
-jQueryBridget( 'masonry', Masonry, $ );
-imagesLoaded.makeJQueryPlugin( $ );
 
 //トップページ、個別ユーザー投稿一覧、個別ユーザーいいね投稿一覧
 //いいねランキングページ、検索一覧ページ
-$(function() {
-  var $post_card_container = $('#post_card_container').masonry({
-    itemSelector: 'none',
-    columnWidth: '.post_sizer',
-    percentPosition: true,
-    stagger: 30,
-    horizontalOrder: true,
-    visibleStyle: { transform: 'translateY(0)', opacity: 1 },
-    hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
-  });
+document.addEventListener('DOMContentLoaded', function() {
 
-  var msnry = $post_card_container.data('masonry');
+  //投稿自体が存在するかチェック
+  if (document.getElementById('post_card_container') != null) {
 
-  $post_card_container.imagesLoaded( function() {
-    $post_card_container.masonry( 'option', { itemSelector: '.post_item' });
-    var $items = $post_card_container.find('.post_item');
-    $post_card_container.masonry( 'appended', $items );
-  });
+    //投稿コンテンツ全体の取得
+    var post_card_container = document.querySelector('#post_card_container');
 
-  InfiniteScroll.imagesLoaded = imagesLoaded;
+    //masonryのオプション記述(1つ1つの投稿はまだ取得しない)
+    var msnry = new Masonry( post_card_container, {
+      itemSelector: 'none',
+      columnWidth: '.post_sizer',
+      percentPosition: true,
+      stagger: 30,
+      visibleStyle: { transform: 'translateY(0)', opacity: 1 },
+      hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
+    });
 
-  if ($('.pagination_next').length) {
-    $post_card_container.infiniteScroll({
+    //imagesLaadedで画像を読み込んで、masonryで投稿を並べる
+    imagesLoaded( post_card_container, function() {
+      post_card_container.classList.remove('post_card_container');
+      msnry.options.itemSelector = '.post_item';
+      var items = post_card_container.querySelectorAll('.post_item');
+      msnry.appended( items );
+    });
+
+    //次のページがあれば、無限スクロールの処理に入る
+    if (document.getElementById('pagination_next') != null) {
+      InfiniteScroll.imagesLoaded = imagesLoaded;
+      var infScroll = new InfiniteScroll( post_card_container, {
         path: '.pagination_next',
         append: '.post_item',
         outlayer: msnry,
@@ -40,6 +42,7 @@ $(function() {
         scrollThreshold: false,
         hideNav: '.pagination',
         status: '.page_load_status',
-    });
+      });
+    }
   }
 });
