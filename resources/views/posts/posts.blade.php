@@ -3,7 +3,7 @@
     <div id="post_card_container" class="row post_card_container">
         @foreach ($posts as $post)
             <div class="post_item post_sizer col-xl-4 col-lg-6 col-md-8 col-sm-10 col-12 offset-xl-0 offset-lg-0 offset-md-2 offset-sm-1 d-inline-block">
-            <div class="card shadow p-2 bg-white rounded mb-4">
+            <div class="card shadow p-2 bg-white rounded mb-4 d-inline-block">
                 <div class="card-header">
                     @empty($post->user->avatar)
                         <a href="{{ route('users.show', $post->user->id) }}" class="text-dark font-weight-bold"><img src="{{ asset('/images/default_icon.png') }}" class="rounded-circle mr-2" width="40" height="40">{{ $post->user->name }}</a>

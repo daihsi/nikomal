@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
     imagesLoaded( post_card_container, function() {
       post_card_container.classList.remove('post_card_container');
       msnry.options.itemSelector = '.post_item';
+      msnry.options.columnWidth = '.post_sizer';
+      msnry.options.percentPosition = true;
+      msnry.options.stagger = 30;
+      msnry.options.transitionDuration = '0.7s';
       var items = post_card_container.querySelectorAll('.post_item');
       msnry.appended( items );
     });
