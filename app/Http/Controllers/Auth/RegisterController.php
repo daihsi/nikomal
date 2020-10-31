@@ -50,48 +50,35 @@ class RegisterController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        
-        event(new Registered($user = $this->create($request->validated())));
+        //画像リサイズしたものを取得したいため、リクエストを取得して格納
+        $data = [
+                "_token" => $request->_token,
+                "name" => $request->name,
+                "email" => $request->email,
+                "password" => $request->password,
+                "password_confirmation" => $request->password,
+                "avatar" => $request->avatarUrl(),
+            ];
+        event(new Registered($user = $this->create($data)));
         $this->guard()->login($user);
         return $this->registered($request, $user)
                         ?: redirect($this->redirectPath())
                         ->with('msg_success', 'ユーザー登録完了しました');
     }
-    
+
     /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
      * @return \App\User
      */
-     
-    
     protected function create(array $data)
     {
-        
-        if (isset($data['avatar'])) {
-            
-            $file = $data['avatar'];
-
-            //アップロードされたファイル名取得
-            $name = $file->getClientOriginalName();
-
-            //画像を横幅300px,縦幅アスペクト比維持の自動サイズへリサイズ
-            $image = Image::make($file)
-                ->resize(300, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });;
-            //s3へのアップロードと保存
-            $path = Storage::disk('s3')->put('/users_avatar/'.$name, (string) $image->encode(), 'public');
-            
-            $data['avatar'] = Storage::disk('s3')->url('users_avatar/'.$name);
-        };
-
-       return User::create([
+        return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'avatar' => $data['avatar'] ?? null,
+            'avatar' => $data['avatar'],
             
         ]);
     }

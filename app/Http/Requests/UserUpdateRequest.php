@@ -5,7 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -31,6 +32,31 @@ class UserUpdateRequest extends FormRequest
         'avatar' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048', 'nullable'],
         'self_introduction' => ['string', 'max:150', 'nullable'],
         ];
+    }
+
+    /**
+     * 画像リサイズ
+     * 
+     * @return string
+     */
+    public function avatarUrl()
+    {
+        $file = $this->avatar;
+
+        //アップロードされたファイル名取得
+        $name = $file->getClientOriginalName();
+
+        //画像を横幅300px,縦幅アスペクト比維持の自動サイズへリサイズ
+        $image = Image::make($file)
+            ->resize(300, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+
+        //s3へのアップロードと保存
+        Storage::disk('s3')->put('/users_avatar/'.$name, (string) $image->encode(), 'public');
+
+        //URLを返す;
+        return Storage::disk('s3')->url('users_avatar/'.$name);
     }
 
     //フラッシュメッセージのみ追加し、オーバーライド

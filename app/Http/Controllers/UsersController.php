@@ -6,7 +6,6 @@ use App\User;
 use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 
 class UsersController extends Controller
@@ -82,24 +81,11 @@ class UsersController extends Controller
             if(!empty($user->avatar)) {
                 Storage::disk('s3')->delete('users_avatar/'.basename($user->avatar));
             }
-            $file = $request->avatar;
-            //アップロードされたファイル名取得
-            $name = $file->getClientOriginalName();
-    
-            //画像を横幅300px,縦幅アスペクト比維持の自動サイズへリサイズ
-            $image = Image::make($file)
-                ->resize(300, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });;
-            //s3へのアップロードと保存
-            $path = Storage::disk('s3')->put('/users_avatar/'.$name, (string) $image->encode(), 'public');
-            //データペースへ保存;
-            $url = Storage::disk('s3')->url('users_avatar/'.$name);
-        }
-        elseif (empty($request->file('image')) && !empty($user->avatar)) {
+            $url = $request->avatarUrl();
+        } elseif (empty($request->avatar) && !empty($user->avatar)) {
             $url = $user->avatar;
         }
-        
+
         $user->fill([
             'name' => $request->name,
             'avatar' => $url ?? null,
