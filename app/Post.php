@@ -112,4 +112,39 @@ class Post extends Model
     public function postComments() {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * 投稿検索
+     * 
+     * @param array $data
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePostSearch($query, $data)
+    {
+            $animals = $data['animals_name'] ?? null;
+            $keyword = $data['keyword'];
+
+            //どちらにも値が入っている場合の検索
+            if (filled($animals) && filled($keyword)) {
+                $query->where('content', 'LIKE', '%'.$keyword.'%')
+                    ->whereHas('postCategorys', function($query) use($animals) {
+                        $query->whereIn('name', $animals);
+                    });
+            }
+    
+            //キーワードのみ値が入っている場合の検索
+            elseif (filled($keyword) && empty($animals)) {
+                $query->where('content', 'LIKE', '%'.$keyword.'%');
+            }
+    
+            //動物カテゴリーのみ値が入っている場合の検索
+            elseif (filled($animals) && empty($keyword)) {
+                $query->whereHas('postCategorys', function($query) use($animals) {
+                        $query->whereIn('name', $animals);
+                    });
+            }
+            return $query;
+    }
 }

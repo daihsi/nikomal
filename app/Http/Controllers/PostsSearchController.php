@@ -20,28 +20,7 @@ class PostsSearchController extends Controller
         $query = Post::query();
 
         if (filled($request->animals_name) || filled($request->keyword)) {
-            $animals = $request->animals_name;
-            $keyword = $request->keyword;
-
-            //どちらにも値が入っている場合の検索
-            if (filled($animals) && filled($keyword)) {
-                $query->where('content', 'LIKE', '%'.$keyword.'%')
-                    ->whereHas('postCategorys', function($query) use($animals) {
-                        $query->whereIn('name', $animals);
-                    });
-            }
-    
-            //キーワードのみ値が入っている場合の検索
-            elseif (filled($keyword) && empty($animals)) {
-                $query->where('content', 'LIKE', '%'.$keyword.'%');
-            }
-    
-            //動物カテゴリーのみ値が入っている場合の検索
-            elseif (filled($animals) && empty($keyword)) {
-                $query->whereHas('postCategorys', function($query) use($animals) {
-                        $query->whereIn('name', $animals);
-                    });
-            }
+            $query = Post::PostSearch($request->all());
             $count = $query->count();
         }
         $posts = $query->with('postImages', 'postCategorys')
@@ -50,8 +29,8 @@ class PostsSearchController extends Controller
                     ->appends($request->query());
         return view('posts.search',[
                 'posts' => $posts,
-                'keyword' => $keyword ?? null,
-                'animals_name' => $animals ?? null,
+                'keyword' => $request->keyword ?? null,
+                'animals_name' => $request->animals_name ?? null,
                 'count' => $count ?? null,
             ]);
     }

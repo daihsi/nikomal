@@ -5,7 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class PostEditRequest extends FormRequest
 {
@@ -32,6 +33,36 @@ class PostEditRequest extends FormRequest
             'animals_name' => ['required', 'array', 'max:3'],
             'animals_name.*' => ['distinct'],
         ];
+    }
+
+    /**
+     * 編集投稿画像リサイズ
+     * 
+     * @return string | null
+     * 
+     */
+    public function imageUrl()
+    {
+        //画像があれば処理に入る
+        if (!empty($this->image)) {
+
+            //画像リサイズ
+            $file = $this->image;
+            $name = $file->getClientOriginalName();
+            $image = Image::make($file)
+                ->resize(400, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+            //s3に画像を保存
+            $path = Storage::disk('s3')->put('/post_images/'.$name, (string) $image->encode(), 'public');
+
+            //画像のURLかnullを返す
+            return Storage::disk('s3')->url('post_images/'.$name);
+        }
+        else {
+            return null;
+        }
     }
 
     //フラッシュメッセージのみ追加し、オーバーライド

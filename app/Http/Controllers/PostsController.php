@@ -11,7 +11,6 @@ use App\Http\Requests\PostRequest;
 use App\Http\Requests\PostEditRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 
 class PostsController extends Controller
 {
@@ -55,7 +54,7 @@ class PostsController extends Controller
         $post = $user->posts()->create([
                     'content' => $request->content,
                 ]);
-        
+
         //カテゴリーの保存
         foreach ($request->animals_name as $animal_name) {
             if (!empty($animal_name)) {
@@ -67,17 +66,8 @@ class PostsController extends Controller
             }
         }
 
-        //画像データの保存
-        $file = $request->image;
-        $name = $file->getClientOriginalName();
-        $image = Image::make($file)
-            ->resize(400, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-        $path = Storage::disk('s3')->put('/post_images/'.$name, (string) $image->encode(), 'public');
-        $url = Storage::disk('s3')->url('post_images/'.$name);
         $post->postImages()->create([
-            'image' => $url,
+            'image' => $request->imageUrl(),
         ]);
 
         return redirect('/')->with('msg_success', '新規投稿しました');
@@ -157,23 +147,17 @@ class PostsController extends Controller
         }
 
         //投稿画像の更新及びs3ストレージ内にある古いファイルの削除
-        foreach ($post->postImages as $post_image) {
-            if (!empty($request->image)) {
+        if (!empty($request->imageUrl())) {
+            foreach ($post->postImages as $post_image) {
                 if (!empty($post_image->image)) {
                     Storage::disk('s3')->delete('post_images/'.basename($post_image->image));
                 }
-                $file = $request->image;
-                $name = $file->getClientOriginalName();
-                $image = Image::make($file)
-                    ->resize(400, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                    });
-                $path = Storage::disk('s3')->put('/post_images/'.$name, (string) $image->encode(), 'public');
-                $url = Storage::disk('s3')->url('post_images/'.$name);
+
+                //画像をデータベースに保存
+                $post_image->fill([
+                    'image' => $request->imageUrl(),
+                ])->save();
             }
-            $post_image->fill([
-                'image' => $url ?? $post_image->image,
-            ])->save();
         }
 
         //キャプショの更新
