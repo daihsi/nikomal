@@ -63,7 +63,7 @@ jobs:
               npm run production
               cp .env.dusk.local .env
               google-chrome --version
-              php artisan dusk:chrome-driver 85
+              php artisan dusk:chrome-driver 87
 
       #chromeを起動
       - run:
